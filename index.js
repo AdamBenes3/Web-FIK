@@ -1,10 +1,23 @@
 const express = require('express');
 const app = express();
 const port = 3000;
+const fs = require('fs');
 
-// Must be connected with TTN
-//const ttnEndpoint = '';
-//const apiKey = '';
+// Read the configuration from the JSON file
+const configPath = './config.json';
+
+let ttnEndpoint, apiKey;
+
+try {
+  const configData = fs.readFileSync(configPath, 'utf-8');
+  const config = JSON.parse(configData);
+  ttnEndpoint = config.ttnEndpoint;
+  apiKey = config.apiKey;
+} catch (err) {
+  console.error('Error reading configuration file:', err);
+  process.exit(1); // Exit the application if there's an error reading the config file
+}
+
 
 // Fetch data from The Things Network
 const fetchData = async () => {
