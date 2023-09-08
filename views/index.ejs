@@ -1,11 +1,53 @@
 <!-- views/index.ejs -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TTN Data Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        h1 {
+            font-size: 28px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        p {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>The Things Network Data test</h1>
-    <p>Data: <%= JSON.stringify(data) %></p>
+    <header>
+        <h1>TTN Data Display</h1>
+    </header>
+    <div class="container">
+        <h2>The Things Network Data Test</h2>
+        <p><strong>Data:</strong> <span id="data"></span></p>
+        <p><%= JSON.stringify(data) %></p>
+    </div>
+
+    
 </body>
 </html>
