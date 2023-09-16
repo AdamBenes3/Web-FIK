@@ -1,0 +1,29 @@
+{
+    "end_device_ids": {
+        "device_id": "fik8b",
+        "application_ids": {
+            "application_id": "balloons"
+        },
+        "dev_eui": "3C56A000A0000064",
+        "dev_addr": "26011828"
+    },
+    "correlation_ids": [
+        "as:up:01HACN2XHD8E0C6YFVBPHHNJQN",
+        "as:up:01HACN2XHJMAZ1JG00ZB9KW7VM",
+        "gs:conn:01HACGPN3CS8TBZY0G3RMN6DB4",
+        "gs:up:host:01HACGPN3H1JY9P878P803RHSR",
+        "gs:uplink:01HACN2XATKZ9RGWWPKC3KNVYD",
+        "ns:uplink:01HACN2XAVYZCWPTW6F1A177VY",
+        "rpc:/ttn.lorawan.v3.GsNs/HandleUplink:01HACN2XAVJPMG096EVP7HHCAD",
+        "rpc:/ttn.lorawan.v3.NsAs/HandleUplink:01HACN2XHCR80VP8JM77K0J4ZP"
+    ],
+    "received_at": "2023-09-15T14:49:27.340596049Z",
+    "location_solved": {
+        "service": "frm-payload",
+        "location": {
+            "latitude": 50.116268157958984,
+            "longitude": 14.461069107055664,
+            "source": "SOURCE_GPS"
+        }
+    }
+}
