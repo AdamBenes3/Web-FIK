@@ -34,6 +34,8 @@ client.on('connect', () => {
     });
 });
 
+var which_file = true;
+
 client.on('message', (topic, message) => {
     console.log(`Received message on topic: ${topic}, Message: ${message.toString()}`);
     // Handle the received message
@@ -47,8 +49,14 @@ client.on('message', (topic, message) => {
     const jsonData = JSON.stringify(receivedData, null, 2);
 
     // Write the data to the data.json file, overwriting its contents
-    fs.writeFileSync('data.json', jsonData);
-
+    if (which_file) {
+        fs.writeFileSync('data.json', jsonData);
+        which_file = false;
+    }
+    else {
+        fs.writeFileSync('data2.json', jsonData);
+        which_file = true;
+    }
     // Append the data to a dataHistory.json file
     fs.appendFile('dataHistory.json', jsonData + '\n', (err) => {
         if (err) {
