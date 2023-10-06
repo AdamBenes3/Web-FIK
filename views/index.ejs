@@ -1,53 +1,134 @@
 <!-- views/index.ejs -->
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TTN Data Display</title>
+    <title>Show Device Information</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
+        table {
+            border-collapse: collapse;
+            width: 100%;
         }
 
-        header {
-            background-color: #007BFF;
-            color: #fff;
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        h1 {
-            font-size: 28px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        p {
-            font-size: 18px;
-            margin-top: 20px;
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
         }
     </style>
 </head>
-<body>
-    <header>
-        <h1>TTN Data Display</h1>
-    </header>
-    <div class="container">
-        <h2>The Things Network Data Test</h2>
-        <p><strong>Data:</strong> <span id="data"></span></p>
-        <p><%= JSON.stringify(data) %></p>
-    </div>
 
-    
+<body>
+    <h1>Show Device Information</h1>
+    <div id="buttons"></div>
+    <div id="tableContainer"></div>
+
+    <script>
+        // Array to store JSON data
+        var jsonDataArray = [];
+
+        // Function to create or update a table for a device
+        function createOrUpdateTable(jsonData) {
+            // Parse the JSON data
+            var jsonDataObj = JSON.parse(jsonData.message);
+
+            // Extract device information
+            var deviceId = jsonDataObj.end_device_ids.device_id;
+
+            // Check if a table with the same device_id already exists
+            var existingTable = document.getElementById(deviceId + 'Table');
+
+            // Create a table if it doesn't exist
+            if (!existingTable) {
+                var table = document.createElement('table');
+                table.id = deviceId + 'Table';
+                table.innerHTML += `
+                    <tr>
+                        <th>Device ID</th>
+                        <td>${deviceId}</td>
+                    </tr>
+                    <tr>
+                        <th>Dev EUI</th>
+                        <td>${jsonDataObj.end_device_ids.dev_eui}</td>
+                    </tr>
+                    <tr>
+                        <th>Dev Addr</th>
+                        <td>${jsonDataObj.end_device_ids.dev_addr}</td>
+                    </tr>
+                    <!-- Add more rows for other data -->
+                `;
+
+                // Add the table to the tableContainer
+                var tableContainer = document.getElementById('tableContainer');
+                tableContainer.appendChild(table);
+            } else {
+                // Toggle the visibility of the existing table
+                var tableStyle = existingTable.style;
+                tableStyle.display = tableStyle.display === 'none' ? 'table' : 'none';
+            }
+        }
+
+        // Function to add JSON data to the array and create a button
+        function addJsonData(jsonData) {
+            jsonDataArray.push(jsonData);
+
+
+            var deviceId = JSON.parse(jsonData.message).end_device_ids.device_id;
+
+            // Check if a button with the same device_id already exists
+            var existingButton = document.getElementById(deviceId + 'Button');
+
+            // Create a button if it doesn't exist
+            if (!existingButton) {
+                // Create a button for each device
+                var button = document.createElement('button');
+                button.id = deviceId + 'Button'; // Assign an ID to the button
+                button.textContent = deviceId;
+                button.addEventListener('click', function (event) {
+                    createOrUpdateTable(jsonDataArray.find(data => JSON.parse(data.message).end_device_ids.device_id === event.target.textContent));
+                });
+
+                // Add the button to the page
+                var buttonsContainer = document.getElementById('buttons');
+                buttonsContainer.appendChild(button);
+            }
+        }
+
+        function loadDataFromServer() {
+            // Make an HTTP GET request to the server for JSON data
+            fetch('/api/data') // Use the correct route
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Parse JSON response as text
+                })
+                .then(data => {
+                    console.log('Server Response:', data.data); // Log the response
+                    if (data) {
+                        console.log("ahe");
+                        // Pass the data as is to the addJsonData function
+                        addJsonData(data.data);
+                    } else {
+                        console.error('Received undefined data from the server');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading data:', error);
+                });
+        }
+
+
+
+
+        // Load JSON data from the server
+        loadDataFromServer();
+
+
+
+
+    </script>
 </body>
+
 </html>
