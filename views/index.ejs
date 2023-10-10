@@ -39,6 +39,10 @@
             // Check if a table with the same device_id already exists
             var existingTable = document.getElementById(deviceId + 'Table');
 
+            // Determine the background color based on speed
+            var speedMps = parseFloat(jsonDataObj.uplink_message.decoded_payload.speed_mps);
+            var speedBackgroundColor = speedMps > 0.5 ? 'red' : '';
+
             // Create a table if it doesn't exist
             if (!existingTable) {
                 var table = document.createElement('table');
@@ -55,6 +59,18 @@
                     <tr>
                         <th>Dev Addr</th>
                         <td>${jsonDataObj.end_device_ids.dev_addr}</td>
+                    </tr>
+                    <tr>
+                        <th style="background-color: red;">Received At</th>
+                        <td style="background-color: red;">${jsonDataObj.received_at}</td>
+                    </tr>
+                    <tr>
+                        <th style="background-color: red;">Timestamp</th>
+                        <td style="background-color: red;">${jsonData.timestamp}</td>
+                    </tr>
+                    <tr>
+                        <th style="background-color: ${speedBackgroundColor};">Speed (m/s)</th>
+                        <td style="background-color: ${speedBackgroundColor};">${speedMps}</td>
                     </tr>
                     <!-- Add more rows for other data -->
                 `;
@@ -107,7 +123,6 @@
                 .then(data => {
                     console.log('Server Response:', data.data); // Log the response
                     if (data) {
-                        console.log("ahe");
                         // Pass the data as is to the addJsonData function
                         addJsonData(data.data);
                     } else {
