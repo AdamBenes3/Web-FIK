@@ -2,6 +2,9 @@ import paho.mqtt.client as mqtt
 import json
 import time
 from pymongo import MongoClient
+import requests
+
+nodejs_server_url = 'http://localhost:3000/api/get/data'  # Replace with the URL of your Node.js server
 
 # Load configuration from config.json
 with open('./config.json', 'r') as config_file:
@@ -15,11 +18,6 @@ password = config['password']
 application_id = 'balloons'
 device_id = 'fik8b'
 topic = '#'  # You can change this to the specific topic you want to subscribe to
-
-# Connect to MongoDB
-mongo_client = MongoClient('mongodb://localhost:27017')  # Replace with your MongoDB URI
-db = mongo_client['mqtt_data']  # Replace with your database name
-collection = db['mqtt_messages']  # Replace with your collection name
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
@@ -51,8 +49,8 @@ def on_message(client, userdata, message):
             file.write(json_data)
         which_file = True
     
-    # Insert the received data into MongoDB
-    collection.insert_one(received_data)
+    headers = {'Content-Type': 'application/json'}
+    response = requests.post(nodejs_server_url, data=json_data, headers=headers)
 
     with open('dataHistory.json', 'a') as file:
         file.write(json_data + '\n')
