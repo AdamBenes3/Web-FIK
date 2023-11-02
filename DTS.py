@@ -18,19 +18,10 @@ payload = {
 
 # Example query parameters for the GET request
 params = {
-    "duration": "30m",
-    "payload_callsign": "your_callsign",
-    "datetime": "2021-02-02T11:27:38.634Z",  # Replace with your desired datetime
+    "duration": "30m",  # Replace with your desired duration
+    "date-time": "2021-02-02T11:27:38.634Z",  # Replace with your desired datetime
 }
 
-# Make a PUT request to upload telemetry data
-put_url = f"{base_url}/amateur/telemetry"
-response_put = requests.put(put_url, headers=headers, data=json.dumps(payload))
-
-if response_put.status_code == 200:
-    print("Telemetry data uploaded successfully.")
-else:
-    print(f"Failed to upload telemetry data. Status code: {response_put.status_code}")
 
 # Make a GET request to retrieve telemetry data
 get_url = f"{base_url}/amateur/telemetry"
@@ -40,4 +31,4 @@ if response_get.status_code == 200:
     telemetry_data = response_get.json()
     print("Telemetry data received:", telemetry_data)
 else:
-    print(f"Failed to retrieve telemetry data. Status code: {response_get.status_code}")
+    print(f"Failed to retrieve telemetry data. Status code: {response_get.status_code, response_get.text}")
