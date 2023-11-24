@@ -1,34 +1,46 @@
-import requests
-import json
-
-# Base URL for the API
-base_url = "https://api.v2.sondehub.org"
-
-# Example headers for the PUT request
-headers = {
-    "User-Agent": "autorx-1.4.1-beta5",  # Replace with your software version
-    "Content-Type": "application/json",
-}
-
-# Example payload for the PUT request (you should replace this with your telemetry data)
-payload = {
-    "telemetry_field1": "value1",
-    "telemetry_field2": "value2",
-}
-
-# Example query parameters for the GET request
-params = {
-    "duration": "30m",  # Replace with your desired duration
-    "date-time": "2021-02-02T11:27:38.634Z",  # Replace with your desired datetime
-}
+from sondehub.amateur import Uploader
+import datetime
+import time
+import logging
 
 
-# Make a GET request to retrieve telemetry data
-get_url = f"{base_url}/amateur/telemetry"
-response_get = requests.get(get_url, params=params)
 
-if response_get.status_code == 200:
-    telemetry_data = response_get.json()
-    print("Telemetry data received:", telemetry_data)
-else:
-    print(f"Failed to retrieve telemetry data. Status code: {response_get.status_code, response_get.text}")
+logging.basicConfig(format="%(asctime)s %(levelname)s:%(message)s", level=logging.DEBUG)
+
+
+uploader = Uploader("SlimonTest", uploader_position=[50.073, 14.418, 400])
+
+
+uploader.add_telemetry(
+    "fiktest-1", # Your payload callsign
+    datetime.datetime.utcnow(),
+    50.073658, # Latitude
+    14.418540, # Longitude
+    10000 # Altitude
+)
+
+uploader.upload_station_position(
+    "MYCALL",
+    [50.073, 14.418, 400], # [latitude, longitude, altitude]
+    mobile=True
+)
+
+time.sleep(10)
+
+uploader.upload_station_position(
+    "MYCALL",
+    [50.073, 14.42, 400], # [latitude, longitude, altitude]
+    mobile=True
+)
+
+
+time.sleep(10)
+
+uploader.upload_station_position(
+    "MYCALL",
+    [50.073, 14.43, 400], # [latitude, longitude, altitude]
+    mobile=True
+)
+
+
+uploader.close()

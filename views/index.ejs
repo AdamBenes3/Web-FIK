@@ -16,15 +16,45 @@
             padding: 8px;
             text-align: left;
         }
+
+        #fixedTable {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #f2f2f2;
+            z-index: 1;
+        }
     </style>
 </head>
 
 <body>
     <h1>Show Device Information</h1>
+
+    <!-- Static table with "Hello" and CDP heartbeat data -->
+    <div id="staticTableContainer">
+        <table>
+            <!-- Add more rows for other static data -->
+            <tr>
+                <th>CDP HB</th>
+                <td id="cdpHbData"></td>
+            </tr>
+            <tr>
+                <th>Car HB</th>
+                <td id="carHbData"></td>
+            </tr>
+            <tr>
+                <th>LDP HB</th>
+                <td id="ldpHbData"></td>
+            </tr>
+        </table>
+    </div>
+
     <div id="buttons"></div>
     <div id="tableContainer"></div>
 
     <script>
+
         // Array to store JSON data
         var jsonDataArray = [];
 
@@ -41,39 +71,39 @@
 
             // Determine the background color based on speed
             var speedMps = parseFloat(jsonDataObj.uplink_message.decoded_payload.speed_mps);
-            var speedBackgroundColor = speedMps > 0.5 ? 'red' : '';
+            var speedBackgroundColor = speedMps > 0.5 ? 'red' : 'green';
 
             // Create a table if it doesn't exist
             if (!existingTable) {
                 var table = document.createElement('table');
                 table.id = deviceId + 'Table';
                 table.innerHTML += `
-                    <tr>
-                        <th>Device ID</th>
-                        <td>${deviceId}</td>
-                    </tr>
-                    <tr>
-                        <th>Dev EUI</th>
-                        <td>${jsonDataObj.end_device_ids.dev_eui}</td>
-                    </tr>
-                    <tr>
-                        <th>Dev Addr</th>
-                        <td>${jsonDataObj.end_device_ids.dev_addr}</td>
-                    </tr>
-                    <tr>
-                        <th style="background-color: red;">Received At</th>
-                        <td style="background-color: red;">${jsonDataObj.received_at}</td>
-                    </tr>
-                    <tr>
-                        <th style="background-color: red;">Timestamp</th>
-                        <td style="background-color: red;">${jsonData.timestamp}</td>
-                    </tr>
-                    <tr>
-                        <th style="background-color: ${speedBackgroundColor};">Speed (m/s)</th>
-                        <td style="background-color: ${speedBackgroundColor};">${speedMps}</td>
-                    </tr>
-                    <!-- Add more rows for other data -->
-                `;
+        <tr>
+            <th>Device ID</th>
+            <td>${deviceId}</td>
+        </tr>
+        <tr>
+            <th>Dev EUI</th>
+            <td>${jsonDataObj.end_device_ids.dev_eui}</td>
+        </tr>
+        <tr>
+            <th>Dev Addr</th>
+            <td>${jsonDataObj.end_device_ids.dev_addr}</td>
+        </tr>
+        <tr>
+            <th style="background-color: red;">Received At</th>
+            <td style="background-color: red;">${jsonDataObj.received_at}</td>
+        </tr>
+        <tr>
+            <th style="background-color: red;">Timestamp</th>
+            <td style="background-color: red;">${jsonData.timestamp}</td>
+        </tr>
+        <tr>
+            <th style="background-color: ${speedBackgroundColor};">Speed (m/s)</th>
+            <td style="background-color: ${speedBackgroundColor};">${speedMps}</td>
+        </tr>
+        <!-- Add more rows for other data -->
+    `;
 
                 // Add the table to the tableContainer
                 var tableContainer = document.getElementById('tableContainer');
@@ -88,7 +118,6 @@
         // Function to add JSON data to the array and create a button
         function addJsonData(jsonData) {
             jsonDataArray.push(jsonData);
-
 
             var deviceId = JSON.parse(jsonData.message).end_device_ids.device_id;
 
@@ -111,17 +140,29 @@
             }
         }
 
+        // Function to update the CDP heartbeat data in the static table
+        function updateStaticTableWithCdpHbData(cdpHbData) {
+            // Update the content of the cell with the CDP heartbeat data
+            document.getElementById('cdpHbData').textContent = JSON.stringify(cdpHbData);
+        }
+        function updateStaticTableWithCarHbData(HbData) {
+            document.getElementById('carHbData').textContent = JSON.stringify(HbData);
+        }
+        updateStaticTableWithLdpHbData = (HbData) => {
+            document.getElementById('ldpHbData').textContent = JSON.stringify(HbData);
+        }
+
         function loadDataFromServer() {
-            // Make an HTTP GET request to the server for JSON data
-            fetch('/api/data') // Use the correct route
+            // Make an HTTP GET request to the server for JSON data from /api/data
+            fetch('/api/data')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
-                    return response.json(); // Parse JSON response as text
+                    return response.json();
                 })
                 .then(data => {
-                    console.log('Server Response:', data.data); // Log the response
+                    console.log('Server Response (api/data):', data.data);
                     if (data) {
                         // Pass the data as is to the addJsonData function
                         addJsonData(data.data);
@@ -130,19 +171,59 @@
                     }
                 })
                 .catch(error => {
-                    console.error('Error loading data:', error);
+                    console.error('Error loading data (api/data):', error);
+                });
+
+            // Make an additional HTTP GET request to the server for JSON data from /api/forward/cdp/hb
+            fetch('/cdp/hb')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Server Response (/cdp/hb):', data);
+                    // Handle the cdp/hb data and update the static table
+                    updateStaticTableWithCdpHbData(data.data.cdp_heartbeat_value);
+                })
+                .catch(error => {
+                    console.error('Error loading cdp/hb data:', error);
+                });
+            fetch('/car/hb')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Server Response (/car/hb):', data);
+                    // Handle the car/hb data and update the static table
+                    updateStaticTableWithCarHbData(data.data.car_heartbeat_value);
+                })
+                .catch(error => {
+                    console.error('Error loading cdp/hb data:', error);
+                });
+            fetch('/ldp/hb')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Server Response (/ldp/hb):', data);
+                    // Handle the car/hb data and update the static table
+                    updateStaticTableWithLdpHbData(data.data.ldp_heartbeat_value);
+                })
+                .catch(error => {
+                    console.error('Error loading ldp/hb data:', error);
                 });
         }
 
-
-
-
         // Load JSON data from the server
         loadDataFromServer();
-
-
-
-
     </script>
 </body>
 
