@@ -22,6 +22,8 @@ password = config['password']
 topic = '#'  # You can change this to the specific topic you want to subscribe to
 
 
+balloons_dict = {}
+
 
 
 express_base_url = "http://localhost:3000/api/forward"
@@ -29,7 +31,10 @@ express_base_url = "http://localhost:3000/api/forward"
 
 def heartbeat_loop():
     while True:
-        send_heartbeat()
+        try:
+            send_heartbeat()
+        except:
+            print("Error couldnt send data to GAPP")
         time.sleep(10)  # Send heartbeat every 10 seconds
 
 def send_data_to_express(endpoint: str, data: dict):
@@ -81,25 +86,46 @@ def on_message(client, userdata, message):
             longitude = payload_dict["uplink_message"]["decoded_payload"]["lon"]
             altitude = payload_dict["uplink_message"]["decoded_payload"].get("alt_m")
 
-            logging.basicConfig(format="%(asctime)s %(levelname)s:%(message)s", level=logging.DEBUG)
+            print("HESO START")
+            
+            # logging.basicConfig(format="%(asctime)s %(levelname)s:%(message)s", level=logging.DEBUG)
+            
+            print(balloon_id + "Test", latitude, longitude, altitude + 1000)
 
-            uploader = Uploader("SlimonTest", uploader_position=[50.073, 14.418, 400])
-            uploader.add_telemetry(
-                balloon_id,  # Your payload callsign
-                datetime.datetime.utcnow(),
-                latitude,  # Latitude
-                longitude,  # Longitude
-                altitude  # Altitude
-            )
-            uploader.close()
+            if (not balloon_id in balloons_dict):
+                balloons_dict[balloon_id] = Uploader(balloon_id)
+                print(balloons_dict)
+                
+                
+            
+            balloons_dict[balloon_id].add_telemetry(
+                    balloon_id + "Test",  # Your payload callsign
+                    datetime.datetime.utcnow(),
+                    latitude,  # Latitude
+                    longitude,  # Longitude
+                    altitude + 1000  # Altitude
+                )
+
+            #uploader = Uploader("AdamTest", uploader_position=[50.073, 14.418, 400])
+            
+            time.sleep(10)
+            
+            #uploader.close()
+            
+            print("HESO END")
 
         except json.JSONDecodeError as e:
             print(f"Error decoding JSON: {e}")
 
     json_data = json.dumps(received_data, indent=2)
-
-    headers = {'Content-Type': 'application/json'}
-    response = requests.post(nodejs_server_url, data=json_data, headers=headers)
+    
+    try:
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(nodejs_server_url, data=json_data, headers=headers)
+    except:
+        print("Error couldnt send data to GAPP")
+        return {"message": "Error couldnt send data to GAPP"}
+    
 
     if response.status_code == 200:
         print('Data sent to Node.js server')
@@ -113,4 +139,12 @@ client.on_connect = on_connect
 client.on_message = on_message
 
 client.connect(server_address, 1883, 60)
-client.loop_forever()
+
+try:
+    client.loop_forever()
+except KeyboardInterrupt as e:
+    print("Ukončeno ctrl+c")
+finally:
+    for i in balloons_dict:
+        print(i, ":", balloons_dict[i])
+        balloons_dict[i].close()

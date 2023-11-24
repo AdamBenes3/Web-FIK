@@ -26,10 +26,60 @@
             z-index: 1;
         }
     </style>
+    <style>
+        #jsonPanel {
+            display: none;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            white-space: pre-wrap;
+        }
+
+        #toggleButton {
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 
 <body>
     <h1>Show Device Information</h1>
+
+    <table>
+        <tr>
+            <th>Last balloon info in json</th>
+            <td>
+                <button id="balloonToggleButton">Balloon</button>
+                <div id="balloonJsonPanel"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>Car 1 last json</th>
+            <td>
+                <button id="car1JsonToggleButton">Car 1</button>
+                <div id="car1Json"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>Car 2 last json</th>
+            <td>
+                <button id="car2JsonToggleButton">Car 2</button>
+                <div id="car2Json"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>Car 3 last json</th>
+            <td>
+                <button id="car3JsonToggleButton">Car 3</button>
+                <div id="car3Json"></div>
+            </td>
+        </tr>
+    </table>
+
 
     <!-- Static table with "Hello" and CDP heartbeat data -->
     <div id="staticTableContainer">
@@ -40,8 +90,16 @@
                 <td id="cdpHbData"></td>
             </tr>
             <tr>
-                <th>Car HB</th>
-                <td id="carHbData"></td>
+                <th>Car 1 HB</th>
+                <td id="car1HbData"></td>
+            </tr>
+            <tr>
+                <th>Car 2 HB</th>
+                <td id="car2HbData"></td>
+            </tr>
+            <tr>
+                <th>Car 3 HB</th>
+                <td id="car3HbData"></td>
             </tr>
             <tr>
                 <th>LDP HB</th>
@@ -58,8 +116,79 @@
         // Array to store JSON data
         var jsonDataArray = [];
 
+        var TTNjson;
+
+        var balloonJsonPanel = document.getElementById('balloonJsonPanel');
+        var balloonToggleButton = document.getElementById('balloonToggleButton');
+
+        balloonToggleButton.addEventListener('click', function () {
+            // Toggle the visibility of the JSON panel
+            balloonJsonPanel.style.display = balloonJsonPanel.style.display === 'block' ? 'none' : 'block';
+
+
+            // Display or hide the JSON data
+            if (balloonJsonPanel.style.display === 'block') {
+                balloonJsonPanel.textContent = JSON.stringify(TTNjson, null, 2);
+            } else {
+                balloonJsonPanel.textContent = '';
+            }
+        });
+
+        var car1;
+
+        var car1Json = document.getElementById('car1Json');
+        var car1JsonToggleButton = document.getElementById('car1JsonToggleButton');
+
+        car1JsonToggleButton.addEventListener('click', function () {
+            // Toggle the visibility of the JSON panel
+            car1Json.style.display = car1Json.style.display === 'block' ? 'none' : 'block';
+
+            // Display or hide the JSON data
+            if (car1Json.style.display === 'block') {
+                car1Json.textContent = JSON.stringify(car1, null, 2);
+            } else {
+                car1Json.textContent = '';
+            }
+        });
+
+        var car2;
+
+        var car2Json = document.getElementById('car2Json');
+        var car2JsonToggleButton = document.getElementById('car2JsonToggleButton');
+
+        car2JsonToggleButton.addEventListener('click', function () {
+            // Toggle the visibility of the JSON panel
+            car2Json.style.display = car2Json.style.display === 'block' ? 'none' : 'block';
+
+            // Display or hide the JSON data
+            if (car2Json.style.display === 'block') {
+                car2Json.textContent = JSON.stringify(car2, null, 2);
+            } else {
+                car2Json.textContent = '';
+            }
+        });
+
+        var car3;
+
+        var car3Json = document.getElementById('car3Json');
+        var car3JsonToggleButton = document.getElementById('car3JsonToggleButton');
+
+        car3JsonToggleButton.addEventListener('click', function () {
+            // Toggle the visibility of the JSON panel
+            car3Json.style.display = car3Json.style.display === 'block' ? 'none' : 'block';
+
+            // Display or hide the JSON data
+            if (car3Json.style.display === 'block') {
+                car3Json.textContent = JSON.stringify(car3, null, 2);
+            } else {
+                car3Json.textContent = '';
+            }
+        });
+
         // Function to create or update a table for a device
         function createOrUpdateTable(jsonData) {
+
+
             // Parse the JSON data
             var jsonDataObj = JSON.parse(jsonData.message);
 
@@ -145,8 +274,45 @@
             // Update the content of the cell with the CDP heartbeat data
             document.getElementById('cdpHbData').textContent = JSON.stringify(cdpHbData);
         }
-        function updateStaticTableWithCarHbData(HbData) {
-            document.getElementById('carHbData').textContent = JSON.stringify(HbData);
+        function updateStaticTableWithCar1HbData(HbData) {
+
+            // Check if the timestamp is older than an hour (3600 seconds)
+            var timestamp = new Date(HbData);
+            var currentTimestamp = new Date();
+            var timeDifferenceInSeconds = (currentTimestamp - timestamp) / 1000;
+
+            // Determine the background color based on the timestamp
+            var timestampBackgroundColor = timeDifferenceInSeconds > 3600 ? 'red' : 'green';
+
+
+            document.getElementById('car1HbData').textContent = JSON.stringify(HbData);
+            document.getElementById('car1HbData').style.backgroundColor = timestampBackgroundColor;
+        }
+        function updateStaticTableWithCar2HbData(HbData) {
+            // Check if the timestamp is older than an hour (3600 seconds)
+            var timestamp = new Date(HbData);
+            var currentTimestamp = new Date();
+            var timeDifferenceInSeconds = (currentTimestamp - timestamp) / 1000;
+
+            // Determine the background color based on the timestamp
+            var timestampBackgroundColor = timeDifferenceInSeconds > 3600 ? 'red' : 'green';
+
+
+            document.getElementById('car2HbData').textContent = JSON.stringify(HbData);
+            document.getElementById('car2HbData').style.backgroundColor = timestampBackgroundColor;
+        }
+        function updateStaticTableWithCar3HbData(HbData) {
+            // Check if the timestamp is older than an hour (3600 seconds)
+            var timestamp = new Date(HbData);
+            var currentTimestamp = new Date();
+            var timeDifferenceInSeconds = (currentTimestamp - timestamp) / 1000;
+
+            // Determine the background color based on the timestamp
+            var timestampBackgroundColor = timeDifferenceInSeconds > 3600 ? 'red' : 'green';
+
+
+            document.getElementById('car3HbData').textContent = JSON.stringify(HbData);
+            document.getElementById('car3HbData').style.backgroundColor = timestampBackgroundColor;
         }
         updateStaticTableWithLdpHbData = (HbData) => {
             document.getElementById('ldpHbData').textContent = JSON.stringify(HbData);
@@ -154,7 +320,7 @@
 
         function loadDataFromServer() {
             // Make an HTTP GET request to the server for JSON data from /api/data
-            fetch('/api/data')
+            fetch('/api/data/balloon')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -166,6 +332,65 @@
                     if (data) {
                         // Pass the data as is to the addJsonData function
                         addJsonData(data.data);
+                        TTNjson = data.data.message;
+                    } else {
+                        console.error('Received undefined data from the server');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading data (api/data):', error);
+                });
+
+            fetch('/car/data/1')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Server Response (api/data):', data.data);
+                    if (data) {
+                        // Pass the data as is to the addJsonData function
+                        car1 = data.data;
+                    } else {
+                        console.error('Received undefined data from the server');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading data (api/data):', error);
+                });
+            fetch('/car/data/2')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Server Response (api/data):', data.data);
+                    if (data) {
+                        // Pass the data as is to the addJsonData function
+                        car2 = data.data;
+                    } else {
+                        console.error('Received undefined data from the server');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading data (api/data):', error);
+                });
+            fetch('/car/data/3')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Server Response (api/data):', data.data);
+                    if (data) {
+                        // Pass the data as is to the addJsonData function
+                        car3 = data.data;
                     } else {
                         console.error('Received undefined data from the server');
                     }
@@ -188,9 +413,9 @@
                     updateStaticTableWithCdpHbData(data.data.cdp_heartbeat_value);
                 })
                 .catch(error => {
-                    console.error('Error loading cdp/hb data:', error);
+                    console.error('Error loading /cdp/hb data:', error);
                 });
-            fetch('/car/hb')
+            fetch('/car/hb/1')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -198,13 +423,47 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Server Response (/car/hb):', data);
+                    console.log('Server Response (/car/hb/1):', data);
                     // Handle the car/hb data and update the static table
-                    updateStaticTableWithCarHbData(data.data.car_heartbeat_value);
+                    updateStaticTableWithCar1HbData(data.data.car_heartbeat_value);
                 })
                 .catch(error => {
-                    console.error('Error loading cdp/hb data:', error);
+                    console.error('Error loading /car/hb/1 data:', error);
                 });
+
+            fetch('/car/hb/2')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Server Response (/car/hb/2):', data);
+                    // Handle the car/hb data and update the static table
+                    updateStaticTableWithCar2HbData(data.data.car_heartbeat_value);
+                })
+                .catch(error => {
+                    console.error('Error loading /car/hb/2 data:', error);
+                });
+
+            fetch('/car/hb/3')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Server Response (/car/hb/3):', data);
+                    // Handle the car/hb data and update the static table
+                    updateStaticTableWithCar3HbData(data.data.car_heartbeat_value);
+                })
+                .catch(error => {
+                    console.error('Error loading /car/hb/3 data:', error);
+                });
+
+
             fetch('/ldp/hb')
                 .then(response => {
                     if (!response.ok) {
@@ -218,7 +477,7 @@
                     updateStaticTableWithLdpHbData(data.data.ldp_heartbeat_value);
                 })
                 .catch(error => {
-                    console.error('Error loading ldp/hb data:', error);
+                    console.error('Error loading /ldp/hb data:', error);
                 });
         }
 

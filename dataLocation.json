@@ -1,5 +1,5 @@
 {
   "topic": "v3/balloons@ttn/devices/fik8b/location/solved",
-  "message": "{\"end_device_ids\":{\"device_id\":\"fik8b\",\"application_ids\":{\"application_id\":\"balloons\"},\"dev_eui\":\"3C56A000A0000064\",\"dev_addr\":\"26011828\"},\"correlation_ids\":[\"gs:uplink:01HFZA2FG3N53PQJXFVXE8E4NJ\"],\"received_at\":\"2023-11-24T00:01:02.164914786Z\",\"location_solved\":{\"service\":\"frm-payload\",\"location\":{\"latitude\":50.11628341674805,\"longitude\":14.461219787597656,\"source\":\"SOURCE_GPS\"}}}",
-  "timestamp": "2023-11-24T00:01:02"
+  "message": "{\"end_device_ids\":{\"device_id\":\"fik8b\",\"application_ids\":{\"application_id\":\"balloons\"},\"dev_eui\":\"3C56A000A0000064\",\"dev_addr\":\"26011828\"},\"correlation_ids\":[\"gs:uplink:01HG0TEWR955GE52HK2BR4FF9J\"],\"received_at\":\"2023-11-24T14:06:40.604175990Z\",\"location_solved\":{\"service\":\"frm-payload\",\"location\":{\"latitude\":50.1164436340332,\"longitude\":14.461044311523438,\"source\":\"SOURCE_GPS\"}}}",
+  "timestamp": "2023-11-24T14:06:40"
 }
