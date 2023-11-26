@@ -51,10 +51,17 @@
 
     <table>
         <tr>
-            <th>Last balloon info in json</th>
+            <th>TTN fik-8b last json</th>
             <td>
-                <button id="balloonToggleButton">Balloon</button>
-                <div id="balloonJsonPanel"></div>
+                <button id="fik-8b-ToggleButton">fik-8b</button>
+                <div id="fik-8b-Panel"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>TTN PX4 last json</th>
+            <td>
+                <button id="px4-ToggleButton">PX4</button>
+                <div id="px4-Panel"></div>
             </td>
         </tr>
         <tr>
@@ -115,12 +122,6 @@
                 <button id="ttnfik8bJsonToggleButton">fik8b</button>
                 <div id="ttnfik8bJson"></div>
             </td>
-        <tr>
-            <th>fik8b car data</th>
-            <td>
-                <button id="carfik8bJsonToggleButton">fik8b</button>
-                <div id="carfik8bJson"></div>
-            </td>
         </tr>
         <tr>
             <th>PX4 TTN data</th>
@@ -130,10 +131,10 @@
             </td>
         </tr>
         <tr>
-            <th>PX4 car data</th>
+            <th>fik8b car data</th>
             <td>
-                <button id="carPX4JsonToggleButton">PX4</button>
-                <div id="carPX4Json"></div>
+                <button id="carJsonToggleButton">fik8b</button>
+                <div id="carJson"></div>
             </td>
         </tr>
     </table>
@@ -145,22 +146,43 @@
 
         // Array to store JSON data
         var jsonDataArray = [];
+        
+        
+        
+        var fik_8b;
 
-        var TTNjson;
+        var fik_8bJson = document.getElementById('fik-8b-Panel');
+        var fik_8b_ToggleButton = document.getElementById('fik-8b-ToggleButton');
 
-        var balloonJsonPanel = document.getElementById('balloonJsonPanel');
-        var balloonToggleButton = document.getElementById('balloonToggleButton');
-
-        balloonToggleButton.addEventListener('click', function () {
+        fik_8b_ToggleButton.addEventListener('click', function () {
             // Toggle the visibility of the JSON panel
-            balloonJsonPanel.style.display = balloonJsonPanel.style.display === 'block' ? 'none' : 'block';
-
+            fik_8bJson.style.display = fik_8bJson.style.display === 'block' ? 'none' : 'block';
 
             // Display or hide the JSON data
-            if (balloonJsonPanel.style.display === 'block') {
-                balloonJsonPanel.textContent = JSON.stringify(TTNjson, null, 2);
+            if (fik_8bJson.style.display === 'block') {
+                fik_8bJson.textContent = JSON.stringify(fik_8b, null, 2);
             } else {
-                balloonJsonPanel.textContent = '';
+                fik_8bJson.textContent = '';
+            }
+        });
+        
+        
+        
+        
+        var PX4;
+
+        var px4_Pane = document.getElementById('px4-Panel');
+        var px4_ToggleButton = document.getElementById('px4-ToggleButton');
+
+        px4_ToggleButton.addEventListener('click', function () {
+            // Toggle the visibility of the JSON panel
+            px4_Pane.style.display = px4_Pane.style.display === 'block' ? 'none' : 'block';
+
+            // Display or hide the JSON data
+            if (px4_Pane.style.display === 'block') {
+                px4_Pane.textContent = JSON.stringify(PX4, null, 2);
+            } else {
+                px4_Pane.textContent = '';
             }
         });
 
@@ -235,6 +257,50 @@
                 ttnfik8bJson.textContent = '';
             }
         });
+        
+        
+        
+        var ttnPX4;
+
+        var ttnPX4Json = document.getElementById('ttnPX4Json');
+        var ttnPX4JsonToggleButton = document.getElementById('ttnPX4JsonToggleButton');
+
+
+
+        ttnPX4JsonToggleButton.addEventListener('click', function () {
+            // Toggle the visibility of the JSON panel
+            ttnPX4Json.style.display = ttnPX4Json.style.display === 'block' ? 'none' : 'block';
+
+            // Display or hide the JSON data
+            if (ttnPX4Json.style.display === 'block') {
+                // Display only specific information, e.g., speed
+                displayTtnPX4Info(ttnPX4);
+            } else {
+                ttnPX4Json.textContent = '';
+            }
+        });
+        
+        
+        var carx;
+
+        var carJson = document.getElementById('carJson');
+        var carJsonToggleButton = document.getElementById('carJsonToggleButton');
+
+
+
+        carJsonToggleButton.addEventListener('click', function () {
+            // Toggle the visibility of the JSON panel
+            carJson.style.display = carJson.style.display === 'block' ? 'none' : 'block';
+
+            // Display or hide the JSON data
+            if (carJson.style.display === 'block') {
+                // Display only specific information, e.g., speed
+                displayCarInfo(carx);
+            } else {
+                carJson.textContent = '';
+            }
+        });
+        
 
         // Function to display specific information from ttnfik8b
         function displayTtnfik8bInfo(data) {
@@ -245,8 +311,6 @@
             // Extract device information
             var deviceId = jsonDataObj.end_device_ids.device_id;
 
-            // Check if a table with the same device_id already exists
-            var existingTable = document.getElementById(deviceId + 'Table');
 
             // Determine the background color based on speed
             var speedMps = parseFloat(jsonDataObj.uplink_message.decoded_payload.speed_mps);
@@ -263,10 +327,101 @@
             
             // Set the background color of the cell
             cell2.style.backgroundColor = speedBackgroundColor;
+            cell1.style.backgroundColor = speedBackgroundColor;
+            
+            var row = infoTable.insertRow();
+            var cell3 = row.insertCell(0);
+            var cell4 = row.insertCell(1);
+            cell3.innerHTML = '<strong>Speed:</strong>';
+            cell4.textContent = speedMps;
+            
+            // Set the background color of the cell
+            cell3.style.backgroundColor = speedBackgroundColor;
+            cell4.style.backgroundColor = speedBackgroundColor;
 
             // Clear existing content and append the new table
             ttnfik8bJson.textContent = '';
             ttnfik8bJson.appendChild(infoTable);
+        }
+        
+        
+        // Function to display specific information from ttnfik8b
+        function displayTtnPX4Info(data) {
+            
+            // Parse the JSON data
+            var jsonDataObj = JSON.parse(data.message);
+
+            // Extract device information
+            var deviceId = jsonDataObj.end_device_ids.device_id;
+
+
+            // Determine the background color based on speed
+            var speedMps = parseFloat(jsonDataObj.uplink_message.decoded_payload.speed_mps);
+            
+            var speedBackgroundColor = speedMps > 10 ? 'red' : 'green';
+            
+            // Display the information in a separate table
+            var infoTable = document.createElement('table');
+            var row = infoTable.insertRow();
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            cell1.innerHTML = '<strong>Speed:</strong>';
+            cell2.textContent = speedMps;
+            
+            // Set the background color of the cell
+            cell2.style.backgroundColor = speedBackgroundColor;
+            cell1.style.backgroundColor = speedBackgroundColor;
+            
+            var row = infoTable.insertRow();
+            var cell3 = row.insertCell(0);
+            var cell4 = row.insertCell(1);
+            cell3.innerHTML = '<strong>Speed:</strong>';
+            cell4.textContent = speedMps;
+            
+            // Set the background color of the cell
+            cell3.style.backgroundColor = speedBackgroundColor;
+            cell4.style.backgroundColor = speedBackgroundColor;
+
+            // Clear existing content and append the new table
+            ttnPX4Json.textContent = '';
+            ttnPX4Json.appendChild(infoTable);
+        }
+        
+        // Function to display specific information from ttnfik8b
+        function displayCarInfo(data) {
+            
+
+
+            // Determine the background color based on speed
+            var speedMps = parseFloat(data.latitude);
+            
+            var speedBackgroundColor = speedMps > 10 ? 'red' : 'green';
+            
+            // Display the information in a separate table
+            var infoTable = document.createElement('table');
+            var row = infoTable.insertRow();
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            cell1.innerHTML = '<strong>Latitude:</strong>';
+            cell2.textContent = speedMps;
+            
+            // Set the background color of the cell
+            cell2.style.backgroundColor = speedBackgroundColor;
+            cell1.style.backgroundColor = speedBackgroundColor;
+            
+            var row = infoTable.insertRow();
+            var cell3 = row.insertCell(0);
+            var cell4 = row.insertCell(1);
+            cell3.innerHTML = '<strong>Latitude:</strong>';
+            cell4.textContent = speedMps;
+            
+            // Set the background color of the cell
+            cell3.style.backgroundColor = speedBackgroundColor;
+            cell4.style.backgroundColor = speedBackgroundColor;
+
+            // Clear existing content and append the new table
+            carJson.textContent = '';
+            carJson.appendChild(infoTable);
         }
 
 
@@ -337,6 +492,48 @@
                     if (data) {
                         // Pass the data as is to the addJsonData function
                         ttnfik8b = data.data;
+                        fik_8b = data.data;
+                    } else {
+                        console.error('Received undefined data from the server');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading data (api/data):', error);
+                });
+                
+                fetch('/TTNpx4')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Server Response (api/data):', data.data);
+                    if (data) {
+                        // Pass the data as is to the addJsonData function
+                        ttnPX4 = data.data;
+                        PX4 = data.data;
+                    } else {
+                        console.error('Received undefined data from the server');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading data (api/data):', error);
+                });
+                
+                fetch('/Car')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Server Response (api/data):', data.data);
+                    if (data) {
+                        // Pass the data as is to the addJsonData function
+                        carx = data.data;
                     } else {
                         console.error('Received undefined data from the server');
                     }
@@ -345,6 +542,8 @@
                     console.error('Error loading data (api/data):', error);
                 });
 
+                
+                
 
             fetch('/car/data/1')
                 .then(response => {

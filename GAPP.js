@@ -352,6 +352,41 @@ app.post('/api/post/data', (req, res) => {
 });
 
 
+// Route to send JSON data
+app.get('/TTNpx4', (req, res) => {
+    try {
+        //console.log("data/" + 'fik8b.json');
+        const rawData = fs.readFileSync("data/" + 'px4.json', 'utf8');
+        const rawData2 = fs.readFileSync("data/" + 'dataLocation.json', 'utf8');
+        const decodedData = JSON.parse(rawData);
+        const decodedData2 = JSON.parse(rawData2);
+
+        console.log(decodedData);
+        // Send JSON data as a response
+        res.json({ data: decodedData });
+    } catch (error) {
+        res.status(500).json({ error: 'Error loading data' });
+    }
+});
+
+// Route to send JSON data
+app.get('/Car', (req, res) => {
+    try {
+        //console.log("data/" + 'fik8b.json');
+        const rawData = fs.readFileSync("data/" + 'car_data.json', 'utf8');
+        const rawData2 = fs.readFileSync("data/" + 'dataLocation.json', 'utf8');
+        const decodedData = JSON.parse(rawData);
+        const decodedData2 = JSON.parse(rawData2);
+
+        console.log(decodedData);
+        // Send JSON data as a response
+        res.json({ data: decodedData });
+    } catch (error) {
+        res.status(500).json({ error: 'Error loading data' });
+    }
+});
+
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
