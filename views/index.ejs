@@ -108,6 +108,36 @@
         </table>
     </div>
 
+    <table>
+        <tr>
+            <th>fik8b TTN data</th>
+            <td>
+                <button id="ttnfik8bJsonToggleButton">fik8b</button>
+                <div id="ttnfik8bJson"></div>
+            </td>
+        <tr>
+            <th>fik8b car data</th>
+            <td>
+                <button id="carfik8bJsonToggleButton">fik8b</button>
+                <div id="carfik8bJson"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>PX4 TTN data</th>
+            <td>
+                <button id="ttnPX4JsonToggleButton">PX4</button>
+                <div id="ttnPX4Json"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>PX4 car data</th>
+            <td>
+                <button id="carPX4JsonToggleButton">PX4</button>
+                <div id="carPX4Json"></div>
+            </td>
+        </tr>
+    </table>
+
     <div id="buttons"></div>
     <div id="tableContainer"></div>
 
@@ -185,12 +215,32 @@
             }
         });
 
-        // Function to create or update a table for a device
-        function createOrUpdateTable(jsonData) {
+
+        var ttnfik8b;
+
+        var ttnfik8bJson = document.getElementById('ttnfik8bJson');
+        var ttnfik8bJsonToggleButton = document.getElementById('ttnfik8bJsonToggleButton');
 
 
+
+        ttnfik8bJsonToggleButton.addEventListener('click', function () {
+            // Toggle the visibility of the JSON panel
+            ttnfik8bJson.style.display = ttnfik8bJson.style.display === 'block' ? 'none' : 'block';
+
+            // Display or hide the JSON data
+            if (ttnfik8bJson.style.display === 'block') {
+                // Display only specific information, e.g., speed
+                displayTtnfik8bInfo(ttnfik8b);
+            } else {
+                ttnfik8bJson.textContent = '';
+            }
+        });
+
+        // Function to display specific information from ttnfik8b
+        function displayTtnfik8bInfo(data) {
+            
             // Parse the JSON data
-            var jsonDataObj = JSON.parse(jsonData.message);
+            var jsonDataObj = JSON.parse(data.message);
 
             // Extract device information
             var deviceId = jsonDataObj.end_device_ids.device_id;
@@ -200,74 +250,26 @@
 
             // Determine the background color based on speed
             var speedMps = parseFloat(jsonDataObj.uplink_message.decoded_payload.speed_mps);
-            var speedBackgroundColor = speedMps > 0.5 ? 'red' : 'green';
+            
+            var speedBackgroundColor = speedMps > 10 ? 'red' : 'green';
+            
+            // Display the information in a separate table
+            var infoTable = document.createElement('table');
+            var row = infoTable.insertRow();
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            cell1.innerHTML = '<strong>Speed:</strong>';
+            cell2.textContent = speedMps;
+            
+            // Set the background color of the cell
+            cell2.style.backgroundColor = speedBackgroundColor;
 
-            // Create a table if it doesn't exist
-            if (!existingTable) {
-                var table = document.createElement('table');
-                table.id = deviceId + 'Table';
-                table.innerHTML += `
-        <tr>
-            <th>Device ID</th>
-            <td>${deviceId}</td>
-        </tr>
-        <tr>
-            <th>Dev EUI</th>
-            <td>${jsonDataObj.end_device_ids.dev_eui}</td>
-        </tr>
-        <tr>
-            <th>Dev Addr</th>
-            <td>${jsonDataObj.end_device_ids.dev_addr}</td>
-        </tr>
-        <tr>
-            <th style="background-color: red;">Received At</th>
-            <td style="background-color: red;">${jsonDataObj.received_at}</td>
-        </tr>
-        <tr>
-            <th style="background-color: red;">Timestamp</th>
-            <td style="background-color: red;">${jsonData.timestamp}</td>
-        </tr>
-        <tr>
-            <th style="background-color: ${speedBackgroundColor};">Speed (m/s)</th>
-            <td style="background-color: ${speedBackgroundColor};">${speedMps}</td>
-        </tr>
-        <!-- Add more rows for other data -->
-    `;
-
-                // Add the table to the tableContainer
-                var tableContainer = document.getElementById('tableContainer');
-                tableContainer.appendChild(table);
-            } else {
-                // Toggle the visibility of the existing table
-                var tableStyle = existingTable.style;
-                tableStyle.display = tableStyle.display === 'none' ? 'table' : 'none';
-            }
+            // Clear existing content and append the new table
+            ttnfik8bJson.textContent = '';
+            ttnfik8bJson.appendChild(infoTable);
         }
 
-        // Function to add JSON data to the array and create a button
-        function addJsonData(jsonData) {
-            jsonDataArray.push(jsonData);
 
-            var deviceId = JSON.parse(jsonData.message).end_device_ids.device_id;
-
-            // Check if a button with the same device_id already exists
-            var existingButton = document.getElementById(deviceId + 'Button');
-
-            // Create a button if it doesn't exist
-            if (!existingButton) {
-                // Create a button for each device
-                var button = document.createElement('button');
-                button.id = deviceId + 'Button'; // Assign an ID to the button
-                button.textContent = deviceId;
-                button.addEventListener('click', function (event) {
-                    createOrUpdateTable(jsonDataArray.find(data => JSON.parse(data.message).end_device_ids.device_id === event.target.textContent));
-                });
-
-                // Add the button to the page
-                var buttonsContainer = document.getElementById('buttons');
-                buttonsContainer.appendChild(button);
-            }
-        }
 
         // Function to update the CDP heartbeat data in the static table
         function updateStaticTableWithCdpHbData(cdpHbData) {
@@ -318,9 +320,12 @@
             document.getElementById('ldpHbData').textContent = JSON.stringify(HbData);
         }
 
+
+
         function loadDataFromServer() {
-            // Make an HTTP GET request to the server for JSON data from /api/data
-            fetch('/api/data/balloon')
+
+
+            fetch('/TTNfik8b')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -331,8 +336,7 @@
                     console.log('Server Response (api/data):', data.data);
                     if (data) {
                         // Pass the data as is to the addJsonData function
-                        addJsonData(data.data);
-                        TTNjson = data.data.message;
+                        ttnfik8b = data.data;
                     } else {
                         console.error('Received undefined data from the server');
                     }
@@ -340,6 +344,7 @@
                 .catch(error => {
                     console.error('Error loading data (api/data):', error);
                 });
+
 
             fetch('/car/data/1')
                 .then(response => {

@@ -2,5 +2,6 @@
   "car_id": "car3",
   "latitude": 50.073,
   "longitude": 14.418,
-  "altitude": 400
+  "altitude": 400,
+  "tmp": "2023-11-26 19:56:49.491170"
 }

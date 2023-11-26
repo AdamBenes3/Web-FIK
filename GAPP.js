@@ -11,7 +11,9 @@ app.set('views', 'views');
 app.use(express.json());
 
 
-function isNewerTimestamp(receivedData) {
+const fss = require('fs');
+
+async function isNewerTimestamp(receivedData) {
     // Assuming the timestamp is stored in the "tmp" field
     const receivedTimestampStr = receivedData["tmp"];
 
@@ -19,16 +21,26 @@ function isNewerTimestamp(receivedData) {
         const receivedTimestamp = new Date(receivedTimestampStr);
 
         // Load existing data from car_data.json
-        const carDataFilePath = "car_data.json";
-        const existingData = require(carDataFilePath); // Assuming Node.js environment
+        const carDataFilePath = "data/car_data.json";
 
-        const existingTimestampStr = existingData["tmp"];
+        try {
+            const existingDataStr = await fss.promises.readFile(carDataFilePath, 'utf8');
+            const existingData = JSON.parse(existingDataStr);
 
-        if (existingTimestampStr) {
-            const existingTimestamp = new Date(existingTimestampStr);
+            const existingTimestampStr = existingData["tmp"];
 
-            // Compare timestamps
-            return receivedTimestamp > existingTimestamp;
+            if (existingTimestampStr) {
+                const existingTimestamp = new Date(existingTimestampStr);
+
+                // Compare timestamps
+                console.log(receivedTimestamp, existingTimestamp);
+                return receivedTimestamp > existingTimestamp;
+            } else {
+                return true;
+            }
+        } catch (error) {
+            console.error('Error reading file:', error);
+            return false;
         }
     }
     return false;
@@ -55,7 +67,7 @@ app.post('/api/forward/ldp/hb', (req, res) => {
 app.get('/ldp/hb', async (req, res) => {
     try {
         // Render the HTML template and include JSON data
-        const rawData = fs.readFileSync('ldp_hb.json', 'utf8');
+        const rawData = fs.readFileSync("data/" + 'ldp_hb.json', 'utf8');
         const decodedData = JSON.parse(rawData);
         res.json({ data: decodedData });
 
@@ -67,14 +79,28 @@ app.get('/ldp/hb', async (req, res) => {
 
 
 // Route to handle heartbeat data from FastAPI
-app.post('/api/forward/car/hb/1', (req, res) => {
+app.post('/api/forward/car/hb', (req, res) => {
     try {
         const receivedData = req.body;
 
-        // Process the received heartbeat data as needed
-        console.log(receivedData);
+        // get the car id
+        const carId = receivedData["car_id"];
 
-        saveDataToFile('car1_hb.json', receivedData);
+        // Process the received heartbeat data as needed
+        // console.log(receivedData);
+
+        if (carId == "car1") {
+            saveDataToFile('car1_hb.json', receivedData);
+        }
+        else if (carId == "car2") {
+            saveDataToFile('car2_hb.json', receivedData);
+        }
+        else if (carId == "car3") {
+            saveDataToFile('car3_hb.json', receivedData);
+        }
+        else {
+            console.log("Error: Invalid car id");
+        }
 
         // You can save the data to a file or perform other operations
 
@@ -87,7 +113,7 @@ app.post('/api/forward/car/hb/1', (req, res) => {
 app.get('/car/hb/1', async (req, res) => {
     try {
         // Render the HTML template and include JSON data
-        const rawData = fs.readFileSync('car1_hb.json', 'utf8');
+        const rawData = fs.readFileSync("data/" + 'car1_hb.json', 'utf8');
         const decodedData = JSON.parse(rawData);
         res.json({ data: decodedData });
 
@@ -97,28 +123,11 @@ app.get('/car/hb/1', async (req, res) => {
     }
 });
 
-// Route to handle heartbeat data from FastAPI
-app.post('/api/forward/car/hb/2', (req, res) => {
-    try {
-        const receivedData = req.body;
-
-        // Process the received heartbeat data as needed
-        console.log(receivedData);
-
-        saveDataToFile('car2_hb.json', receivedData);
-
-        // You can save the data to a file or perform other operations
-
-        res.status(200).json({ message: 'Heartbeat data received successfully' });
-    } catch (error) {
-        res.status(500).json({ error: 'Error processing heartbeat data' });
-    }
-});
 
 app.get('/car/hb/2', async (req, res) => {
     try {
         // Render the HTML template and include JSON data
-        const rawData = fs.readFileSync('car2_hb.json', 'utf8');
+        const rawData = fs.readFileSync("data/" + 'car2_hb.json', 'utf8');
         const decodedData = JSON.parse(rawData);
         res.json({ data: decodedData });
 
@@ -128,28 +137,11 @@ app.get('/car/hb/2', async (req, res) => {
     }
 });
 
-// Route to handle heartbeat data from FastAPI
-app.post('/api/forward/car/hb/3', (req, res) => {
-    try {
-        const receivedData = req.body;
-
-        // Process the received heartbeat data as needed
-        console.log(receivedData);
-
-        saveDataToFile('car3_hb.json', receivedData);
-
-        // You can save the data to a file or perform other operations
-
-        res.status(200).json({ message: 'Heartbeat data received successfully' });
-    } catch (error) {
-        res.status(500).json({ error: 'Error processing heartbeat data' });
-    }
-});
 
 app.get('/car/hb/3', async (req, res) => {
     try {
         // Render the HTML template and include JSON data
-        const rawData = fs.readFileSync('car3_hb.json', 'utf8');
+        const rawData = fs.readFileSync("data/" + 'car3_hb.json', 'utf8');
         const decodedData = JSON.parse(rawData);
         res.json({ data: decodedData });
 
@@ -160,68 +152,51 @@ app.get('/car/hb/3', async (req, res) => {
 });
 
 // Route to handle car data from FastAPI
-app.post('/api/forward/car/data/1', (req, res) => {
+app.post('/api/forward/car/data', (req, res) => {
+    console.log("Received car data");
     try {
+        
+        console.log("Received car data");
         const receivedData = req.body;
 
-        // Process the received car data as needed
         console.log(receivedData);
-
-        if (isNewerTimestamp(receivedData)) {
-            saveDataToFile('car_data.json', receivedData);
-            saveDataToFile('car1_data.json', receivedData);
+        // car id
+        const carId = receivedData["car_id"];
+        
+        console.log(isNewerTimestamp(receivedData));
+        
+        if (carId == "car1") {
+            console.log(isNewerTimestamp(receivedData));
+            if (isNewerTimestamp(receivedData)) {
+                saveDataToFile('car_data.json', receivedData);
+                saveDataToFile('car1_data.json', receivedData);
+            }
+            else {
+                saveDataToFile('car1_data.json', receivedData);
+            }
+        }
+        else if (carId == "car2") {
+            if (isNewerTimestamp(receivedData)) {
+                saveDataToFile('car_data.json', receivedData);
+                saveDataToFile('car2_data.json', receivedData);
+            }
+            else {
+                saveDataToFile('car2_data.json', receivedData);
+            }
+        }
+        else if (carId == "car3") {
+            if (isNewerTimestamp(receivedData)) {
+                saveDataToFile('car_data.json', receivedData);
+                saveDataToFile('car3_data.json', receivedData);
+            }
+            else {
+                saveDataToFile('car3_data.json', receivedData);
+            }
         }
         else {
-            saveDataToFile('car1_data.json', receivedData);
+            console.log("Error: Invalid car id");
         }
 
-        // You can save the data to a file or perform other operations
-        saveDataToFile('car1_data.json', receivedData);
-
-        res.status(200).json({ message: 'Car data received successfully' });
-    } catch (error) {
-        res.status(500).json({ error: 'Error processing car data' });
-    }
-});
-app.post('/api/forward/car/data/2', (req, res) => {
-    try {
-        const receivedData = req.body;
-
-        // Process the received car data as needed
-        console.log(receivedData);
-        
-        if (isNewerTimestamp(receivedData)) {
-            saveDataToFile('car_data.json', receivedData);
-            saveDataToFile('car2_data.json', receivedData);
-        }
-        else {
-            saveDataToFile('car2_data.json', receivedData);
-        }
-
-        // You can save the data to a file or perform other operations
-
-        res.status(200).json({ message: 'Car data received successfully' });
-    } catch (error) {
-        res.status(500).json({ error: 'Error processing car data' });
-    }
-});
-app.post('/api/forward/car/data/3', (req, res) => {
-    try {
-        const receivedData = req.body;
-
-        // Process the received car data as needed
-        console.log(receivedData);
-        
-        
-        if (isNewerTimestamp(receivedData)) {
-            saveDataToFile('car_data.json', receivedData);
-            saveDataToFile('car3_data.json', receivedData);
-        }
-        else {
-            saveDataToFile('car3_data.json', receivedData);
-        }
-
-        // You can save the data to a file or perform other operations
 
         res.status(200).json({ message: 'Car data received successfully' });
     } catch (error) {
@@ -232,7 +207,7 @@ app.post('/api/forward/car/data/3', (req, res) => {
 app.get('/car/data/1', async (req, res) => {
     try {
         // Render the HTML template and include JSON data
-        const rawData = fs.readFileSync('car1_data.json', 'utf8');
+        const rawData = fs.readFileSync("data/" + 'car1_data.json', 'utf8');
         const decodedData = JSON.parse(rawData);
         res.json({ data: decodedData });
 
@@ -244,7 +219,7 @@ app.get('/car/data/1', async (req, res) => {
 app.get('/car/data/2', async (req, res) => {
     try {
         // Render the HTML template and include JSON data
-        const rawData = fs.readFileSync('car2_data.json', 'utf8');
+        const rawData = fs.readFileSync("data/" + 'car2_data.json', 'utf8');
         const decodedData = JSON.parse(rawData);
         res.json({ data: decodedData });
 
@@ -256,7 +231,7 @@ app.get('/car/data/2', async (req, res) => {
 app.get('/car/data/3', async (req, res) => {
     try {
         // Render the HTML template and include JSON data
-        const rawData = fs.readFileSync('car3_data.json', 'utf8');
+        const rawData = fs.readFileSync("data/" + 'car3_data.json', 'utf8');
         const decodedData = JSON.parse(rawData);
         res.json({ data: decodedData });
 
@@ -290,7 +265,7 @@ function saveDataToFile(filename, data) {
     try {
         // Write the data to the file, overwriting the existing content
         console.log("Saved to file: " + filename);
-        fs.writeFileSync(filename, JSON.stringify(data, null, 2));
+        fs.writeFileSync("data/" + filename, JSON.stringify(data, null, 2));
     } catch (error) {
         console.error('Error saving data to file:', error);
     }
@@ -299,7 +274,7 @@ function saveDataToFile(filename, data) {
 app.get('/cdp/hb', async (req, res) => {
     try {
         // Render the HTML template and include JSON data
-        const rawData = fs.readFileSync('cdp_hb.json', 'utf8');
+        const rawData = fs.readFileSync("data/" + "cdp_hb.json", 'utf8');
         const decodedData = JSON.parse(rawData);
         res.json({ data: decodedData });
 
@@ -312,10 +287,11 @@ app.get('/cdp/hb', async (req, res) => {
 
 
 // Route to send JSON data
-app.get('/api/data/balloon', (req, res) => {
+app.get('/TTNfik8b', (req, res) => {
     try {
-        const rawData = fs.readFileSync('data.json', 'utf8');
-        const rawData2 = fs.readFileSync('dataLocation.json', 'utf8');
+        //console.log("data/" + 'fik8b.json');
+        const rawData = fs.readFileSync("data/" + 'fik8b.json', 'utf8');
+        const rawData2 = fs.readFileSync("data/" + 'dataLocation.json', 'utf8');
         const decodedData = JSON.parse(rawData);
         const decodedData2 = JSON.parse(rawData2);
 
@@ -330,8 +306,8 @@ app.get('/api/data/balloon', (req, res) => {
 // Route to render HTML
 app.get('/', async (req, res) => {
     try {
-        const rawData = fs.readFileSync('data.json', 'utf8');
-        const rawData2 = fs.readFileSync('dataLocation.json', 'utf8');
+        const rawData = fs.readFileSync("data/" + 'fik8b.json', 'utf8');
+        const rawData2 = fs.readFileSync("data/" + 'dataLocation.json', 'utf8');
         const decodedData = JSON.parse(rawData);
         const decodedData2 = JSON.parse(rawData2);
         // Render the HTML template and include JSON data
@@ -343,8 +319,8 @@ app.get('/', async (req, res) => {
 
 app.get('/api/get/data', async (req, res) => {
     try {
-        const rawData = fs.readFileSync('data.json', 'utf8');
-        const rawData2 = fs.readFileSync('dataLocation.json', 'utf8');
+        const rawData = fs.readFileSync("data/" + 'data.json', 'utf8');
+        const rawData2 = fs.readFileSync("data/" + 'dataLocation.json', 'utf8');
         const decodedData = JSON.parse(rawData);
         const decodedData2 = JSON.parse(rawData2);
         // Render the HTML template and include JSON data
@@ -361,10 +337,10 @@ app.post('/api/post/data', (req, res) => {
         const receivedData = req.body;
         // Write the received data to a file (e.g., dataReceived.json)
         if (receivedData.topic.endsWith("up")) {
-            fs.writeFileSync('data.json', JSON.stringify(receivedData, null, 2));
+            fs.writeFileSync("data/" + "data.json", JSON.stringify(receivedData, null, 2));
         }
         else {
-            fs.writeFileSync('dataLocation.json', JSON.stringify(receivedData, null, 2));
+            fs.writeFileSync("data/" + "dataLocation.json", JSON.stringify(receivedData, null, 2));
         }
 
         console.log(receivedData);
