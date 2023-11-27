@@ -75,16 +75,16 @@ def on_message(client, userdata, message):
             time.sleep(10)
         except json.JSONDecodeError as e:
             print(f"Error decoding JSON: {e}")
-    json_data = json.dumps(received_data, indent=2)
     try:
-        response = send_data_to_express("/post/car/data", json_data)
+        response = send_data_to_express("/post/data", received_data)
+        if response.status_code == 200:
+            print('Data sent to Node.js server')
+        else:
+            pass
+            #print(f'Failed to send data. Status code: {response.status_code}, Response: {response.text}')
     except:
         print("Error couldnt send data to GAPP")
-        return {"message": "Error couldnt send data to GAPP"}
-    if response.status_code == 200:
-        print('Data sent to Node.js server')
-    else:
-        print(f'Failed to send data. Status code: {response.status_code}, Response: {response.text}')
+    
 
 client = mqtt.Client()
 client.username_pw_set(username, password)

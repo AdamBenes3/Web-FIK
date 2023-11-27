@@ -7,6 +7,21 @@ const fsPromises = require('fs');
 app.set('view engine', 'ejs');
 app.use(express.json());
 
+
+function appendToJsonFile(filePath, newData) {
+    try {
+      const existingData = fs.readFileSync("data/" + filePath, 'utf-8');
+      let jsonData = JSON.parse(existingData);
+      jsonData.history.push(newData);
+      const updatedJsonData = JSON.stringify(jsonData, null, 2);
+      fs.writeFileSync("data/" + filePath, updatedJsonData);
+      console.log('Data appended successfully.');
+    } catch (error) {
+      console.error('Error appending data:', error.message);
+    }
+  }
+
+
 function saveDataToFile(filename, data) {
     try {
         console.log("Saved to file: " + filename);
@@ -121,6 +136,7 @@ app.post('/post/car/data', (req, res) => {
     console.log("Received car data");
     try {
         const receivedData = req.body;
+        appendToJsonFile("ALLDATA.json", receivedData);
         const carId = receivedData["car_id"];
         switch (carId) {
             case "car1":
@@ -209,17 +225,26 @@ app.get('/get/cdp/hb', async (req, res) => {
 app.post('/post/data', (req, res) => {
     try {
         const receivedData = req.body;
+        appendToJsonFile("ALLDATA.json", receivedData);
         if (receivedData.topic.endsWith("up")) {
-            const deviceID = receivedData.uplink_message.decoded_payload.device_id;
-            if (deviceID = 'fik8b') {
-                fs.writeFileSync("data/" + "fik8b.json", JSON.stringify(receivedData, null, 2));
+            receivedData.message
+            const deviceID = JSON.parse(receivedData.message).end_device_ids.device_id;
+            if (deviceID == 'fik8b') {
+                saveDataToFile("fik8b.json", receivedData);
             }
-            if (deviceID = 'px4') {
-                fs.writeFileSync("data/" + "px4.json", JSON.stringify(receivedData, null, 2));
+            if (deviceID == 'px4') {
+                saveDataToFile("px4.json", receivedData);
             }
         }
-        else {
-            fs.writeFileSync("data/" + "dataLocation.json", JSON.stringify(receivedData, null, 2));
+        else if (receivedData.topic.endsWith("solved")) {
+            receivedData.message
+            const deviceID = JSON.parse(receivedData.message).end_device_ids.device_id;
+            if (deviceID == 'fik8b') {
+                saveDataToFile("fik8bLocation.json", receivedData);
+            }
+            if (deviceID == 'px4') {
+                saveDataToFile("px4Location.json", receivedData);
+            }
         }
         res.status(200).json({ message: 'Data received successfully' });
     } catch (error) {
