@@ -77,13 +77,11 @@ async def forward_heartbeat(request: Request):
     if (not car_id in car_dict):
         car_dict[car_id] = Uploader(car_id)
         print(car_dict)
-    car_dict[car_id].add_telemetry(
-            car_id + "Test",
-            datetime.datetime.utcnow(),
-            latitude,
-            longitude,
-            altitude + 1000
-        )
+    car_dict[car_id].upload_station_position(
+        car_id + "Test",
+        [latitude, longitude, altitude],
+        mobile=True
+    )
     response = send_data_to_express("/post/car/hb", data)
     print(response.json())
     return {"message": "Heartbeat data received and forwarded successfully"}
