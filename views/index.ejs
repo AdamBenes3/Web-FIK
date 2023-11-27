@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Show Device Information</title>
+    <title>UJF</title>
     <style>
         table {
             border-collapse: collapse;
@@ -16,25 +16,8 @@
             padding: 8px;
             text-align: left;
         }
-
-        #fixedTable {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background-color: #f2f2f2;
-            z-index: 1;
-        }
     </style>
     <style>
-        #jsonPanel {
-            display: none;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin: 10px;
-            white-space: pre-wrap;
-        }
-
         #toggleButton {
             cursor: pointer;
             background-color: #007BFF;
@@ -47,440 +30,321 @@
 </head>
 
 <body>
-    <h1>Show Device Information</h1>
+    <h1>Json data:</h1>
 
     <table>
         <tr>
-            <th>TTN fik-8b last json</th>
+            <th>TTN fik8b last json</th>
             <td>
-                <button id="fik-8b-ToggleButton">fik-8b</button>
-                <div id="fik-8b-Panel"></div>
+                <button id="fik8bButton">fik-8b</button>
+                <div id="fik8bPanel"></div>
             </td>
         </tr>
         <tr>
-            <th>TTN PX4 last json</th>
+            <th>TTN px4 last json</th>
             <td>
-                <button id="px4-ToggleButton">PX4</button>
-                <div id="px4-Panel"></div>
+                <button id="px4Button">px4</button>
+                <div id="px4Panel"></div>
             </td>
         </tr>
         <tr>
             <th>Car 1 last json</th>
             <td>
-                <button id="car1JsonToggleButton">Car 1</button>
-                <div id="car1Json"></div>
+                <button id="car1Button">Car 1</button>
+                <div id="car1Panel"></div>
             </td>
         </tr>
         <tr>
             <th>Car 2 last json</th>
             <td>
-                <button id="car2JsonToggleButton">Car 2</button>
-                <div id="car2Json"></div>
+                <button id="car2Button">Car 2</button>
+                <div id="car2Panel"></div>
             </td>
         </tr>
         <tr>
             <th>Car 3 last json</th>
             <td>
-                <button id="car3JsonToggleButton">Car 3</button>
-                <div id="car3Json"></div>
+                <button id="car3Button">Car 3</button>
+                <div id="car3Panel"></div>
             </td>
         </tr>
     </table>
 
+    <h1>Last HB:</h1>
 
-    <!-- Static table with "Hello" and CDP heartbeat data -->
-    <div id="staticTableContainer">
+    <div id="hbTableContainer">
         <table>
-            <!-- Add more rows for other static data -->
             <tr>
                 <th>CDP HB</th>
-                <td id="cdpHbData"></td>
+                <td id="cdpHb"></td>
             </tr>
             <tr>
                 <th>Car 1 HB</th>
-                <td id="car1HbData"></td>
+                <td id="car1Hb"></td>
             </tr>
             <tr>
                 <th>Car 2 HB</th>
-                <td id="car2HbData"></td>
+                <td id="car2Hb"></td>
             </tr>
             <tr>
                 <th>Car 3 HB</th>
-                <td id="car3HbData"></td>
+                <td id="car3Hb"></td>
             </tr>
             <tr>
                 <th>LDP HB</th>
-                <td id="ldpHbData"></td>
+                <td id="ldpHb"></td>
             </tr>
         </table>
     </div>
+
+    <h1>Tables of output:</h1>
 
     <table>
         <tr>
             <th>fik8b TTN data</th>
             <td>
-                <button id="ttnfik8bJsonToggleButton">fik8b</button>
-                <div id="ttnfik8bJson"></div>
+                <button id="fik8bDataButton">fik8b</button>
+                <div id="fik8bDataPanel"></div>
             </td>
         </tr>
         <tr>
-            <th>PX4 TTN data</th>
+            <th>px4 TTN data</th>
             <td>
-                <button id="ttnPX4JsonToggleButton">PX4</button>
-                <div id="ttnPX4Json"></div>
+                <button id="px4DataButton">px4</button>
+                <div id="px4DataPanel"></div>
             </td>
         </tr>
         <tr>
-            <th>fik8b car data</th>
+            <th>Car data</th>
             <td>
-                <button id="carJsonToggleButton">fik8b</button>
-                <div id="carJson"></div>
+                <button id="carDataButton">car</button>
+                <div id="carDataPanel"></div>
             </td>
         </tr>
     </table>
 
-    <div id="buttons"></div>
-    <div id="tableContainer"></div>
-
     <script>
 
-        // Array to store JSON data
-        var jsonDataArray = [];
-        
-        
-        
-        var fik_8b;
+        var fik8b;
 
-        var fik_8bJson = document.getElementById('fik-8b-Panel');
-        var fik_8b_ToggleButton = document.getElementById('fik-8b-ToggleButton');
+        var fik8bPanel = document.getElementById('fik8bPanel');
+        var fik8bButton = document.getElementById('fik8bButton');
 
-        fik_8b_ToggleButton.addEventListener('click', function () {
-            // Toggle the visibility of the JSON panel
-            fik_8bJson.style.display = fik_8bJson.style.display === 'block' ? 'none' : 'block';
-
-            // Display or hide the JSON data
-            if (fik_8bJson.style.display === 'block') {
-                fik_8bJson.textContent = JSON.stringify(fik_8b, null, 2);
+        fik8bButton.addEventListener('click', function () {
+            fik8bPanel.style.display = fik8bPanel.style.display === 'block' ? 'none' : 'block';
+            if (fik8bPanel.style.display === 'block') {
+                fik8bPanel.textContent = JSON.stringify(fik8b, null, 2);
             } else {
-                fik_8bJson.textContent = '';
+                fik8bPanel.textContent = '';
             }
         });
-        
-        
-        
-        
-        var PX4;
 
-        var px4_Pane = document.getElementById('px4-Panel');
-        var px4_ToggleButton = document.getElementById('px4-ToggleButton');
 
-        px4_ToggleButton.addEventListener('click', function () {
-            // Toggle the visibility of the JSON panel
-            px4_Pane.style.display = px4_Pane.style.display === 'block' ? 'none' : 'block';
 
-            // Display or hide the JSON data
-            if (px4_Pane.style.display === 'block') {
-                px4_Pane.textContent = JSON.stringify(PX4, null, 2);
+
+        var px4;
+
+        var px4Panel = document.getElementById('px4Panel');
+        var px4Button = document.getElementById('px4Button');
+
+        px4Button.addEventListener('click', function () {
+            px4Panel.style.display = px4Panel.style.display === 'block' ? 'none' : 'block';
+            if (px4Panel.style.display === 'block') {
+                px4Panel.textContent = JSON.stringify(px4, null, 2);
             } else {
-                px4_Pane.textContent = '';
+                px4Panel.textContent = '';
             }
         });
 
         var car1;
 
-        var car1Json = document.getElementById('car1Json');
-        var car1JsonToggleButton = document.getElementById('car1JsonToggleButton');
+        var car1Panel = document.getElementById('car1Panel');
+        var car1Button = document.getElementById('car1Button');
 
-        car1JsonToggleButton.addEventListener('click', function () {
-            // Toggle the visibility of the JSON panel
-            car1Json.style.display = car1Json.style.display === 'block' ? 'none' : 'block';
-
-            // Display or hide the JSON data
-            if (car1Json.style.display === 'block') {
-                car1Json.textContent = JSON.stringify(car1, null, 2);
+        car1Button.addEventListener('click', function () {
+            car1Panel.style.display = car1Panel.style.display === 'block' ? 'none' : 'block';
+            if (car1Panel.style.display === 'block') {
+                car1Panel.textContent = JSON.stringify(car1, null, 2);
             } else {
-                car1Json.textContent = '';
+                car1Panel.textContent = '';
             }
         });
 
         var car2;
 
-        var car2Json = document.getElementById('car2Json');
-        var car2JsonToggleButton = document.getElementById('car2JsonToggleButton');
+        var car2Panel = document.getElementById('car2Panel');
+        var car2Button = document.getElementById('car2Button');
 
-        car2JsonToggleButton.addEventListener('click', function () {
-            // Toggle the visibility of the JSON panel
-            car2Json.style.display = car2Json.style.display === 'block' ? 'none' : 'block';
-
-            // Display or hide the JSON data
-            if (car2Json.style.display === 'block') {
-                car2Json.textContent = JSON.stringify(car2, null, 2);
+        car2Button.addEventListener('click', function () {
+            car2Panel.style.display = car2Panel.style.display === 'block' ? 'none' : 'block';
+            if (car2Panel.style.display === 'block') {
+                car2Panel.textContent = JSON.stringify(car2, null, 2);
             } else {
-                car2Json.textContent = '';
+                car2Panel.textContent = '';
             }
         });
 
         var car3;
 
-        var car3Json = document.getElementById('car3Json');
-        var car3JsonToggleButton = document.getElementById('car3JsonToggleButton');
+        var car3Panel = document.getElementById('car3Panel');
+        var car3Button = document.getElementById('car3Button');
 
-        car3JsonToggleButton.addEventListener('click', function () {
-            // Toggle the visibility of the JSON panel
-            car3Json.style.display = car3Json.style.display === 'block' ? 'none' : 'block';
-
-            // Display or hide the JSON data
-            if (car3Json.style.display === 'block') {
-                car3Json.textContent = JSON.stringify(car3, null, 2);
+        car3Button.addEventListener('click', function () {
+            car3Panel.style.display = car3Panel.style.display === 'block' ? 'none' : 'block';
+            if (car3Panel.style.display === 'block') {
+                car3Panel.textContent = JSON.stringify(car3, null, 2);
             } else {
-                car3Json.textContent = '';
+                car3Panel.textContent = '';
             }
         });
 
 
-        var ttnfik8b;
 
-        var ttnfik8bJson = document.getElementById('ttnfik8bJson');
-        var ttnfik8bJsonToggleButton = document.getElementById('ttnfik8bJsonToggleButton');
+        var fik8bDataPanel = document.getElementById('fik8bDataPanel');
+        var fik8bDataButton = document.getElementById('fik8bDataButton');
 
-
-
-        ttnfik8bJsonToggleButton.addEventListener('click', function () {
-            // Toggle the visibility of the JSON panel
-            ttnfik8bJson.style.display = ttnfik8bJson.style.display === 'block' ? 'none' : 'block';
-
-            // Display or hide the JSON data
-            if (ttnfik8bJson.style.display === 'block') {
-                // Display only specific information, e.g., speed
-                displayTtnfik8bInfo(ttnfik8b);
+        fik8bDataButton.addEventListener('click', function () {
+            fik8bDataPanel.style.display = fik8bDataPanel.style.display === 'block' ? 'none' : 'block';
+            if (fik8bDataPanel.style.display === 'block') {
+                displayFik8bInfo(fik8b);
             } else {
-                ttnfik8bJson.textContent = '';
+                fik8bDataPanel.textContent = '';
             }
         });
-        
-        
-        
-        var ttnPX4;
 
-        var ttnPX4Json = document.getElementById('ttnPX4Json');
-        var ttnPX4JsonToggleButton = document.getElementById('ttnPX4JsonToggleButton');
+        var px4DataPanel = document.getElementById('px4DataPanel');
+        var px4DataButton = document.getElementById('px4DataButton');
 
-
-
-        ttnPX4JsonToggleButton.addEventListener('click', function () {
-            // Toggle the visibility of the JSON panel
-            ttnPX4Json.style.display = ttnPX4Json.style.display === 'block' ? 'none' : 'block';
-
-            // Display or hide the JSON data
-            if (ttnPX4Json.style.display === 'block') {
-                // Display only specific information, e.g., speed
-                displayTtnPX4Info(ttnPX4);
+        px4DataButton.addEventListener('click', function () {
+            px4DataPanel.style.display = px4DataPanel.style.display === 'block' ? 'none' : 'block';
+            if (px4DataPanel.style.display === 'block') {
+                displayPx4Info(px4);
             } else {
-                ttnPX4Json.textContent = '';
+                px4DataPanel.textContent = '';
             }
         });
-        
-        
-        var carx;
-
-        var carJson = document.getElementById('carJson');
-        var carJsonToggleButton = document.getElementById('carJsonToggleButton');
 
 
+        var car;
 
-        carJsonToggleButton.addEventListener('click', function () {
-            // Toggle the visibility of the JSON panel
-            carJson.style.display = carJson.style.display === 'block' ? 'none' : 'block';
+        var carDataPanel = document.getElementById('carDataPanel');
+        var carDataButton = document.getElementById('carDataButton');
 
-            // Display or hide the JSON data
-            if (carJson.style.display === 'block') {
-                // Display only specific information, e.g., speed
-                displayCarInfo(carx);
+        carDataButton.addEventListener('click', function () {
+            carDataPanel.style.display = carDataPanel.style.display === 'block' ? 'none' : 'block';
+            if (carDataPanel.style.display === 'block') {
+                displayCarInfo(car);
             } else {
-                carJson.textContent = '';
+                carDataPanel.textContent = '';
             }
         });
-        
 
-        // Function to display specific information from ttnfik8b
-        function displayTtnfik8bInfo(data) {
-            
-            // Parse the JSON data
+
+        function displayFik8bInfo(data) {
             var jsonDataObj = JSON.parse(data.message);
-
-            // Extract device information
             var deviceId = jsonDataObj.end_device_ids.device_id;
-
-
-            // Determine the background color based on speed
             var speedMps = parseFloat(jsonDataObj.uplink_message.decoded_payload.speed_mps);
-            
             var speedBackgroundColor = speedMps > 10 ? 'red' : 'green';
-            
-            // Display the information in a separate table
             var infoTable = document.createElement('table');
             var row = infoTable.insertRow();
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
-            cell1.innerHTML = '<strong>Speed:</strong>';
+            cell1.innerHTML = '<strong>SpeedMPS:</strong>';
             cell2.textContent = speedMps;
-            
-            // Set the background color of the cell
             cell2.style.backgroundColor = speedBackgroundColor;
             cell1.style.backgroundColor = speedBackgroundColor;
-            
             var row = infoTable.insertRow();
             var cell3 = row.insertCell(0);
             var cell4 = row.insertCell(1);
-            cell3.innerHTML = '<strong>Speed:</strong>';
+            cell3.innerHTML = '<strong>SpeedMPS:</strong>';
             cell4.textContent = speedMps;
-            
-            // Set the background color of the cell
             cell3.style.backgroundColor = speedBackgroundColor;
             cell4.style.backgroundColor = speedBackgroundColor;
-
-            // Clear existing content and append the new table
-            ttnfik8bJson.textContent = '';
-            ttnfik8bJson.appendChild(infoTable);
+            fik8bDataPanel.textContent = '';
+            fik8bDataPanel.appendChild(infoTable);
         }
-        
-        
-        // Function to display specific information from ttnfik8b
-        function displayTtnPX4Info(data) {
-            
-            // Parse the JSON data
+
+        function displayPx4Info(data) {
             var jsonDataObj = JSON.parse(data.message);
-
-            // Extract device information
             var deviceId = jsonDataObj.end_device_ids.device_id;
-
-
-            // Determine the background color based on speed
             var speedMps = parseFloat(jsonDataObj.uplink_message.decoded_payload.speed_mps);
-            
             var speedBackgroundColor = speedMps > 10 ? 'red' : 'green';
-            
-            // Display the information in a separate table
             var infoTable = document.createElement('table');
             var row = infoTable.insertRow();
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
-            cell1.innerHTML = '<strong>Speed:</strong>';
+            cell1.innerHTML = '<strong>SpeedMPS:</strong>';
             cell2.textContent = speedMps;
-            
-            // Set the background color of the cell
             cell2.style.backgroundColor = speedBackgroundColor;
             cell1.style.backgroundColor = speedBackgroundColor;
-            
             var row = infoTable.insertRow();
             var cell3 = row.insertCell(0);
             var cell4 = row.insertCell(1);
-            cell3.innerHTML = '<strong>Speed:</strong>';
+            cell3.innerHTML = '<strong>SpeedMPS:</strong>';
             cell4.textContent = speedMps;
-            
-            // Set the background color of the cell
             cell3.style.backgroundColor = speedBackgroundColor;
             cell4.style.backgroundColor = speedBackgroundColor;
-
-            // Clear existing content and append the new table
-            ttnPX4Json.textContent = '';
-            ttnPX4Json.appendChild(infoTable);
+            px4DataPanel.textContent = '';
+            px4DataPanel.appendChild(infoTable);
         }
-        
-        // Function to display specific information from ttnfik8b
+
         function displayCarInfo(data) {
-            
-
-
-            // Determine the background color based on speed
-            var speedMps = parseFloat(data.latitude);
-            
-            var speedBackgroundColor = speedMps > 10 ? 'red' : 'green';
-            
-            // Display the information in a separate table
+            var latitude = parseFloat(data.latitude);
+            var latitudeBackgroundColor = latitude > 10 ? 'red' : 'green';
             var infoTable = document.createElement('table');
             var row = infoTable.insertRow();
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             cell1.innerHTML = '<strong>Latitude:</strong>';
-            cell2.textContent = speedMps;
-            
-            // Set the background color of the cell
-            cell2.style.backgroundColor = speedBackgroundColor;
-            cell1.style.backgroundColor = speedBackgroundColor;
-            
+            cell2.textContent = latitude;
+            cell2.style.backgroundColor = latitudeBackgroundColor;
+            cell1.style.backgroundColor = latitudeBackgroundColor;
             var row = infoTable.insertRow();
             var cell3 = row.insertCell(0);
             var cell4 = row.insertCell(1);
             cell3.innerHTML = '<strong>Latitude:</strong>';
-            cell4.textContent = speedMps;
-            
-            // Set the background color of the cell
-            cell3.style.backgroundColor = speedBackgroundColor;
-            cell4.style.backgroundColor = speedBackgroundColor;
-
-            // Clear existing content and append the new table
-            carJson.textContent = '';
-            carJson.appendChild(infoTable);
+            cell4.textContent = latitude;
+            cell3.style.backgroundColor = latitudeBackgroundColor;
+            cell4.style.backgroundColor = latitudeBackgroundColor;
+            carDataPanel.textContent = '';
+            carDataPanel.appendChild(infoTable);
         }
 
-
-
-        // Function to update the CDP heartbeat data in the static table
-        function updateStaticTableWithCdpHbData(cdpHbData) {
-            // Update the content of the cell with the CDP heartbeat data
-            document.getElementById('cdpHbData').textContent = JSON.stringify(cdpHbData);
+        function updateStaticTableWithcdpHb(cdpHb) {
+            document.getElementById('cdpHb').textContent = JSON.stringify(cdpHb);
         }
-        function updateStaticTableWithCar1HbData(HbData) {
 
-            // Check if the timestamp is older than an hour (3600 seconds)
+        function updateStaticTableWithcar1Hb(HbData) {
             var timestamp = new Date(HbData);
             var currentTimestamp = new Date();
             var timeDifferenceInSeconds = (currentTimestamp - timestamp) / 1000;
-
-            // Determine the background color based on the timestamp
             var timestampBackgroundColor = timeDifferenceInSeconds > 3600 ? 'red' : 'green';
-
-
-            document.getElementById('car1HbData').textContent = JSON.stringify(HbData);
-            document.getElementById('car1HbData').style.backgroundColor = timestampBackgroundColor;
+            document.getElementById('car1Hb').textContent = JSON.stringify(HbData);
+            document.getElementById('car1Hb').style.backgroundColor = timestampBackgroundColor;
         }
-        function updateStaticTableWithCar2HbData(HbData) {
-            // Check if the timestamp is older than an hour (3600 seconds)
+
+        function updateStaticTableWithcar2Hb(HbData) {
             var timestamp = new Date(HbData);
             var currentTimestamp = new Date();
             var timeDifferenceInSeconds = (currentTimestamp - timestamp) / 1000;
-
-            // Determine the background color based on the timestamp
             var timestampBackgroundColor = timeDifferenceInSeconds > 3600 ? 'red' : 'green';
-
-
-            document.getElementById('car2HbData').textContent = JSON.stringify(HbData);
-            document.getElementById('car2HbData').style.backgroundColor = timestampBackgroundColor;
+            document.getElementById('car2Hb').textContent = JSON.stringify(HbData);
+            document.getElementById('car2Hb').style.backgroundColor = timestampBackgroundColor;
         }
-        function updateStaticTableWithCar3HbData(HbData) {
-            // Check if the timestamp is older than an hour (3600 seconds)
+        function updateStaticTableWithcar3Hb(HbData) {
             var timestamp = new Date(HbData);
             var currentTimestamp = new Date();
             var timeDifferenceInSeconds = (currentTimestamp - timestamp) / 1000;
-
-            // Determine the background color based on the timestamp
             var timestampBackgroundColor = timeDifferenceInSeconds > 3600 ? 'red' : 'green';
-
-
-            document.getElementById('car3HbData').textContent = JSON.stringify(HbData);
-            document.getElementById('car3HbData').style.backgroundColor = timestampBackgroundColor;
+            document.getElementById('car3Hb').textContent = JSON.stringify(HbData);
+            document.getElementById('car3Hb').style.backgroundColor = timestampBackgroundColor;
         }
-        updateStaticTableWithLdpHbData = (HbData) => {
-            document.getElementById('ldpHbData').textContent = JSON.stringify(HbData);
+        updateStaticTableWithldpHb = (HbData) => {
+            document.getElementById('ldpHb').textContent = JSON.stringify(HbData);
         }
-
-
 
         function loadDataFromServer() {
-
-
-            fetch('/TTNfik8b')
+            fetch('/get/fik8b')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -488,52 +352,8 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Server Response (api/data):', data.data);
                     if (data) {
-                        // Pass the data as is to the addJsonData function
-                        ttnfik8b = data.data;
-                        fik_8b = data.data;
-                    } else {
-                        console.error('Received undefined data from the server');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading data (api/data):', error);
-                });
-                
-                fetch('/TTNpx4')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Server Response (api/data):', data.data);
-                    if (data) {
-                        // Pass the data as is to the addJsonData function
-                        ttnPX4 = data.data;
-                        PX4 = data.data;
-                    } else {
-                        console.error('Received undefined data from the server');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading data (api/data):', error);
-                });
-                
-                fetch('/Car')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Server Response (api/data):', data.data);
-                    if (data) {
-                        // Pass the data as is to the addJsonData function
-                        carx = data.data;
+                        fik8b = data.data;
                     } else {
                         console.error('Received undefined data from the server');
                     }
@@ -542,10 +362,7 @@
                     console.error('Error loading data (api/data):', error);
                 });
 
-                
-                
-
-            fetch('/car/data/1')
+            fetch('/get/px4')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -553,9 +370,43 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Server Response (api/data):', data.data);
                     if (data) {
-                        // Pass the data as is to the addJsonData function
+                        px4 = data.data;
+                    } else {
+                        console.error('Received undefined data from the server');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading data (api/data):', error);
+                });
+
+            fetch('/get/car/data')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data) {
+                        car = data.data;
+                    } else {
+                        console.error('Received undefined data from the server');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading data (api/data):', error);
+                });
+
+            fetch('/get/car/data/1')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data) {
                         car1 = data.data;
                     } else {
                         console.error('Received undefined data from the server');
@@ -564,7 +415,7 @@
                 .catch(error => {
                     console.error('Error loading data (api/data):', error);
                 });
-            fetch('/car/data/2')
+            fetch('/get/car/data/2')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -572,9 +423,7 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Server Response (api/data):', data.data);
                     if (data) {
-                        // Pass the data as is to the addJsonData function
                         car2 = data.data;
                     } else {
                         console.error('Received undefined data from the server');
@@ -583,7 +432,7 @@
                 .catch(error => {
                     console.error('Error loading data (api/data):', error);
                 });
-            fetch('/car/data/3')
+            fetch('/get/car/data/3')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -591,9 +440,7 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Server Response (api/data):', data.data);
                     if (data) {
-                        // Pass the data as is to the addJsonData function
                         car3 = data.data;
                     } else {
                         console.error('Received undefined data from the server');
@@ -602,9 +449,7 @@
                 .catch(error => {
                     console.error('Error loading data (api/data):', error);
                 });
-
-            // Make an additional HTTP GET request to the server for JSON data from /api/forward/cdp/hb
-            fetch('/cdp/hb')
+            fetch('/get/cdp/hb')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -612,14 +457,12 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Server Response (/cdp/hb):', data);
-                    // Handle the cdp/hb data and update the static table
-                    updateStaticTableWithCdpHbData(data.data.cdp_heartbeat_value);
+                    updateStaticTableWithcdpHb(data.data.cdp_heartbeat_value);
                 })
                 .catch(error => {
                     console.error('Error loading /cdp/hb data:', error);
                 });
-            fetch('/car/hb/1')
+            fetch('/get/car/hb/1')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -627,15 +470,13 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Server Response (/car/hb/1):', data);
-                    // Handle the car/hb data and update the static table
-                    updateStaticTableWithCar1HbData(data.data.car_heartbeat_value);
+                    updateStaticTableWithcar1Hb(data.data.car_heartbeat_value);
                 })
                 .catch(error => {
                     console.error('Error loading /car/hb/1 data:', error);
                 });
 
-            fetch('/car/hb/2')
+            fetch('/get/car/hb/2')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -643,15 +484,13 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Server Response (/car/hb/2):', data);
-                    // Handle the car/hb data and update the static table
-                    updateStaticTableWithCar2HbData(data.data.car_heartbeat_value);
+                    updateStaticTableWithcar2Hb(data.data.car_heartbeat_value);
                 })
                 .catch(error => {
                     console.error('Error loading /car/hb/2 data:', error);
                 });
 
-            fetch('/car/hb/3')
+            fetch('/get/car/hb/3')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -659,16 +498,13 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Server Response (/car/hb/3):', data);
-                    // Handle the car/hb data and update the static table
-                    updateStaticTableWithCar3HbData(data.data.car_heartbeat_value);
+                    updateStaticTableWithcar3Hb(data.data.car_heartbeat_value);
                 })
                 .catch(error => {
-                    console.error('Error loading /car/hb/3 data:', error);
                 });
 
 
-            fetch('/ldp/hb')
+            fetch('/get/ldp/hb')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -676,16 +512,13 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Server Response (/ldp/hb):', data);
-                    // Handle the car/hb data and update the static table
-                    updateStaticTableWithLdpHbData(data.data.ldp_heartbeat_value);
+                    updateStaticTableWithldpHb(data.data.ldp_heartbeat_value);
                 })
                 .catch(error => {
                     console.error('Error loading /ldp/hb data:', error);
                 });
         }
 
-        // Load JSON data from the server
         loadDataFromServer();
     </script>
 </body>

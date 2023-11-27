@@ -4,7 +4,7 @@ import time
 
 def send_heartbeat():
     # Replace the URL with the actual URL of your FastAPI app
-    url = "http://localhost:8000/car/hb"
+    url = "http://localhost:8000/post/car/hb"
 
     # Heartbeat data
     heartbeat_data = {"car_heartbeat_value": str(datetime.datetime.now()), "car_id": "car1", "latitude": 50.073, "longitude": 14.418, "altitude": 400}
@@ -13,7 +13,7 @@ def send_heartbeat():
     response = requests.post(url, json=heartbeat_data)
     
     # Replace the URL with the actual URL of your FastAPI app
-    url = "http://localhost:8000/car/hb"
+    url = "http://localhost:8000/post/car/hb"
 
     # Heartbeat data
     heartbeat_data = {"car_heartbeat_value": str(datetime.datetime.now()), "car_id": "car2", "latitude": 50.073, "longitude": 14.418, "altitude": 400}
@@ -22,7 +22,7 @@ def send_heartbeat():
     response = requests.post(url, json=heartbeat_data)
     
     # Replace the URL with the actual URL of your FastAPI app
-    url = "http://localhost:8000/car/hb"
+    url = "http://localhost:8000/post/car/hb"
 
     # Heartbeat data
     heartbeat_data = {"car_heartbeat_value": str(datetime.datetime.now()), "car_id": "car3", "latitude": 50.073, "longitude": 14.418, "altitude": 400}
@@ -37,7 +37,7 @@ def send_heartbeat():
 
 def send_data():
     # Replace the URL with the actual URL of your FastAPI app
-    url = "http://localhost:8000/car/data"
+    url = "http://localhost:8000/post/car/data"
 
     # Heartbeat data
     data = {
