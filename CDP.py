@@ -54,7 +54,7 @@ def is_newer_timestamp(received_data: dict):
     received_timestamp_str = received_data.get("tmp")
     if received_timestamp_str:
         received_timestamp = datetime.datetime.strptime(received_timestamp_str, "%Y-%m-%d %H:%M:%S.%f")
-        car_data_file_path = "data/car_data.json"
+        car_data_file_path = "cdp/car_data.json"
         with open(car_data_file_path, "r") as file:
             existing_data = json.load(file)
         existing_timestamp_str = existing_data.get("tmp")
@@ -101,6 +101,9 @@ async def forward_data(request: Request):
             longitude,
             altitude
         )
+        car_data_file_path = "cdp/car_data.json"
+        with open(car_data_file_path, "w") as file:
+            file.write(json.dumps(data, indent=2))
         return {"message": "Data data received and forwarded successfully"}
     else:
         response = send_data_to_express("/post/car/data", data)

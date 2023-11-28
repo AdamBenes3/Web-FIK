@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const fs = require('fs');
-const fsPromises = require('fs');
 
 app.set('view engine', 'ejs');
 app.use(express.json());
@@ -37,8 +36,9 @@ async function isNewerTimestamp(receivedData) {
         const receivedTimestamp = new Date(receivedTimestampStr);
         const carDataFilePath = "data/car_data.json";
         try {
-            const existingDataStr = await fsPromises.promises.readFile(carDataFilePath, 'utf8');
+            const existingDataStr = fs.readFileSync(carDataFilePath, 'utf8');
             const existingData = JSON.parse(existingDataStr);
+            console.log("existingData: " + existingData);
             const existingTimestampStr = existingData["tmp"];
             if (existingTimestampStr) {
                 const existingTimestamp = new Date(existingTimestampStr);
@@ -132,30 +132,32 @@ app.get('/get/car/hb/3', async (req, res) => {
     }
 });
 
-app.post('/post/car/data', (req, res) => {
+app.post('/post/car/data', async (req, res) => {
     console.log("Received car data");
     try {
         const receivedData = req.body;
         appendToJsonFile("ALLDATA.json", receivedData);
         const carId = receivedData["car_id"];
+        const isNewer = await isNewerTimestamp(receivedData);
+        console.log("isNewer:", isNewer);
+
         switch (carId) {
             case "car1":
-                console.log(isNewerTimestamp(receivedData));
-                if (isNewerTimestamp(receivedData)) {
+                if (isNewer) {
                     saveDataToFile('car_data.json', receivedData);
                 }
                 saveDataToFile('car1_data.json', receivedData);
                 break;
 
             case "car2":
-                if (isNewerTimestamp(receivedData)) {
+                if (isNewer) {
                     saveDataToFile('car_data.json', receivedData);
                 }
                 saveDataToFile('car2_data.json', receivedData);
                 break;
 
             case "car3":
-                if (isNewerTimestamp(receivedData)) {
+                if (isNewer) {
                     saveDataToFile('car_data.json', receivedData);
                 }
                 saveDataToFile('car3_data.json', receivedData);
@@ -165,9 +167,9 @@ app.post('/post/car/data', (req, res) => {
                 console.log("Error: Invalid car id");
         }
 
-
         res.status(200).json({ message: 'Car data received successfully' });
     } catch (error) {
+        console.error('Error processing car data:', error);
         res.status(500).json({ error: 'Error processing car data' });
     }
 });
