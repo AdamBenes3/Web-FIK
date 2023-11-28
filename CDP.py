@@ -5,8 +5,6 @@ from fastapi.responses import JSONResponse
 import requests
 import datetime
 from sondehub.amateur import Uploader
-import logging
-
 
 app = FastAPI()
 router = APIRouter()

@@ -1,0 +1,6 @@
+fastapi==0.68.0
+aiohttp==3.7.4.post0
+requests==2.26.0
+uvicorn==0.15.0
+# Add any specific version for sondehub if needed
+# sondehub==X.Y.Z
