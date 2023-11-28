@@ -5,7 +5,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: odz-ujf-av-cr/web-fik:fastapi
+  IMAGE_NAME: odz-ujf-av-cr/web-fik_fastapi
 
 jobs:
   build-and-push-image:
