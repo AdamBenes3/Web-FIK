@@ -1,0 +1,12 @@
+services:
+  web:
+    #image: "ghcr.io/odz-ujf-av-cr/web-fik/gapp:main"
+    build:
+      dockerfile: nodejs.Dockerfile
+    ports:
+      - "4000:3000"
+  cdp:
+    #image: "ghcr.io/odz-ujf-av-cr/web-fik/fastapi:main"
+    build:
+      dockerfile: fastapi.Dockerfile
+

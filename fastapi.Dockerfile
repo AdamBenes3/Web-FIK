@@ -12,7 +12,7 @@ RUN pip install fastapi[all] uvicorn
 RUN pip install requests sondehub
 
 # Bundle app source
-COPY . /app
+COPY . .
 
 # Expose the port the app runs on
 EXPOSE 8000

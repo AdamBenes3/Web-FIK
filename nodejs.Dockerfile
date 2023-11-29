@@ -11,7 +11,7 @@ COPY package*.json ./
 RUN npm install
 
 # Copy the content of the current directory to the working directory in the container
-COPY . /app
+COPY . .
 
 # Expose the port the app runs on
 EXPOSE 3000
