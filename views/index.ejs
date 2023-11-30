@@ -39,7 +39,9 @@
     <table>
         <tr>
             <th>TTN fik8b last json</th>
-            <th><div id="fik8bTimeStamp"></div></th>
+            <th>
+                <div id="fik8bTimeStamp"></div>
+            </th>
             <td>
                 <button id="fik8bButton">fik8b</button>
                 <div id="fik8bPanel"></div>
@@ -47,7 +49,9 @@
         </tr>
         <tr>
             <th>TTN px4 last json</th>
-            <th><div id="px4TimeStamp"></div></th>
+            <th>
+                <div id="px4TimeStamp"></div>
+            </th>
             <td>
                 <button id="px4Button">px4</button>
                 <div id="px4Panel"></div>
@@ -471,7 +475,7 @@
             fetch('/get/fik8b')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        console.log('Network response was not ok');
                     }
                     return response.json();
                 })
@@ -481,17 +485,17 @@
                         var timestamp = new Date(fik8b.timestamp);
                         document.getElementById('fik8bTimeStamp').textContent = timestamp.toLocaleString();
                     } else {
-                        console.error('Received undefined data from the server');
+                        console.log('Received undefined data from the server');
                     }
                 })
                 .catch(error => {
-                    console.error('Error loading data /get/fik8b: ', error);
+                    console.log('Error loading data /get/fik8b: ', error);
                 });
 
             fetch('/get/px4')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        console.log('Network response was not ok');
                     }
                     return response.json();
                 })
@@ -501,17 +505,17 @@
                         var timestamp = new Date(px4.timestamp);
                         document.getElementById('px4TimeStamp').textContent = timestamp.toLocaleString();
                     } else {
-                        console.error('Received undefined data from the server');
+                        console.log('Received undefined data from the server');
                     }
                 })
                 .catch(error => {
-                    console.error('Error loading data /get/px4: ', error);
+                    console.log('Error loading data /get/px4: ', error);
                 });
 
             fetch('/get/car/data')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        console.log('Network response was not ok');
                     }
                     return response.json();
                 })
@@ -519,17 +523,17 @@
                     if (data) {
                         car = data.data;
                     } else {
-                        console.error('Received undefined data from the server');
+                        console.log('Received undefined data from the server');
                     }
                 })
                 .catch(error => {
-                    console.error('Error loading data /get/car/data: ', error);
+                    console.log('Error loading data /get/car/data: ', error);
                 });
 
             fetch('/get/car/data/1')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        console.log('Network response was not ok');
                     }
                     return response.json();
                 })
@@ -537,16 +541,16 @@
                     if (data) {
                         car1 = data.data;
                     } else {
-                        console.error('Received undefined data from the server');
+                        console.log('Received undefined data from the server');
                     }
                 })
                 .catch(error => {
-                    console.error('Error loading data /get/car/data/1: ', error);
+                    console.log('Error loading data /get/car/data/1: ', error);
                 });
             fetch('/get/car/data/2')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        console.log('Network response was not ok');
                     }
                     return response.json();
                 })
@@ -554,16 +558,16 @@
                     if (data) {
                         car2 = data.data;
                     } else {
-                        console.error('Received undefined data from the server');
+                        console.log('Received undefined data from the server');
                     }
                 })
                 .catch(error => {
-                    console.error('Error loading data /get/car/data/2: ', error);
+                    console.log('Error loading data /get/car/data/2: ', error);
                 });
             fetch('/get/car/data/3')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        console.log('Network response was not ok');
                     }
                     return response.json();
                 })
@@ -571,16 +575,16 @@
                     if (data) {
                         car3 = data.data;
                     } else {
-                        console.error('Received undefined data from the server');
+                        console.log('Received undefined data from the server');
                     }
                 })
                 .catch(error => {
-                    console.error('Error loading data /get/car/data/3: ', error);
+                    console.log('Error loading data /get/car/data/3: ', error);
                 });
             fetch('/get/cdp/hb')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        console.log('Network response was not ok');
                     }
                     return response.json();
                 })
@@ -588,12 +592,12 @@
                     updateStaticTableWithcdpHb(data.data.cdp_heartbeat_value);
                 })
                 .catch(error => {
-                    console.error('Error loading data /get/cdp/hb: ', error);
+                    console.log('Error loading data /get/cdp/hb: ', error);
                 });
             fetch('/get/car/hb/1')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        console.log('Network response was not ok');
                     }
                     return response.json();
                 })
@@ -601,13 +605,13 @@
                     updateStaticTableWithcar1Hb(data.data.car_heartbeat_value);
                 })
                 .catch(error => {
-                    console.error('Error loading data /get/car/hb/1: ', error);
+                    console.log('Error loading data /get/car/hb/1: ', error);
                 });
 
             fetch('/get/car/hb/2')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        console.log('Network response was not ok');
                     }
                     return response.json();
                 })
@@ -615,13 +619,13 @@
                     updateStaticTableWithcar2Hb(data.data.car_heartbeat_value);
                 })
                 .catch(error => {
-                    console.error('Error loading /car/hb/2 data:', error);
+                    console.log('Error loading /car/hb/2 data:', error);
                 });
 
             fetch('/get/car/hb/3')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        console.log('Network response was not ok');
                     }
                     return response.json();
                 })
@@ -635,7 +639,7 @@
             fetch('/get/ldp/hb')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        console.log('Network response was not ok');
                     }
                     return response.json();
                 })
@@ -643,7 +647,7 @@
                     updateStaticTableWithldpHb(data.data.ldp_heartbeat_value);
                 })
                 .catch(error => {
-                    console.error('Error loading data /get/ldp/hb: ', error);
+                    console.log('Error loading data /get/ldp/hb: ', error);
                 });
             var now = new Date();
             var lastReloadTimeElement = document.getElementById('lastReloadTime');
