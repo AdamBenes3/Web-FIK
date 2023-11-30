@@ -39,13 +39,15 @@
     <table>
         <tr>
             <th>TTN fik8b last json</th>
+            <th><div id="fik8bTimeStamp"></div></th>
             <td>
-                <button id="fik8bButton">fik-8b</button>
+                <button id="fik8bButton">fik8b</button>
                 <div id="fik8bPanel"></div>
             </td>
         </tr>
         <tr>
             <th>TTN px4 last json</th>
+            <th><div id="px4TimeStamp"></div></th>
             <td>
                 <button id="px4Button">px4</button>
                 <div id="px4Panel"></div>
@@ -53,6 +55,7 @@
         </tr>
         <tr>
             <th>Car 1 last json</th>
+            <th></th>
             <td>
                 <button id="car1Button">Car 1</button>
                 <div id="car1Panel"></div>
@@ -60,6 +63,7 @@
         </tr>
         <tr>
             <th>Car 2 last json</th>
+            <th></th>
             <td>
                 <button id="car2Button">Car 2</button>
                 <div id="car2Panel"></div>
@@ -67,6 +71,7 @@
         </tr>
         <tr>
             <th>Car 3 last json</th>
+            <th></th>
             <td>
                 <button id="car3Button">Car 3</button>
                 <div id="car3Panel"></div>
@@ -473,12 +478,14 @@
                 .then(data => {
                     if (data) {
                         fik8b = data.data;
+                        var timestamp = new Date(fik8b.timestamp);
+                        document.getElementById('fik8bTimeStamp').textContent = timestamp.toLocaleString();
                     } else {
                         console.error('Received undefined data from the server');
                     }
                 })
                 .catch(error => {
-                    console.error('Error loading data (api/data):', error);
+                    console.error('Error loading data /get/fik8b: ', error);
                 });
 
             fetch('/get/px4')
@@ -491,12 +498,14 @@
                 .then(data => {
                     if (data) {
                         px4 = data.data;
+                        var timestamp = new Date(px4.timestamp);
+                        document.getElementById('px4TimeStamp').textContent = timestamp.toLocaleString();
                     } else {
                         console.error('Received undefined data from the server');
                     }
                 })
                 .catch(error => {
-                    console.error('Error loading data (api/data):', error);
+                    console.error('Error loading data /get/px4: ', error);
                 });
 
             fetch('/get/car/data')
@@ -514,7 +523,7 @@
                     }
                 })
                 .catch(error => {
-                    console.error('Error loading data (api/data):', error);
+                    console.error('Error loading data /get/car/data: ', error);
                 });
 
             fetch('/get/car/data/1')
@@ -532,7 +541,7 @@
                     }
                 })
                 .catch(error => {
-                    console.error('Error loading data (api/data):', error);
+                    console.error('Error loading data /get/car/data/1: ', error);
                 });
             fetch('/get/car/data/2')
                 .then(response => {
@@ -549,7 +558,7 @@
                     }
                 })
                 .catch(error => {
-                    console.error('Error loading data (api/data):', error);
+                    console.error('Error loading data /get/car/data/2: ', error);
                 });
             fetch('/get/car/data/3')
                 .then(response => {
@@ -566,7 +575,7 @@
                     }
                 })
                 .catch(error => {
-                    console.error('Error loading data (api/data):', error);
+                    console.error('Error loading data /get/car/data/3: ', error);
                 });
             fetch('/get/cdp/hb')
                 .then(response => {
@@ -579,7 +588,7 @@
                     updateStaticTableWithcdpHb(data.data.cdp_heartbeat_value);
                 })
                 .catch(error => {
-                    console.error('Error loading /cdp/hb data:', error);
+                    console.error('Error loading data /get/cdp/hb: ', error);
                 });
             fetch('/get/car/hb/1')
                 .then(response => {
@@ -592,7 +601,7 @@
                     updateStaticTableWithcar1Hb(data.data.car_heartbeat_value);
                 })
                 .catch(error => {
-                    console.error('Error loading /car/hb/1 data:', error);
+                    console.error('Error loading data /get/car/hb/1: ', error);
                 });
 
             fetch('/get/car/hb/2')
@@ -634,7 +643,7 @@
                     updateStaticTableWithldpHb(data.data.ldp_heartbeat_value);
                 })
                 .catch(error => {
-                    console.error('Error loading /ldp/hb data:', error);
+                    console.error('Error loading data /get/ldp/hb: ', error);
                 });
             var now = new Date();
             var lastReloadTimeElement = document.getElementById('lastReloadTime');
