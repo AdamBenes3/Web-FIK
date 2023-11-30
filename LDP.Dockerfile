@@ -5,7 +5,7 @@ FROM python:3.8
 WORKDIR .
 
 # Copy requirements.txt to the working directory
-COPY requirements2.txt ./
+COPY requirementsLDP.txt ./
 
 # Install app dependencies
 RUN pip install fastapi[all] uvicorn
