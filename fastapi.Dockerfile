@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 8000
 
 # Define the command to run your app
-CMD ["uvicorn", "CDP:app", "--reload"]
+CMD ["uvicorn", "CDP:app","--host","0.0.0.0","--port","8000"]
