@@ -9,8 +9,8 @@ from sondehub.amateur import Uploader
 app = FastAPI()
 router = APIRouter()
 
-express_base_url = "http://localhost:4000"
-#express_base_url = "https://fik.crreat.eu"
+#express_base_url = "http://localhost:4000"
+express_base_url = "https://fik.crreat.eu"
 
 car_dict = {}
 
