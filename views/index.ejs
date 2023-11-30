@@ -70,6 +70,10 @@
         </tr>
     </table>
 
+    <h1>Formated json:</h1>
+
+    <pre id="formattedJson"></pre>
+
     <h1>Last HB:</h1>
 
     <div id="hbTableContainer">
@@ -133,12 +137,16 @@
         fik8bButton.addEventListener('click', function () {
             fik8bPanel.style.display = fik8bPanel.style.display === 'block' ? 'none' : 'block';
             if (fik8bPanel.style.display === 'block') {
-                fik8bPanel.textContent = JSON.stringify(fik8b, null, 2);
+                px4Panel.style.display = 'none';
+                car1Panel.style.display = 'none';
+                car2Panel.style.display = 'none';
+                car3Panel.style.display = 'none';
+                var formattedJson = JSON.stringify(JSON.parse(fik8b.message), null, 2);
+                document.getElementById('formattedJson').textContent = formattedJson;
             } else {
-                fik8bPanel.textContent = '';
+                document.getElementById('formattedJson').textContent = '';
             }
         });
-
 
 
 
@@ -150,9 +158,14 @@
         px4Button.addEventListener('click', function () {
             px4Panel.style.display = px4Panel.style.display === 'block' ? 'none' : 'block';
             if (px4Panel.style.display === 'block') {
-                px4Panel.textContent = JSON.stringify(px4, null, 2);
+                fik8bPanel.style.display = 'none';
+                car1Panel.style.display = 'none';
+                car2Panel.style.display = 'none';
+                car3Panel.style.display = 'none';
+                var formattedJson = JSON.stringify(JSON.parse(px4.message), null, 2);
+                document.getElementById('formattedJson').textContent = formattedJson;
             } else {
-                px4Panel.textContent = '';
+                document.getElementById('formattedJson').textContent = '';
             }
         });
 
@@ -164,9 +177,14 @@
         car1Button.addEventListener('click', function () {
             car1Panel.style.display = car1Panel.style.display === 'block' ? 'none' : 'block';
             if (car1Panel.style.display === 'block') {
-                car1Panel.textContent = JSON.stringify(car1, null, 2);
+                fik8bPanel.style.display = 'none';
+                px4Panel.style.display = 'none';
+                car2Panel.style.display = 'none';
+                car3Panel.style.display = 'none';
+                var formattedJson = JSON.stringify(car1, null, 2);
+                document.getElementById('formattedJson').textContent = formattedJson;
             } else {
-                car1Panel.textContent = '';
+                document.getElementById('formattedJson').textContent = '';
             }
         });
 
@@ -178,9 +196,14 @@
         car2Button.addEventListener('click', function () {
             car2Panel.style.display = car2Panel.style.display === 'block' ? 'none' : 'block';
             if (car2Panel.style.display === 'block') {
-                car2Panel.textContent = JSON.stringify(car2, null, 2);
+                fik8bPanel.style.display = 'none';
+                px4Panel.style.display = 'none';
+                car1Panel.style.display = 'none';
+                car3Panel.style.display = 'none';
+                var formattedJson = JSON.stringify(car2, null, 2);
+                document.getElementById('formattedJson').textContent = formattedJson;
             } else {
-                car2Panel.textContent = '';
+                document.getElementById('formattedJson').textContent = '';
             }
         });
 
@@ -192,9 +215,14 @@
         car3Button.addEventListener('click', function () {
             car3Panel.style.display = car3Panel.style.display === 'block' ? 'none' : 'block';
             if (car3Panel.style.display === 'block') {
-                car3Panel.textContent = JSON.stringify(car3, null, 2);
+                fik8bPanel.style.display = 'none';
+                px4Panel.style.display = 'none';
+                car1Panel.style.display = 'none';
+                car2Panel.style.display = 'none';
+                var formattedJson = JSON.stringify(car3, null, 2);
+                document.getElementById('formattedJson').textContent = formattedJson;
             } else {
-                car3Panel.textContent = '';
+                document.getElementById('formattedJson').textContent = '';
             }
         });
 
