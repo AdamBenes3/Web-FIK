@@ -83,5 +83,5 @@ if __name__ == "__main__":
     # Send a heartbeat every 5 seconds (adjust as needed)
     while True:
         send_heartbeat()
-        # send_data()
+        send_data()
         time.sleep(5)

@@ -16,6 +16,10 @@ car_dict = {}
 
 uploader_data = Uploader("SlimonTest", uploader_position=[50.073, 14.418, 400])
 
+global existing_timestamp_str
+
+existing_timestamp_str = None
+
 def send_data_to_express(endpoint: str, data: dict):
     try:
         url = f"{express_base_url}{endpoint}"
@@ -52,13 +56,10 @@ def on_shutdown():
         car_dict[i].close()
 
 def is_newer_timestamp(received_data: dict):
+    global existing_timestamp_str
     received_timestamp_str = received_data.get("tmp")
     if received_timestamp_str:
         received_timestamp = datetime.datetime.strptime(received_timestamp_str, "%Y-%m-%d %H:%M:%S.%f")
-        car_data_file_path = "cdp/car_data.json"
-        with open(car_data_file_path, "r") as file:
-            existing_data = json.load(file)
-        existing_timestamp_str = existing_data.get("tmp")
         if existing_timestamp_str:
             existing_timestamp = datetime.datetime.strptime(existing_timestamp_str, "%Y-%m-%d %H:%M:%S.%f")
             return received_timestamp > existing_timestamp
@@ -87,6 +88,7 @@ async def forward_heartbeat(request: Request):
 
 @router.post("/post/car/data")
 async def forward_data(request: Request):
+    global existing_timestamp_str
     data = await request.json()
     balloon_id = data.get("balloon_id")
     latitude = data.get("latitude")
@@ -102,9 +104,7 @@ async def forward_data(request: Request):
             longitude,
             altitude
         )
-        car_data_file_path = "cdp/car_data.json"
-        with open(car_data_file_path, "w") as file:
-            file.write(json.dumps(data, indent=2))
+        existing_timestamp_str = data.get("tmp")
         return {"message": "Data data received and forwarded successfully"}
     else:
         response = send_data_to_express("/post/car/data", data)
