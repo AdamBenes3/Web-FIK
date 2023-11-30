@@ -30,6 +30,8 @@
 </head>
 
 <body>
+    
+    <div id="lastReloadTime">Last Reload Time: </div>
     <h1>Json data:</h1>
 
     <table>
@@ -128,6 +130,7 @@
     </table>
 
     <script>
+        
 
         var fik8b;
 
@@ -372,6 +375,9 @@
         }
 
         function loadDataFromServer() {
+            var now = new Date();
+            var lastReloadTimeElement = document.getElementById('lastReloadTime');
+            lastReloadTimeElement.textContent = 'Last Reload Time: ' + now.toLocaleString();
             fetch('/get/fik8b')
                 .then(response => {
                     if (!response.ok) {
