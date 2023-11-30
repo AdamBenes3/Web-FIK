@@ -9,16 +9,16 @@ app.use(express.json());
 
 function appendToJsonFile(filePath, newData) {
     try {
-      const existingData = fs.readFileSync("data/" + filePath, 'utf-8');
-      let jsonData = JSON.parse(existingData);
-      jsonData.history.push(newData);
-      const updatedJsonData = JSON.stringify(jsonData, null, 2);
-      fs.writeFileSync("data/" + filePath, updatedJsonData);
-      console.log('Data appended successfully.');
+        const existingData = fs.readFileSync("data/" + filePath, 'utf-8');
+        let jsonData = JSON.parse(existingData);
+        jsonData.history.push(newData);
+        const updatedJsonData = JSON.stringify(jsonData, null, 2);
+        fs.writeFileSync("data/" + filePath, updatedJsonData);
+        console.log('Data appended successfully.');
     } catch (error) {
-      console.error('Error appending data:', error.message);
+        console.error('Error appending data:', error.message);
     }
-  }
+}
 
 
 function saveDataToFile(filename, data) {
@@ -139,8 +139,6 @@ app.post('/post/car/data', async (req, res) => {
         appendToJsonFile("ALLDATA.json", receivedData);
         const carId = receivedData["car_id"];
         const isNewer = await isNewerTimestamp(receivedData);
-        console.log("isNewer:", isNewer);
-
         switch (carId) {
             case "car1":
                 if (isNewer) {
@@ -148,25 +146,21 @@ app.post('/post/car/data', async (req, res) => {
                 }
                 saveDataToFile('car1_data.json', receivedData);
                 break;
-
             case "car2":
                 if (isNewer) {
                     saveDataToFile('car_data.json', receivedData);
                 }
                 saveDataToFile('car2_data.json', receivedData);
                 break;
-
             case "car3":
                 if (isNewer) {
                     saveDataToFile('car_data.json', receivedData);
                 }
                 saveDataToFile('car3_data.json', receivedData);
                 break;
-
             default:
                 console.log("Error: Invalid car id");
         }
-
         res.status(200).json({ message: 'Car data received successfully' });
     } catch (error) {
         console.error('Error processing car data:', error);

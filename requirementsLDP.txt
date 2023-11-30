@@ -1,0 +1,4 @@
+paho-mqtt==1.5.1
+requests==2.26.0
+# Add any specific version for sondehub if needed
+# sondehub==X.Y.Z
