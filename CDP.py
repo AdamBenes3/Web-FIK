@@ -75,7 +75,7 @@ async def forward_heartbeat(request: Request):
     altitude = data.get("altitude")
     if (not car_id in car_dict):
         car_dict[car_id] = Uploader(car_id)
-        print(car_dict)
+        print(car_dict) 
     car_dict[car_id].upload_station_position(
         car_id + "Test",
         [latitude, longitude, altitude],

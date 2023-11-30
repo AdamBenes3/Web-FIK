@@ -43,7 +43,7 @@ def send_data():
     data = {
         "car_id": "car1",
         "latitude": 50.073,
-        "longitude": 14.418,
+        "longitude": 14.618,
         "altitude": 400,
         "tmp": str(datetime.datetime.now())
         }
@@ -54,7 +54,7 @@ def send_data():
     data = {
         "car_id": "car2",
         "latitude": 50.073,
-        "longitude": 14.418,
+        "longitude": 14.818,
         "altitude": 400,
         "tmp": str(datetime.datetime.now())
         }
@@ -83,5 +83,5 @@ if __name__ == "__main__":
     # Send a heartbeat every 5 seconds (adjust as needed)
     while True:
         send_heartbeat()
-        send_data()
+        # send_data()
         time.sleep(5)

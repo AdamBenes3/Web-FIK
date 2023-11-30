@@ -374,11 +374,32 @@
             document.getElementById('cdpHb').textContent = JSON.stringify(cdpHb);
         }
 
+        function updateStaticTableWithcdpHb(cdpHb) {
+            var timestamp = new Date(cdpHb);
+            var currentTimestamp = new Date();
+            var timeDifferenceInSeconds = (currentTimestamp - timestamp) / 1000;
+            if (timeDifferenceInSeconds < 60) {
+                timestampBackgroundColor = 'green';
+            } else if (timeDifferenceInSeconds >= 60 && timeDifferenceInSeconds <= 300) {
+                timestampBackgroundColor = 'orange';
+            } else {
+                timestampBackgroundColor = 'red';
+            }
+            document.getElementById('cdpHb').textContent = JSON.stringify(cdpHb);
+            document.getElementById('cdpHb').style.backgroundColor = timestampBackgroundColor;
+        }
+
         function updateStaticTableWithcar1Hb(HbData) {
             var timestamp = new Date(HbData);
             var currentTimestamp = new Date();
             var timeDifferenceInSeconds = (currentTimestamp - timestamp) / 1000;
-            var timestampBackgroundColor = timeDifferenceInSeconds > 3600 ? 'red' : 'green';
+            if (timeDifferenceInSeconds < 60) {
+                timestampBackgroundColor = 'green';
+            } else if (timeDifferenceInSeconds >= 60 && timeDifferenceInSeconds <= 300) {
+                timestampBackgroundColor = 'orange';
+            } else {
+                timestampBackgroundColor = 'red';
+            }
             document.getElementById('car1Hb').textContent = JSON.stringify(HbData);
             document.getElementById('car1Hb').style.backgroundColor = timestampBackgroundColor;
         }
@@ -387,7 +408,13 @@
             var timestamp = new Date(HbData);
             var currentTimestamp = new Date();
             var timeDifferenceInSeconds = (currentTimestamp - timestamp) / 1000;
-            var timestampBackgroundColor = timeDifferenceInSeconds > 3600 ? 'red' : 'green';
+            if (timeDifferenceInSeconds < 60) {
+                timestampBackgroundColor = 'green';
+            } else if (timeDifferenceInSeconds >= 60 && timeDifferenceInSeconds <= 300) {
+                timestampBackgroundColor = 'orange';
+            } else {
+                timestampBackgroundColor = 'red';
+            }
             document.getElementById('car2Hb').textContent = JSON.stringify(HbData);
             document.getElementById('car2Hb').style.backgroundColor = timestampBackgroundColor;
         }
@@ -395,12 +422,29 @@
             var timestamp = new Date(HbData);
             var currentTimestamp = new Date();
             var timeDifferenceInSeconds = (currentTimestamp - timestamp) / 1000;
-            var timestampBackgroundColor = timeDifferenceInSeconds > 3600 ? 'red' : 'green';
+            if (timeDifferenceInSeconds < 60) {
+                timestampBackgroundColor = 'green';
+            } else if (timeDifferenceInSeconds >= 60 && timeDifferenceInSeconds <= 300) {
+                timestampBackgroundColor = 'orange';
+            } else {
+                timestampBackgroundColor = 'red';
+            }
             document.getElementById('car3Hb').textContent = JSON.stringify(HbData);
             document.getElementById('car3Hb').style.backgroundColor = timestampBackgroundColor;
         }
-        updateStaticTableWithldpHb = (HbData) => {
+        function updateStaticTableWithldpHb(HbData) {
+            var timestamp = new Date(HbData);
+            var currentTimestamp = new Date();
+            var timeDifferenceInSeconds = (currentTimestamp - timestamp) / 1000;
+            if (timeDifferenceInSeconds < 60) {
+                timestampBackgroundColor = 'green';
+            } else if (timeDifferenceInSeconds >= 60 && timeDifferenceInSeconds <= 300) {
+                timestampBackgroundColor = 'orange';
+            } else {
+                timestampBackgroundColor = 'red';
+            }
             document.getElementById('ldpHb').textContent = JSON.stringify(HbData);
+            document.getElementById('ldpHb').style.backgroundColor = timestampBackgroundColor;
         }
 
         function loadDataFromServer() {

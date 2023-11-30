@@ -382,6 +382,16 @@
       "longitude": 14.418,
       "altitude": 400,
       "tmp": "2023-11-28 17:12:10.634124"
+    },
+    {
+      "topic": "v3/balloons@ttn/devices/fik8b/up",
+      "message": "{\"end_device_ids\":{\"device_id\":\"fik8b\",\"application_ids\":{\"application_id\":\"balloons\"},\"dev_eui\":\"3C56A000A0000064\",\"dev_addr\":\"26011828\"},\"correlation_ids\":[\"gs:uplink:01HGGFX55B8X26BJW6CAN3C7TM\"],\"received_at\":\"2023-11-30T16:10:04.541222972Z\",\"uplink_message\":{\"f_port\":1,\"f_cnt\":1008,\"frm_payload\":\"DwyHdjADnXaAAAIA/TXxAAU=\",\"decoded_payload\":{\"alt_m\":253,\"alt_okay\":1,\"course\":215.765625,\"course_ok\":1,\"lat\":50.1165885925293,\"latlon_age_s\":2,\"latlon_ok\":1,\"lon\":14.460357666015625,\"speed_mps\":0.3125,\"speed_ok\":0},\"rx_metadata\":[{\"gateway_ids\":{\"gateway_id\":\"crreat3\",\"eui\":\"58A0CBFFFE802F94\"},\"time\":\"2023-11-30T16:10:04.261353015Z\",\"timestamp\":1781901820,\"rssi\":-101,\"channel_rssi\":-101,\"snr\":6,\"location\":{\"latitude\":50.1163816927179,\"longitude\":14.4611111283302,\"altitude\":259,\"source\":\"SOURCE_REGISTRY\"},\"uplink_token\":\"ChUKEwoHY3JyZWF0MxIIWKDL//6AL5QQ/NPW0QYaDAjc56KrBhCi8JaeASDggICN7rAB\",\"received_at\":\"2023-11-30T16:10:04.252415198Z\"}],\"settings\":{\"data_rate\":{\"lora\":{\"bandwidth\":125000,\"spreading_factor\":10,\"coding_rate\":\"4/5\"}},\"frequency\":\"868300000\",\"timestamp\":1781901820,\"time\":\"2023-11-30T16:10:04.261353015Z\"},\"received_at\":\"2023-11-30T16:10:04.332863114Z\",\"consumed_airtime\":\"0.452608s\",\"locations\":{\"frm-payload\":{\"latitude\":50.1165885925293,\"longitude\":14.460357666015625,\"source\":\"SOURCE_GPS\"}},\"network_ids\":{\"net_id\":\"000013\",\"ns_id\":\"EC656E0000000181\",\"tenant_id\":\"ttn\",\"cluster_id\":\"eu1\",\"cluster_address\":\"eu1.cloud.thethings.network\"}}}",
+      "timestamp": "2023-11-30T16:10:04"
+    },
+    {
+      "topic": "v3/balloons@ttn/devices/fik8b/location/solved",
+      "message": "{\"end_device_ids\":{\"device_id\":\"fik8b\",\"application_ids\":{\"application_id\":\"balloons\"},\"dev_eui\":\"3C56A000A0000064\",\"dev_addr\":\"26011828\"},\"correlation_ids\":[\"gs:uplink:01HGGFX55B8X26BJW6CAN3C7TM\"],\"received_at\":\"2023-11-30T16:10:04.541222972Z\",\"location_solved\":{\"service\":\"frm-payload\",\"location\":{\"latitude\":50.1165885925293,\"longitude\":14.460357666015625,\"source\":\"SOURCE_GPS\"}}}",
+      "timestamp": "2023-11-30T16:10:14"
     }
   ]
 }
