@@ -31,7 +31,9 @@
 
 <body>
 
+    
     <div id="lastReloadTime">Last Reload Time: </div>
+    <button id="reloadButton">Reload Data</button>
     <h1>Json data:</h1>
 
     <table>
@@ -129,8 +131,21 @@
         </tr>
     </table>
 
-    <script>
+    
 
+
+
+    <script>
+        
+        var reloadButton = document.getElementById('reloadButton');
+
+        function reloadData() {
+            loadDataFromServer();
+        }
+        
+        reloadButton.addEventListener('click', reloadData);
+        setInterval(reloadData, 3000);
+        
 
         var fik8b;
 
