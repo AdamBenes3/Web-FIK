@@ -1,12 +1,32 @@
 services:
   web:
-    #image: "ghcr.io/odz-ujf-av-cr/web-fik/gapp:main"
     build:
-      dockerfile: nodejs.Dockerfile
+      dockerfile: GAPP.Dockerfile
+    volumes:
+      - gapp_data:/data 
     ports:
-      - "4000:3000"
+      - "4000:4000" 
   cdp:
-    #image: "ghcr.io/odz-ujf-av-cr/web-fik/fastapi:main"
     build:
-      dockerfile: fastapi.Dockerfile
+      dockerfile: CDP.Dockerfile
+    volumes:
+      - cdp_data:/cdp 
+    ports:
+      - "8000:8000"
+  ldp:
+    build:
+      dockerfile: LDP.Dockerfile
+    configs:
+      - source: ldp_config
+        target: /config.json
 
+
+configs:
+  ldp_config:
+    file: ./ldp_config.json
+
+volumes:
+  cdp_data:
+    name: "cdp_data_volume"
+  gapp_data:
+    name: "gapp_data_volume"

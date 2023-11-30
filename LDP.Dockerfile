@@ -11,7 +11,7 @@ COPY requirementsLDP.txt ./
 RUN pip install requests sondehub paho-mqtt
 
 # Bundle app source
-COPY . /app
+COPY LDP.py .
 
 # Define the command to run your app
-CMD ["python3", "app/LDP.py"]
+CMD ["python3", "LDP.py"]

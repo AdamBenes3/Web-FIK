@@ -11,10 +11,11 @@ COPY package*.json ./
 RUN npm install
 
 # Copy the content of the current directory to the working directory in the container
-COPY . .
+COPY GAPP.js .
+COPY views views
 
 # Expose the port the app runs on
-EXPOSE 3000
+EXPOSE 4000
 
 # Define the command to run your app
 CMD ["node", "GAPP.js"]
