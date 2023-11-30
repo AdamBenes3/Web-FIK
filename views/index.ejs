@@ -30,7 +30,7 @@
 </head>
 
 <body>
-    
+
     <div id="lastReloadTime">Last Reload Time: </div>
     <h1>Json data:</h1>
 
@@ -130,7 +130,7 @@
     </table>
 
     <script>
-        
+
 
         var fik8b;
 
@@ -273,27 +273,56 @@
 
         function displayFik8bInfo(data) {
             var jsonDataObj = JSON.parse(data.message);
-            var deviceId = jsonDataObj.end_device_ids.device_id;
-            var speedMps = parseFloat(jsonDataObj.uplink_message.decoded_payload.speed_mps);
-            var speedBackgroundColor = speedMps > 10 ? 'red' : 'green';
+
+            // Extracting information
+            var decodedPayload = jsonDataObj.uplink_message.decoded_payload;
+            var frmPayload = decodedPayload.frm_payload;
+
+            // Creating the table
             var infoTable = document.createElement('table');
-            var row = infoTable.insertRow();
-            var cell1 = row.insertCell(0);
-            var cell2 = row.insertCell(1);
-            cell1.innerHTML = '<strong>SpeedMPS:</strong>';
-            cell2.textContent = speedMps;
-            cell2.style.backgroundColor = speedBackgroundColor;
-            cell1.style.backgroundColor = speedBackgroundColor;
-            var row = infoTable.insertRow();
-            var cell3 = row.insertCell(0);
-            var cell4 = row.insertCell(1);
-            cell3.innerHTML = '<strong>SpeedMPS:</strong>';
-            cell4.textContent = speedMps;
-            cell3.style.backgroundColor = speedBackgroundColor;
-            cell4.style.backgroundColor = speedBackgroundColor;
+
+            // Function to add a row to the table
+            function addRow(label, value) {
+                var row = infoTable.insertRow();
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                cell1.innerHTML = '<strong>' + label + ':</strong>';
+                cell2.textContent = value;
+            }
+
+            // Adding rows for each required information
+            addRow('alt_m', decodedPayload.alt_m);
+            addRow('alt_okay', decodedPayload.alt_okay);
+            addRow('course', decodedPayload.course);
+            addRow('course_ok', decodedPayload.course_ok);
+            addRow('lat', decodedPayload.lat);
+            addRow('latlon_age_s', decodedPayload.latlon_age_s);
+            addRow('latlon_ok', decodedPayload.latlon_ok);
+            addRow('lon', decodedPayload.lon);
+            addRow('speed_mps', decodedPayload.speed_mps);
+            addRow('speed_ok', decodedPayload.speed_ok);
+
+            try {
+                // Attempting to parse frm-payload
+                var frmPayloadObj = JSON.parse(frmPayload);
+
+                // Adding additional information from frm-payload
+                if (frmPayloadObj.locations && frmPayloadObj.locations['frm-payload']) {
+                    var frmPayloadLocation = frmPayloadObj.locations['frm-payload'];
+                    addRow('frm-payload: latitude', frmPayloadLocation.latitude);
+                    addRow('frm-payload: longitude', frmPayloadLocation.longitude);
+                    addRow('frm-payload: source', frmPayloadLocation.source);
+                }
+            } catch (error) {
+                // If parsing fails, display frm-payload as is
+                addRow('frm-payload (raw)', frmPayload);
+            }
+
+            // Clearing and appending the table to the panel
             fik8bDataPanel.textContent = '';
             fik8bDataPanel.appendChild(infoTable);
         }
+
 
         function displayPx4Info(data) {
             var jsonDataObj = JSON.parse(data.message);
