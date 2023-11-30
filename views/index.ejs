@@ -472,6 +472,7 @@
         }
 
         function loadDataFromServer() {
+            var load = true;
             fetch('/get/fik8b')
                 .then(response => {
                     if (!response.ok) {
@@ -489,6 +490,7 @@
                     }
                 })
                 .catch(error => {
+                    load = false;
                     console.log('Error loading data /get/fik8b: ', error);
                 });
 
@@ -509,6 +511,7 @@
                     }
                 })
                 .catch(error => {
+                    load = false;
                     console.log('Error loading data /get/px4: ', error);
                 });
 
@@ -527,6 +530,7 @@
                     }
                 })
                 .catch(error => {
+                    load = false;
                     console.log('Error loading data /get/car/data: ', error);
                 });
 
@@ -545,6 +549,7 @@
                     }
                 })
                 .catch(error => {
+                    load = false;
                     console.log('Error loading data /get/car/data/1: ', error);
                 });
             fetch('/get/car/data/2')
@@ -579,6 +584,7 @@
                     }
                 })
                 .catch(error => {
+                    load = false;
                     console.log('Error loading data /get/car/data/3: ', error);
                 });
             fetch('/get/cdp/hb')
@@ -592,6 +598,7 @@
                     updateStaticTableWithcdpHb(data.data.cdp_heartbeat_value);
                 })
                 .catch(error => {
+                    load = false;
                     console.log('Error loading data /get/cdp/hb: ', error);
                 });
             fetch('/get/car/hb/1')
@@ -605,6 +612,7 @@
                     updateStaticTableWithcar1Hb(data.data.car_heartbeat_value);
                 })
                 .catch(error => {
+                    load = false;
                     console.log('Error loading data /get/car/hb/1: ', error);
                 });
 
@@ -619,7 +627,8 @@
                     updateStaticTableWithcar2Hb(data.data.car_heartbeat_value);
                 })
                 .catch(error => {
-                    console.log('Error loading /car/hb/2 data:', error);
+                    load = false;
+                    console.log('Error loading data /car/hb/2: ', error);
                 });
 
             fetch('/get/car/hb/3')
@@ -633,6 +642,8 @@
                     updateStaticTableWithcar3Hb(data.data.car_heartbeat_value);
                 })
                 .catch(error => {
+                    load = false;
+                    console.log('Error loading data /get/car/hb/3: ', error);
                 });
 
 
@@ -647,11 +658,40 @@
                     updateStaticTableWithldpHb(data.data.ldp_heartbeat_value);
                 })
                 .catch(error => {
+                    load = false;
                     console.log('Error loading data /get/ldp/hb: ', error);
                 });
-            var now = new Date();
-            var lastReloadTimeElement = document.getElementById('lastReloadTime');
-            lastReloadTimeElement.textContent = 'Last Reload Time: ' + now.toLocaleString();
+            Promise.all([
+                fetch('/get/fik8b'),
+                fetch('/get/px4'),
+                fetch('/get/car/data'),
+                fetch('/get/car/data/1'),
+                fetch('/get/car/data/2'),
+                fetch('/get/car/data/3'),
+                fetch('/get/car/hb/1'),
+                fetch('/get/car/hb/2'),
+                fetch('/get/car/hb/3'),
+                fetch('/get/ldp/hb')
+            ])
+                .then(responses => {
+                    responses.forEach(response => {
+                        if (!response.ok) {
+                            console.log('Network response was not ok');
+                            load = false;
+                        }
+                    });
+                    if (load) {
+                        responses[3].json().then(data => {
+                            updateStaticTableWithldpHb(data.data.ldp_heartbeat_value);
+                            var now = new Date();
+                            var lastReloadTimeElement = document.getElementById('lastReloadTime');
+                            lastReloadTimeElement.textContent = 'Last Reload Time: ' + now.toLocaleString();
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.log('Error loading data: ', error);
+                });
         }
 
         loadDataFromServer();
