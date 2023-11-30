@@ -8,11 +8,10 @@ WORKDIR .
 COPY requirementsLDP.txt ./
 
 # Install app dependencies
-RUN pip install fastapi[all] uvicorn
-RUN pip install requests sondehub
+RUN pip install requests sondehub paho-mqtt
 
 # Bundle app source
 COPY . /app
 
 # Define the command to run your app
-CMD ["python3", "LDP.py"]
+CMD ["python3", "app/LDP.py"]
