@@ -722,23 +722,20 @@
                             lastReloadTimeElement.style.backgroundColor = timestampBackgroundColor;
                         });
                     }
-                    else {
-                        now.setHours(timestamp.getHours() + 1);
-                        var currentTimestamp = new Date();
-                        var timeDifferenceInSeconds = (currentTimestamp - now) / 1000;
-                        if (timeDifferenceInSeconds < 10) {
-                            timestampBackgroundColor = 'rgba(0, 128, 0, 0.7)';
-                        } else if (timeDifferenceInSeconds >= 60 && timeDifferenceInSeconds <= 100) {
-                            timestampBackgroundColor = 'rgba(255, 165, 0, 0.7)';
-                        } else {
-                            timestampBackgroundColor = 'rgba(255, 0, 0, 0.7)';
-                        }
-                        var lastReloadTimeElement = document.getElementById('lastReloadTime');
-                        lastReloadTimeElement.style.backgroundColor = timestampBackgroundColor;
-                    }
                 })
                 .catch(error => {
-                    console.log('Error loading data: ', error);
+                    var currentTimestamp = new Date();
+                    var timeDifferenceInSeconds = (currentTimestamp - now) / 1000;
+                    if (timeDifferenceInSeconds < 10) {
+                        timestampBackgroundColor = 'rgba(0, 128, 0, 0.7)';
+                    } else if (timeDifferenceInSeconds >= 10 && timeDifferenceInSeconds <= 100) {
+                        timestampBackgroundColor = 'rgba(255, 165, 0, 0.7)';
+                    } else {
+                        timestampBackgroundColor = 'rgba(255, 0, 0, 0.7)';
+                    }
+                    var lastReloadTimeElement = document.getElementById('lastReloadTime');
+                    lastReloadTimeElement.style.backgroundColor = timestampBackgroundColor;
+                    console.log('Error loading data');
                 });
         }
 
