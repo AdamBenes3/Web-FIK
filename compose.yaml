@@ -12,7 +12,7 @@ services:
     volumes:
       - cdp_data:/cdp 
     ports:
-      - "8000:8000"
+      - "5060:8000"
   ldp:
     build:
       dockerfile: LDP.Dockerfile
