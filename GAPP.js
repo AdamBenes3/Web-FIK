@@ -167,6 +167,7 @@ app.get('/get/car/hb/3', async (req, res) => {
 app.post('/post/car/data', async (req, res) => {
     console.log("Received car data");
     try {
+        console.log("Received car data");
         const receivedData = req.body;
         appendToJsonFile("ALLDATA.json", receivedData);
         const carId = receivedData["car_id"];

@@ -143,10 +143,6 @@
         </tr>
     </table>
 
-
-
-
-
     <script>
         var now;
 
@@ -377,25 +373,48 @@
         }
 
         function displayCarInfo(data) {
-            var latitude = parseFloat(data.latitude);
-            var latitudeBackgroundColor = latitude > 10 ? 'red' : 'green';
+            console.log(data);
+            function make(b1, b2, b3, b4) {
+                return (b1 << 24) | (b2 << 16) | (b3 << 8) | b4;
+            }
+
+            const first16Numbers = data.TUNNEL.payload.slice(0, 16);
+
+            const convertedNumbers = [];
+            for (let i = 0; i < 16; i += 4) {
+                const num1 = make(...first16Numbers.slice(i, i + 4));
+                convertedNumbers.push(num1);
+            }
+            
+            const globalPosition = data.GLOBAL_POSITION_INT;
+            const latitude = parseFloat(globalPosition.lat);
+            const longitude = parseFloat(globalPosition.lon);
+            const altitude = parseFloat(globalPosition.alt);
+            const vx = parseFloat(globalPosition.vx);
+            const vy = parseFloat(globalPosition.vy);
+            const vz = parseFloat(globalPosition.vz);
+
             var infoTable = document.createElement('table');
-            var row = infoTable.insertRow();
-            var cell1 = row.insertCell(0);
-            var cell2 = row.insertCell(1);
-            cell1.innerHTML = '<strong>Latitude:</strong>';
-            cell2.textContent = latitude;
-            cell2.style.backgroundColor = latitudeBackgroundColor;
-            cell1.style.backgroundColor = latitudeBackgroundColor;
-            var row = infoTable.insertRow();
-            var cell3 = row.insertCell(0);
-            var cell4 = row.insertCell(1);
-            cell3.innerHTML = '<strong>Latitude:</strong>';
-            cell4.textContent = latitude;
-            cell3.style.backgroundColor = latitudeBackgroundColor;
-            cell4.style.backgroundColor = latitudeBackgroundColor;
+            displayTableRow(infoTable, 'Converted 1:', convertedNumbers[0]);
+            displayTableRow(infoTable, 'Converted 2:', convertedNumbers[1]);
+            displayTableRow(infoTable, 'Converted 3:', convertedNumbers[2]);
+            displayTableRow(infoTable, 'Converted 4:', convertedNumbers[3]);
+            displayTableRow(infoTable, 'Latitude:', latitude);
+            displayTableRow(infoTable, 'Longitude:', longitude);
+            displayTableRow(infoTable, 'Altitude:', altitude);
+            displayTableRow(infoTable, 'Velocity (vx):', vx);
+            displayTableRow(infoTable, 'Velocity (vy):', vy);
+            displayTableRow(infoTable, 'Velocity (vz):', vz);
             carDataPanel.textContent = '';
             carDataPanel.appendChild(infoTable);
+        }
+
+        function displayTableRow(table, label, value) {
+            var row = table.insertRow();
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            cell1.innerHTML = `<strong>${label}</strong>`;
+            cell2.textContent = value;
         }
 
         function updateStaticTableWithcdpHb(cdpHb) {
@@ -552,6 +571,10 @@
                 .then(data => {
                     if (data) {
                         car = data.data;
+                        console.log("Data: ");
+                        console.log(data);
+                        console.log("Car: ")
+                        console.log(car);
                     } else {
                         console.log('Received undefined data from the server');
                     }
