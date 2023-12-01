@@ -62,7 +62,7 @@
         </tr>
         <tr>
             <th>Car 1 last json</th>
-            <th></th>
+            <td id="car1TimeStamp"></td>
             <td>
                 <button class="custom-button" id="car1Button">Car 1</button>
                 <div id="car1Panel"></div>
@@ -70,7 +70,7 @@
         </tr>
         <tr>
             <th>Car 2 last json</th>
-            <th></th>
+            <td id="car2TimeStamp"></td>
             <td>
                 <button class="custom-button" id="car2Button">Car 2</button>
                 <div id="car2Panel"></div>
@@ -78,7 +78,7 @@
         </tr>
         <tr>
             <th>Car 3 last json</th>
-            <th></th>
+            <td id="car3TimeStamp"></td>
             <td>
                 <button class="custom-button" id="car3Button">Car 3</button>
                 <div id="car3Panel"></div>
@@ -622,8 +622,8 @@
                         } else {
                             timestampBackgroundColor = 'rgba(255, 0, 0, 0.7)';
                         }
-                        document.getElementById('car1Panel').textContent = timestamp.toLocaleString('en-US', { hour12: false }) + ", (-" + timeDifferenceInSeconds + "s)";
-                        document.getElementById('car1Panel').style.backgroundColor = timestampBackgroundColor;
+                        document.getElementById('car1TimeStamp').textContent = timestamp.toLocaleString('en-US', { hour12: false }) + ", (-" + timeDifferenceInSeconds + "s)";
+                        document.getElementById('car1TimeStamp').style.backgroundColor = timestampBackgroundColor;
                     } else {
                         console.log('Received undefined data from the server');
                     }
@@ -653,8 +653,8 @@
                         } else {
                             timestampBackgroundColor = 'rgba(255, 0, 0, 0.7)';
                         }
-                        document.getElementById('car2Panel').textContent = timestamp.toLocaleString('en-US', { hour12: false }) + ", (-" + timeDifferenceInSeconds + "s)";
-                        document.getElementById('car2Panel').style.backgroundColor = timestampBackgroundColor;
+                        document.getElementById('car2TimeStamp').textContent = timestamp.toLocaleString('en-US', { hour12: false }) + ", (-" + timeDifferenceInSeconds + "s)";
+                        document.getElementById('car2TimeStamp').style.backgroundColor = timestampBackgroundColor;
                     } else {
                         console.log('Received undefined data from the server');
                     }
@@ -683,8 +683,8 @@
                         } else {
                             timestampBackgroundColor = 'rgba(255, 0, 0, 0.7)';
                         }
-                        document.getElementById('car3Panel').textContent = timestamp.toLocaleString('en-US', { hour12: false }) + ", (-" + timeDifferenceInSeconds + "s)";
-                        document.getElementById('car3Panel').style.backgroundColor = timestampBackgroundColor;
+                        document.getElementById('car3TimeStamp').textContent = timestamp.toLocaleString('en-US', { hour12: false }) + ", (-" + timeDifferenceInSeconds + "s)";
+                        document.getElementById('car3TimeStamp').style.backgroundColor = timestampBackgroundColor;
                     } else {
                         console.log('Received undefined data from the server');
                     }
