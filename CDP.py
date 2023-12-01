@@ -57,7 +57,7 @@ def on_shutdown():
 
 def is_newer_timestamp(received_data: dict):
     global existing_timestamp_str
-    received_timestamp_str = received_data.get("tmp")
+    received_timestamp_str = received_data.get("lastPosUpdate")
     if received_timestamp_str:
         received_timestamp = datetime.datetime.strptime(received_timestamp_str, "%Y-%m-%d %H:%M:%S.%f")
         if existing_timestamp_str:
