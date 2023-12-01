@@ -282,7 +282,7 @@ app.post('/post/data', (req, res) => {
             if (deviceID == 'fik8b') {
                 saveDataToFile("fik8b.json", receivedData);
             }
-            if (deviceID == 'px4') {
+            if (deviceID == 'fik-px4') {
                 saveDataToFile("px4.json", receivedData);
             }
         }
@@ -292,7 +292,7 @@ app.post('/post/data', (req, res) => {
             if (deviceID == 'fik8b') {
                 saveDataToFile("fik8bLocation.json", receivedData);
             }
-            if (deviceID == 'px4') {
+            if (deviceID == 'fik-px4') {
                 saveDataToFile("px4Location.json", receivedData);
             }
         }
