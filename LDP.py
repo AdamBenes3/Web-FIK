@@ -55,6 +55,7 @@ def on_message(client, userdata, message):
         'message': message_payload,
         'timestamp': time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime())
     }
+    print(received_data)
     if received_data["topic"].endswith("up"):
         try:
             payload_dict = json.loads(message_payload)
