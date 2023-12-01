@@ -13,6 +13,12 @@ function appendToJsonFile(filePath, newData) {
         let jsonData = JSON.parse(existingData);
         jsonData.history.push(newData);
         const updatedJsonData = JSON.stringify(jsonData, null, 2);
+        if (fs.existsSync("data/" + filePath)) {
+            
+        }
+        else {
+            fs.writeFileSync("data/" + filePath, JSON.stringify({}));
+        }
         fs.writeFileSync("data/" + filePath, updatedJsonData);
         console.log('Data appended successfully.');
     } catch (error) {
@@ -24,6 +30,12 @@ function appendToJsonFile(filePath, newData) {
 function saveDataToFile(filename, data) {
     try {
         console.log("Saved to file: " + filename);
+        if (fs.existsSync("data/" + filename)) {
+            
+        }
+        else {
+            fs.writeFileSync("data/" + filename, JSON.stringify({}));
+        }
         fs.writeFileSync("data/" + filename, JSON.stringify(data, null, 2));
     } catch (error) {
         console.error('Error saving data to file:', error);
@@ -65,12 +77,17 @@ app.post('/post/ldp/hb', (req, res) => {
 });
 
 app.get('/get/ldp/hb', async (req, res) => {
+    const filePath = "data/ldp_hb.json";
     try {
-        const rawData = fs.readFileSync("data/" + 'ldp_hb.json', 'utf8');
-        const decodedData = JSON.parse(rawData);
-        res.json({ data: decodedData });
+        if (fs.existsSync(filePath)) {
+            const rawData = fs.readFileSync(filePath, 'utf8');
+            const decodedData = rawData ? JSON.parse(rawData) : {};
+            res.json({ data: decodedData });
+        } else {
+            fs.writeFileSync(filePath, JSON.stringify({}));
+        }
     } catch (error) {
-        res.status(500).send('Error rendering the page');
+        res.status(500).json({ error: 'Error loading data' });
     }
 });
 
@@ -101,34 +118,49 @@ app.post('/post/car/hb', (req, res) => {
 });
 
 app.get('/get/car/hb/1', async (req, res) => {
+    const filePath = "data/car1_hb.json";
     try {
-        const rawData = fs.readFileSync("data/" + 'car1_hb.json', 'utf8');
-        const decodedData = JSON.parse(rawData);
-        res.json({ data: decodedData });
+        if (fs.existsSync(filePath)) {
+            const rawData = fs.readFileSync(filePath, 'utf8');
+            const decodedData = rawData ? JSON.parse(rawData) : {};
+            res.json({ data: decodedData });
+        } else {
+            fs.writeFileSync(filePath, JSON.stringify({}));
+        }
     } catch (error) {
-        res.status(500).send('Error rendering the page');
+        res.status(500).json({ error: 'Error loading data' });
     }
 });
 
 
 app.get('/get/car/hb/2', async (req, res) => {
+    const filePath = "data/car2_hb.json";
     try {
-        const rawData = fs.readFileSync("data/" + 'car2_hb.json', 'utf8');
-        const decodedData = JSON.parse(rawData);
-        res.json({ data: decodedData });
+        if (fs.existsSync(filePath)) {
+            const rawData = fs.readFileSync(filePath, 'utf8');
+            const decodedData = rawData ? JSON.parse(rawData) : {};
+            res.json({ data: decodedData });
+        } else {
+            fs.writeFileSync(filePath, JSON.stringify({}));
+        }
     } catch (error) {
-        res.status(500).send('Error rendering the page');
+        res.status(500).json({ error: 'Error loading data' });
     }
 });
 
 
 app.get('/get/car/hb/3', async (req, res) => {
+    const filePath = "data/car3_hb.json";
     try {
-        const rawData = fs.readFileSync("data/" + 'car3_hb.json', 'utf8');
-        const decodedData = JSON.parse(rawData);
-        res.json({ data: decodedData });
+        if (fs.existsSync(filePath)) {
+            const rawData = fs.readFileSync(filePath, 'utf8');
+            const decodedData = rawData ? JSON.parse(rawData) : {};
+            res.json({ data: decodedData });
+        } else {
+            fs.writeFileSync(filePath, JSON.stringify({}));
+        }
     } catch (error) {
-        res.status(500).send('Error rendering the page');
+        res.status(500).json({ error: 'Error loading data' });
     }
 });
 
@@ -169,32 +201,47 @@ app.post('/post/car/data', async (req, res) => {
 });
 
 app.get('/get/car/data/1', async (req, res) => {
+    const filePath = "data/car1_data.json";
     try {
-        const rawData = fs.readFileSync("data/" + 'car1_data.json', 'utf8');
-        const decodedData = JSON.parse(rawData);
-        res.json({ data: decodedData });
+        if (fs.existsSync(filePath)) {
+            const rawData = fs.readFileSync(filePath, 'utf8');
+            const decodedData = rawData ? JSON.parse(rawData) : {};
+            res.json({ data: decodedData });
+        } else {
+            fs.writeFileSync(filePath, JSON.stringify({}));
+        }
     } catch (error) {
-        res.status(500).send('Error rendering the page');
+        res.status(500).json({ error: 'Error loading data' });
     }
 });
 
 app.get('/get/car/data/2', async (req, res) => {
+    const filePath = "data/car2_data.json";
     try {
-        const rawData = fs.readFileSync("data/" + 'car2_data.json', 'utf8');
-        const decodedData = JSON.parse(rawData);
-        res.json({ data: decodedData });
+        if (fs.existsSync(filePath)) {
+            const rawData = fs.readFileSync(filePath, 'utf8');
+            const decodedData = rawData ? JSON.parse(rawData) : {};
+            res.json({ data: decodedData });
+        } else {
+            fs.writeFileSync(filePath, JSON.stringify({}));
+        }
     } catch (error) {
-        res.status(500).send('Error rendering the page');
+        res.status(500).json({ error: 'Error loading data' });
     }
 });
 
 app.get('/get/car/data/3', async (req, res) => {
+    const filePath = "data/car3_data.json";
     try {
-        const rawData = fs.readFileSync("data/" + 'car3_data.json', 'utf8');
-        const decodedData = JSON.parse(rawData);
-        res.json({ data: decodedData });
+        if (fs.existsSync(filePath)) {
+            const rawData = fs.readFileSync(filePath, 'utf8');
+            const decodedData = rawData ? JSON.parse(rawData) : {};
+            res.json({ data: decodedData });
+        } else {
+            fs.writeFileSync(filePath, JSON.stringify({}));
+        }
     } catch (error) {
-        res.status(500).send('Error rendering the page');
+        res.status(500).json({ error: 'Error loading data' });
     }
 });
 
@@ -209,12 +256,17 @@ app.post('/post/cdp/hb', (req, res) => {
 });
 
 app.get('/get/cdp/hb', async (req, res) => {
+    const filePath = "data/cdp_hb.json";
     try {
-        const rawData = fs.readFileSync("data/" + "cdp_hb.json", 'utf8');
-        const decodedData = JSON.parse(rawData);
-        res.json({ data: decodedData });
+        if (fs.existsSync(filePath)) {
+            const rawData = fs.readFileSync(filePath, 'utf8');
+            const decodedData = rawData ? JSON.parse(rawData) : {};
+            res.json({ data: decodedData });
+        } else {
+            fs.writeFileSync(filePath, JSON.stringify({}));
+        }
     } catch (error) {
-        res.status(500).send('Error rendering the page');
+        res.status(500).json({ error: 'Error loading data' });
     }
 });
 
@@ -249,36 +301,45 @@ app.post('/post/data', (req, res) => {
 });
 
 app.get('/get/fik8b', (req, res) => {
+    const filePath = "data/fik8b.json";
     try {
-        const rawData = fs.readFileSync("data/" + 'fik8b.json', 'utf8');
-        const decodedData = JSON.parse(rawData);
-        // const rawData2 = fs.readFileSync("data/" + 'dataLocation.json', 'utf8');
-        // const decodedData2 = JSON.parse(rawData2);
-        res.json({ data: decodedData });
+        if (fs.existsSync(filePath)) {
+            const rawData = fs.readFileSync(filePath, 'utf8');
+            const decodedData = rawData ? JSON.parse(rawData) : {};
+            res.json({ data: decodedData });
+        } else {
+            fs.writeFileSync(filePath, JSON.stringify({}));
+        }
     } catch (error) {
         res.status(500).json({ error: 'Error loading data' });
     }
 });
 
 app.get('/get/px4', (req, res) => {
+    const filePath = "data/px4.json";
     try {
-        const rawData = fs.readFileSync("data/" + 'px4.json', 'utf8');
-        const decodedData = JSON.parse(rawData);
-        // const rawData2 = fs.readFileSync("data/" + 'dataLocation.json', 'utf8');
-        // const decodedData2 = JSON.parse(rawData2);
-        res.json({ data: decodedData });
+        if (fs.existsSync(filePath)) {
+            const rawData = fs.readFileSync(filePath, 'utf8');
+            const decodedData = rawData ? JSON.parse(rawData) : {};
+            res.json({ data: decodedData });
+        } else {
+            fs.writeFileSync(filePath, JSON.stringify({}));
+        }
     } catch (error) {
         res.status(500).json({ error: 'Error loading data' });
     }
 });
 
 app.get('/get/car/data', (req, res) => {
+    const filePath = "data/car_data.json";
     try {
-        const rawData = fs.readFileSync("data/" + 'car_data.json', 'utf8');
-        const decodedData = JSON.parse(rawData);
-        // const rawData2 = fs.readFileSync("data/" + 'dataLocation.json', 'utf8');
-        // const decodedData2 = JSON.parse(rawData2);
-        res.json({ data: decodedData });
+        if (fs.existsSync(filePath)) {
+            const rawData = fs.readFileSync(filePath, 'utf8');
+            const decodedData = rawData ? JSON.parse(rawData) : {};
+            res.json({ data: decodedData });
+        } else {
+            fs.writeFileSync(filePath, JSON.stringify({}));
+        }
     } catch (error) {
         res.status(500).json({ error: 'Error loading data' });
     }

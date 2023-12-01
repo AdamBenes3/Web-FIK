@@ -682,7 +682,6 @@
                     });
                     if (load) {
                         responses[3].json().then(data => {
-                            updateStaticTableWithldpHb(data.data.ldp_heartbeat_value);
                             var now = new Date();
                             var lastReloadTimeElement = document.getElementById('lastReloadTime');
                             lastReloadTimeElement.textContent = 'Last Reload Time: ' + now.toLocaleString();
