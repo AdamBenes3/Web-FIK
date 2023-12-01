@@ -416,7 +416,7 @@
             const latitude = parseFloat(data.latitude);
             const longitude = parseFloat(data.longitude);
             const altitude = parseFloat(data.altitude);
-            const tmp = parseFloat(data.tmp);
+            const tmp = data.tmp;
 
             var infoTable = document.createElement('table');
             displayTableRow(infoTable, 'Converted 1:', convertedNumbers[0]);
@@ -426,7 +426,7 @@
             displayTableRow(infoTable, 'Latitude:', latitude);
             displayTableRow(infoTable, 'Longitude:', longitude);
             displayTableRow(infoTable, 'Altitude:', altitude);
-            displayTableRow(infoTable, 'Tmo:', tmp);
+            displayTableRow(infoTable, 'Tmp:', tmp);
             carDataPanel.textContent = '';
             carDataPanel.appendChild(infoTable);
         }
