@@ -35,7 +35,8 @@ except:
 #time.sleep(5)
 #subprocess.Popen(["./QGroundControl.AppImage"])
 
-connection = mavutil.mavlink_connection('tcp:127.0.0.1:5760',source_system=1,source_component=139)
+#connection = mavutil.mavlink_connection('tcp:127.0.0.1:5760',source_system=1,source_component=139)
+connection = mavutil.mavlink_connection('udpin:127.0.0.1:14445',source_system=1,source_component=139)
 connection.mav.heartbeat_send(mavutil.mavlink.MAV_TYPE_ONBOARD_CONTROLLER,
                                               mavutil.mavlink.MAV_AUTOPILOT_INVALID, 0, 0, 0)
 
@@ -61,7 +62,7 @@ for k,v in messages.items():
 state["latitude"]=""
 state["longitude"]=""
 state["altitude"]=""
-state["lastPosUpdate"]=""
+state["tmp"]=""
 state["car_id"]=carID
 state["balloon_id"]="fik_SiK"
 sended=True
@@ -73,8 +74,9 @@ while True:
   msg = connection.recv_match(blocking=True,timeout=5)
   if msg:
     #update data and send to server
-    print("MSG:",msg.get_type())
+    print("MSG:", msg.get_type(), msg)
     if msg.get_type() in messages:
+      k = msg.get_type()
       members=vars(msg)
       changetime=str(datetime.datetime.utcnow())
       for m in messages[msg.get_type()]:
@@ -83,11 +85,14 @@ while True:
       sended=False
 
     if msg.get_type()=="GPS_RAW_INT":
-      state["lastPosUpdate"]=str(datetime.datetime.utcnow())
-      state["latitude"]=float(msg["lat"])/10000000.0
-      state["longitude"]=float(msg["lat"])/10000000.0
-      state["altitude"]=float(msg["alt"])/1000.0
-      print(state["lastPosUpdate"]," ",state["latitude"]," ",state["longitude"]," ",state["altitude"])
+      #print(msg)
+      #print(type(msg))
+      #print(msg.lat)
+      state["tmp"]=str(datetime.datetime.utcnow())
+      state["latitude"]=float(msg.lat)/10000000.0
+      state["longitude"]=float(msg.lon)/10000000.0
+      state["altitude"]=float(msg.alt)/1000.0
+      print(state["tmp"]," ",state["latitude"]," ",state["longitude"]," ",state["altitude"])
       sended=False
 
   if (datetime.datetime.utcnow()-lastHB).total_seconds()>15:     
@@ -111,6 +116,7 @@ while True:
     #try send     
     try:
       print("Sending Data to CDP")
+      print(state)
       response = requests.post(f"{cdpAddres}{dataEndPoint}", json=state)
       print(response)
 
@@ -120,7 +126,3 @@ while True:
 
     except Exception as e:
       print("Error couldnt send Data to CDP",e)
-
-
-  
-
