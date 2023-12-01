@@ -373,7 +373,6 @@
         }
 
         function displayCarInfo(data) {
-            console.log(data);
             function make(b1, b2, b3, b4) {
                 return (b1 << 24) | (b2 << 16) | (b3 << 8) | b4;
             }
@@ -571,10 +570,6 @@
                 .then(data => {
                     if (data) {
                         car = data.data;
-                        console.log("Data: ");
-                        console.log(data);
-                        console.log("Car: ")
-                        console.log(car);
                     } else {
                         console.log('Received undefined data from the server');
                     }
