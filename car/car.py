@@ -44,10 +44,7 @@ messages={
   "GPS_RAW_INT":["lat","lon","alt","eph","epv","vel","cog","satellites_visible","h_acc","v_acc"],
 	"ATTITUDE":["roll","pitch","yaw","rollspeed","pitchspeed","yawspeed"],
   "ALTITUDE":["altitude_amsl","altitude_local"],
-	"GLOBAL_POSITION_INT":["lat","lon","alt","relative_alt","vx","vy","vz"],
-	"GPS_GLOBAL_ORIGIN":["altitude"],
-  "GPS_STATUS":["satellites_visible","satellite_used"],
-  "HOME_POSITION":["latitude","longitude","altitude"],
+  "VFR_HUD":["groundspeed","alt","climb"],
   "HYGROMETER_SENSOR":["id","temperature","humidity"],
   "TUNNEL":["payload_length","payload"]
 }
