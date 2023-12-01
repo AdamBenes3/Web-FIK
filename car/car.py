@@ -62,7 +62,7 @@ for k,v in messages.items():
 state["latitude"]=""
 state["longitude"]=""
 state["altitude"]=""
-state["lastPosUpdate"]=""
+state["tmp"]=""
 state["car_id"]=carID
 state["balloon_id"]="fik_SiK"
 sended=True
@@ -88,7 +88,7 @@ while True:
       #print(msg)
       #print(type(msg))
       #print(msg.lat)
-      state["lastPosUpdate"]=str(datetime.datetime.utcnow())
+      state["tmp"]=str(datetime.datetime.utcnow())
       state["latitude"]=float(msg.lat)/10000000.0
       state["longitude"]=float(msg.lon)/10000000.0
       state["altitude"]=float(msg.alt)/1000.0
