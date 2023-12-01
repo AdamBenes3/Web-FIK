@@ -273,11 +273,11 @@ app.get('/get/cdp/hb', async (req, res) => {
 });
 
 app.post('/post/data', (req, res) => {
+    console.log("Received data");
     try {
         const receivedData = req.body;
         appendToJsonFile("ALLDATA.json", receivedData);
         if (receivedData.topic.endsWith("up")) {
-            receivedData.message
             const deviceID = JSON.parse(receivedData.message).end_device_ids.device_id;
             if (deviceID == 'fik8b') {
                 saveDataToFile("fik8b.json", receivedData);
