@@ -16,8 +16,8 @@ password = config['password']
 
 topic = '#'
 balloons_dict = {}
-express_base_url = "http://localhost:4000"
-#express_base_url = "https://fik.crreat.eu"
+#express_base_url = "http://localhost:4000"
+express_base_url = "https://fik.crreat.eu"
 
 
 def heartbeat_loop():

@@ -395,11 +395,8 @@
         }
 
         function updateStaticTableWithcdpHb(cdpHb) {
-            document.getElementById('cdpHb').textContent = JSON.stringify(cdpHb);
-        }
-
-        function updateStaticTableWithcdpHb(cdpHb) {
             var timestamp = new Date(cdpHb);
+            timestamp.setHours(timestamp.getHours() + 1);
             var currentTimestamp = new Date();
             var timeDifferenceInSeconds = (currentTimestamp - timestamp) / 1000;
             if (timeDifferenceInSeconds < 60) {
@@ -409,12 +406,13 @@
             } else {
                 timestampBackgroundColor = 'red';
             }
-            document.getElementById('cdpHb').textContent = JSON.stringify(cdpHb);
+            document.getElementById('cdpHb').textContent = timestamp.toLocaleString() + ", Time difference: " + timeDifferenceInSeconds;
             document.getElementById('cdpHb').style.backgroundColor = timestampBackgroundColor;
         }
 
         function updateStaticTableWithcar1Hb(HbData) {
             var timestamp = new Date(HbData);
+            timestamp.setHours(timestamp.getHours() + 1);
             var currentTimestamp = new Date();
             var timeDifferenceInSeconds = (currentTimestamp - timestamp) / 1000;
             if (timeDifferenceInSeconds < 60) {
@@ -424,12 +422,13 @@
             } else {
                 timestampBackgroundColor = 'red';
             }
-            document.getElementById('car1Hb').textContent = JSON.stringify(HbData);
+            document.getElementById('car1Hb').textContent = timestamp.toLocaleString() + ", Time difference: " + timeDifferenceInSeconds;
             document.getElementById('car1Hb').style.backgroundColor = timestampBackgroundColor;
         }
 
         function updateStaticTableWithcar2Hb(HbData) {
             var timestamp = new Date(HbData);
+            timestamp.setHours(timestamp.getHours() + 1);
             var currentTimestamp = new Date();
             var timeDifferenceInSeconds = (currentTimestamp - timestamp) / 1000;
             if (timeDifferenceInSeconds < 60) {
@@ -439,11 +438,12 @@
             } else {
                 timestampBackgroundColor = 'red';
             }
-            document.getElementById('car2Hb').textContent = JSON.stringify(HbData);
+            document.getElementById('car2Hb').textContent = timestamp.toLocaleString() + ", Time difference: " + timeDifferenceInSeconds;
             document.getElementById('car2Hb').style.backgroundColor = timestampBackgroundColor;
         }
         function updateStaticTableWithcar3Hb(HbData) {
             var timestamp = new Date(HbData);
+            timestamp.setHours(timestamp.getHours() + 1);
             var currentTimestamp = new Date();
             var timeDifferenceInSeconds = (currentTimestamp - timestamp) / 1000;
             if (timeDifferenceInSeconds < 60) {
@@ -453,11 +453,12 @@
             } else {
                 timestampBackgroundColor = 'red';
             }
-            document.getElementById('car3Hb').textContent = JSON.stringify(HbData);
+            document.getElementById('car3Hb').textContent = timestamp.toLocaleString() + ", Time difference: " + timeDifferenceInSeconds;
             document.getElementById('car3Hb').style.backgroundColor = timestampBackgroundColor;
         }
         function updateStaticTableWithldpHb(HbData) {
             var timestamp = new Date(HbData);
+            timestamp.setHours(timestamp.getHours() + 1);
             var currentTimestamp = new Date();
             var timeDifferenceInSeconds = (currentTimestamp - timestamp) / 1000;
             if (timeDifferenceInSeconds < 60) {
@@ -467,7 +468,7 @@
             } else {
                 timestampBackgroundColor = 'red';
             }
-            document.getElementById('ldpHb').textContent = JSON.stringify(HbData);
+            document.getElementById('ldpHb').textContent = timestamp.toLocaleString() + ", Time difference: " + timeDifferenceInSeconds;
             document.getElementById('ldpHb').style.backgroundColor = timestampBackgroundColor;
         }
 
