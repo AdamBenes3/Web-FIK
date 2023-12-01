@@ -385,13 +385,9 @@
                 convertedNumbers.push(num1);
             }
             console.log(data);
-            const globalPosition = data.GLOBAL_POSITION_INT;
-            const latitude = parseFloat(globalPosition.lat);
-            const longitude = parseFloat(globalPosition.lon);
-            const altitude = parseFloat(globalPosition.alt);
-            const vx = parseFloat(globalPosition.vx);
-            const vy = parseFloat(globalPosition.vy);
-            const vz = parseFloat(globalPosition.vz);
+            const latitude = parseFloat(data.latitude);
+            const longitude = parseFloat(data.longitude);
+            const altitude = parseFloat(data.altitude);
 
             var infoTable = document.createElement('table');
             displayTableRow(infoTable, 'Converted 1:', convertedNumbers[0]);
@@ -401,9 +397,6 @@
             displayTableRow(infoTable, 'Latitude:', latitude);
             displayTableRow(infoTable, 'Longitude:', longitude);
             displayTableRow(infoTable, 'Altitude:', altitude);
-            displayTableRow(infoTable, 'Velocity (vx):', vx);
-            displayTableRow(infoTable, 'Velocity (vy):', vy);
-            displayTableRow(infoTable, 'Velocity (vz):', vz);
             carDataPanel.textContent = '';
             carDataPanel.appendChild(infoTable);
         }
