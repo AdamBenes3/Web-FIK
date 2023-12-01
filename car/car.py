@@ -31,9 +31,9 @@ except:
   print("GPS ERROR")
   sys.exit()
 
-#proc=subprocess.Popen(["./mavlink-routerd", "-c", "TF-GCS.conf"])
-#time.sleep(5)
-#subprocess.Popen(["./QGroundControl.AppImage"])
+proc=subprocess.Popen(["./mavlink-routerd", "-c", "TF-GCS.conf"])
+time.sleep(5)
+qgcproc=subprocess.Popen(["./QGroundControl.AppImage"])
 
 connection = mavutil.mavlink_connection('tcp:127.0.0.1:5760',source_system=1,source_component=139)
 connection.mav.heartbeat_send(mavutil.mavlink.MAV_TYPE_ONBOARD_CONTROLLER,
