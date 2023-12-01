@@ -92,7 +92,7 @@ while True:
       state["latitude"]=float(msg.lat)/10000000.0
       state["longitude"]=float(msg.lon)/10000000.0
       state["altitude"]=float(msg.alt)/1000.0
-      print(state["lastPosUpdate"]," ",state["latitude"]," ",state["longitude"]," ",state["altitude"])
+      print(state["tmp"]," ",state["latitude"]," ",state["longitude"]," ",state["altitude"])
       sended=False
 
   if (datetime.datetime.utcnow()-lastHB).total_seconds()>15:     
