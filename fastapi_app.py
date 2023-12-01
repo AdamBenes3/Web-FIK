@@ -7,7 +7,7 @@ def send_heartbeat():
     url = "http://localhost:8000/post/car/hb"
 
     # Heartbeat data
-    heartbeat_data = {"car_heartbeat_value": str(datetime.datetime.now()), "car_id": "car1", "latitude": 50.073, "longitude": 14.418, "altitude": 400}
+    heartbeat_data = {"car_heartbeat_value": str(datetime.datetime.utcnow()), "car_id": "car1", "latitude": 50.073, "longitude": 14.418, "altitude": 400}
 
     # Send POST request to the FastAPI app
     response = requests.post(url, json=heartbeat_data)
@@ -16,7 +16,7 @@ def send_heartbeat():
     url = "http://localhost:8000/post/car/hb"
 
     # Heartbeat data
-    heartbeat_data = {"car_heartbeat_value": str(datetime.datetime.now()), "car_id": "car2", "latitude": 50.073, "longitude": 14.418, "altitude": 400}
+    heartbeat_data = {"car_heartbeat_value": str(datetime.datetime.utcnow()), "car_id": "car2", "latitude": 50.073, "longitude": 14.418, "altitude": 400}
 
     # Send POST request to the FastAPI app
     response = requests.post(url, json=heartbeat_data)
@@ -25,7 +25,7 @@ def send_heartbeat():
     url = "http://localhost:8000/post/car/hb"
 
     # Heartbeat data
-    heartbeat_data = {"car_heartbeat_value": str(datetime.datetime.now()), "car_id": "car3", "latitude": 50.073, "longitude": 14.418, "altitude": 400}
+    heartbeat_data = {"car_heartbeat_value": str(datetime.datetime.utcnow()), "car_id": "car3", "latitude": 50.073, "longitude": 14.418, "altitude": 400}
 
     # Send POST request to the FastAPI app
     response = requests.post(url, json=heartbeat_data)
@@ -45,7 +45,7 @@ def send_data():
         "latitude": 50.073,
         "longitude": 14.618,
         "altitude": 400,
-        "tmp": str(datetime.datetime.now())
+        "tmp": str(datetime.datetime.utcnow())
         }
 
     # Send POST request to the FastAPI app
@@ -56,7 +56,7 @@ def send_data():
         "latitude": 50.073,
         "longitude": 14.818,
         "altitude": 400,
-        "tmp": str(datetime.datetime.now())
+        "tmp": str(datetime.datetime.utcnow())
         }
 
     # Send POST request to the FastAPI app
@@ -67,7 +67,7 @@ def send_data():
         "latitude": 50.073,
         "longitude": 14.418,
         "altitude": 400,
-        "tmp": str(datetime.datetime.now())
+        "tmp": str(datetime.datetime.utcnow())
         }
 
     # Send POST request to the FastAPI app

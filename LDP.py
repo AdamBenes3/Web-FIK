@@ -16,8 +16,8 @@ password = config['password']
 
 topic = '#'
 balloons_dict = {}
-#express_base_url = "http://localhost:4000"
-express_base_url = "https://fik.crreat.eu"
+express_base_url = "http://localhost:4000"
+#express_base_url = "https://fik.crreat.eu"
 
 
 def heartbeat_loop():
@@ -74,7 +74,6 @@ def on_message(client, userdata, message):
                     longitude,
                     altitude + 1000
                 )
-            time.sleep(10)
         except json.JSONDecodeError as e:
             print(f"Error decoding JSON: {e}")
     try:

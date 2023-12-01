@@ -665,6 +665,216 @@
       "longitude": 14.418,
       "altitude": 400,
       "tmp": "2023-12-01 09:59:11.560442"
+    },
+    {
+      "car_id": "car1",
+      "latitude": 50.073,
+      "longitude": 14.618,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:20:44.133456"
+    },
+    {
+      "car_id": "car2",
+      "latitude": 50.073,
+      "longitude": 14.818,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:20:44.206615"
+    },
+    {
+      "car_id": "car3",
+      "latitude": 50.073,
+      "longitude": 14.418,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:20:44.230646"
+    },
+    {
+      "car_id": "car1",
+      "latitude": 50.073,
+      "longitude": 14.618,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:20:50.988906"
+    },
+    {
+      "car_id": "car2",
+      "latitude": 50.073,
+      "longitude": 14.818,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:20:50.999404"
+    },
+    {
+      "car_id": "car3",
+      "latitude": 50.073,
+      "longitude": 14.418,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:20:51.009825"
+    },
+    {
+      "car_id": "car1",
+      "latitude": 50.073,
+      "longitude": 14.618,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:20:57.564997"
+    },
+    {
+      "car_id": "car2",
+      "latitude": 50.073,
+      "longitude": 14.818,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:20:57.578542"
+    },
+    {
+      "car_id": "car3",
+      "latitude": 50.073,
+      "longitude": 14.418,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:20:57.592307"
+    },
+    {
+      "car_id": "car1",
+      "latitude": 50.073,
+      "longitude": 14.618,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:21:04.743176"
+    },
+    {
+      "car_id": "car2",
+      "latitude": 50.073,
+      "longitude": 14.818,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:21:04.761129"
+    },
+    {
+      "car_id": "car3",
+      "latitude": 50.073,
+      "longitude": 14.418,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:21:04.792345"
+    },
+    {
+      "car_id": "car1",
+      "latitude": 50.073,
+      "longitude": 14.618,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:21:11.674539"
+    },
+    {
+      "car_id": "car2",
+      "latitude": 50.073,
+      "longitude": 14.818,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:21:11.687398"
+    },
+    {
+      "car_id": "car3",
+      "latitude": 50.073,
+      "longitude": 14.418,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:21:11.709589"
+    },
+    {
+      "car_id": "car1",
+      "latitude": 50.073,
+      "longitude": 14.618,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:21:18.583936"
+    },
+    {
+      "car_id": "car2",
+      "latitude": 50.073,
+      "longitude": 14.818,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:21:18.596222"
+    },
+    {
+      "car_id": "car3",
+      "latitude": 50.073,
+      "longitude": 14.418,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:21:18.602990"
+    },
+    {
+      "car_id": "car1",
+      "latitude": 50.073,
+      "longitude": 14.618,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:21:25.573039"
+    },
+    {
+      "car_id": "car2",
+      "latitude": 50.073,
+      "longitude": 14.818,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:21:25.579319"
+    },
+    {
+      "car_id": "car3",
+      "latitude": 50.073,
+      "longitude": 14.418,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:21:25.584951"
+    },
+    {
+      "car_id": "car1",
+      "latitude": 50.073,
+      "longitude": 14.618,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:21:32.154757"
+    },
+    {
+      "car_id": "car2",
+      "latitude": 50.073,
+      "longitude": 14.818,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:21:32.165938"
+    },
+    {
+      "car_id": "car3",
+      "latitude": 50.073,
+      "longitude": 14.418,
+      "altitude": 400,
+      "tmp": "2023-12-01 10:21:32.186419"
+    },
+    {
+      "car_id": "car1",
+      "latitude": 50.073,
+      "longitude": 14.618,
+      "altitude": 400,
+      "tmp": "2023-12-01 09:21:54.198845"
+    },
+    {
+      "car_id": "car2",
+      "latitude": 50.073,
+      "longitude": 14.818,
+      "altitude": 400,
+      "tmp": "2023-12-01 09:21:54.214604"
+    },
+    {
+      "car_id": "car3",
+      "latitude": 50.073,
+      "longitude": 14.418,
+      "altitude": 400,
+      "tmp": "2023-12-01 09:21:54.221554"
+    },
+    {
+      "car_id": "car1",
+      "latitude": 50.073,
+      "longitude": 14.618,
+      "altitude": 400,
+      "tmp": "2023-12-01 09:22:01.032993"
+    },
+    {
+      "car_id": "car2",
+      "latitude": 50.073,
+      "longitude": 14.818,
+      "altitude": 400,
+      "tmp": "2023-12-01 09:22:01.046950"
+    },
+    {
+      "car_id": "car3",
+      "latitude": 50.073,
+      "longitude": 14.418,
+      "altitude": 400,
+      "tmp": "2023-12-01 09:22:01.057367"
     }
   ]
 }
