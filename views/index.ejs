@@ -373,7 +373,18 @@
         }
 
         function displayCarInfo(data) {
-            // Extracting GLOBAL_POSITION_INT information
+            function make(b1, b2, b3, b4) {
+                return (b1 << 24) | (b2 << 16) | (b3 << 8) | b4;
+            }
+
+            const first16Numbers = data.TUNNEL.payload.slice(0, 16);
+
+            const convertedNumbers = [];
+            for (let i = 0; i < 16; i += 4) {
+                const num1 = make(...first16Numbers.slice(i, i + 4));
+                convertedNumbers.push(num1);
+            }
+            
             const globalPosition = data.GLOBAL_POSITION_INT;
             const latitude = parseFloat(globalPosition.lat);
             const longitude = parseFloat(globalPosition.lon);
@@ -382,54 +393,28 @@
             const vy = parseFloat(globalPosition.vy);
             const vz = parseFloat(globalPosition.vz);
 
-            // Creating table and rows
             var infoTable = document.createElement('table');
-
-            // Row 1: Latitude
-            var row1 = infoTable.insertRow();
-            var cell1Row1 = row1.insertCell(0);
-            var cell2Row1 = row1.insertCell(1);
-            cell1Row1.innerHTML = '<strong>Latitude:</strong>';
-            cell2Row1.textContent = latitude;
-
-            // Row 2: Longitude
-            var row2 = infoTable.insertRow();
-            var cell1Row2 = row2.insertCell(0);
-            var cell2Row2 = row2.insertCell(1);
-            cell1Row2.innerHTML = '<strong>Longitude:</strong>';
-            cell2Row2.textContent = longitude;
-
-            // Row 3: Altitude
-            var row3 = infoTable.insertRow();
-            var cell1Row3 = row3.insertCell(0);
-            var cell2Row3 = row3.insertCell(1);
-            cell1Row3.innerHTML = '<strong>Altitude:</strong>';
-            cell2Row3.textContent = altitude;
-
-            // Row 4: Velocity (vx, vy, vz)
-            var row4 = infoTable.insertRow();
-            var cell1Row4 = row4.insertCell(0);
-            var cell2Row4 = row4.insertCell(1);
-            cell1Row4.innerHTML = '<strong>Velocity (vx):</strong>';
-            cell2Row4.textContent = vx;
-
-            var row5 = infoTable.insertRow();
-            var cell1Row5 = row5.insertCell(0);
-            var cell2Row5 = row5.insertCell(1);
-            cell1Row5.innerHTML = '<strong>Velocity (vy):</strong>';
-            cell2Row5.textContent = vy;
-
-            var row6 = infoTable.insertRow();
-            var cell1Row6 = row6.insertCell(0);
-            var cell2Row6 = row6.insertCell(1);
-            cell1Row6.innerHTML = '<strong>Velocity (vz):</strong>';
-            cell2Row6.textContent = vz;
-
-            // Appending the table to the carDataPanel
+            displayTableRow(infoTable, 'Converted 1:', convertedNumbers[0]);
+            displayTableRow(infoTable, 'Converted 2:', convertedNumbers[1]);
+            displayTableRow(infoTable, 'Converted 3:', convertedNumbers[2]);
+            displayTableRow(infoTable, 'Converted 4:', convertedNumbers[3]);
+            displayTableRow(infoTable, 'Latitude:', latitude);
+            displayTableRow(infoTable, 'Longitude:', longitude);
+            displayTableRow(infoTable, 'Altitude:', altitude);
+            displayTableRow(infoTable, 'Velocity (vx):', vx);
+            displayTableRow(infoTable, 'Velocity (vy):', vy);
+            displayTableRow(infoTable, 'Velocity (vz):', vz);
             carDataPanel.textContent = '';
             carDataPanel.appendChild(infoTable);
         }
 
+        function displayTableRow(table, label, value) {
+            var row = table.insertRow();
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            cell1.innerHTML = `<strong>${label}</strong>`;
+            cell2.textContent = value;
+        }
 
         function updateStaticTableWithcdpHb(cdpHb) {
             var timestamp = new Date(cdpHb);
