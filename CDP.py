@@ -78,7 +78,7 @@ async def forward_heartbeat(request: Request):
         car_dict[car_id] = Uploader(car_id)
         print(car_dict) 
     car_dict[car_id].upload_station_position(
-        car_id + "Test",
+        "fik-" + car_id + "Test",
         [latitude, longitude, altitude],
         mobile=True
     )
@@ -98,7 +98,7 @@ async def forward_data(request: Request):
         response = send_data_to_express("/post/car/data", data)
         print("Received data is newer than the existing data.")
         uploader_data.add_telemetry(
-            balloon_id,
+            "fik-" + balloon_id + + "Test",
             datetime.datetime.utcnow(),
             latitude,
             longitude,

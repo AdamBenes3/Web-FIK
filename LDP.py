@@ -68,11 +68,11 @@ def on_message(client, userdata, message):
                 balloons_dict[balloon_id] = Uploader(balloon_id)
             
             balloons_dict[balloon_id].add_telemetry(
-                    balloon_id + "Test",
+                    "fik-" + balloon_id + "Test",
                     datetime.datetime.utcnow(),
                     latitude,
                     longitude,
-                    altitude + 1000
+                    altitude
                 )
         except json.JSONDecodeError as e:
             print(f"Error decoding JSON: {e}")
