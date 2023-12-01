@@ -98,7 +98,7 @@ async def forward_data(request: Request):
         response = send_data_to_express("/post/car/data", data)
         print("Received data is newer than the existing data.")
         uploader_data.add_telemetry(
-            "fik-" + balloon_id,
+            "fik-" + balloon_id + + "Test",
             datetime.datetime.utcnow(),
             latitude,
             longitude,
