@@ -581,6 +581,90 @@
       "longitude": 14.418,
       "altitude": 400,
       "tmp": "2023-11-30 18:17:03.629292"
+    },
+    {
+      "car_id": "car1",
+      "latitude": 50.073,
+      "longitude": 14.618,
+      "altitude": 400,
+      "tmp": "2023-12-01 09:58:50.701712"
+    },
+    {
+      "car_id": "car2",
+      "latitude": 50.073,
+      "longitude": 14.818,
+      "altitude": 400,
+      "tmp": "2023-12-01 09:58:50.745316"
+    },
+    {
+      "car_id": "car3",
+      "latitude": 50.073,
+      "longitude": 14.418,
+      "altitude": 400,
+      "tmp": "2023-12-01 09:58:50.765388"
+    },
+    {
+      "car_id": "car1",
+      "latitude": 50.073,
+      "longitude": 14.618,
+      "altitude": 400,
+      "tmp": "2023-12-01 09:58:57.567008"
+    },
+    {
+      "car_id": "car2",
+      "latitude": 50.073,
+      "longitude": 14.818,
+      "altitude": 400,
+      "tmp": "2023-12-01 09:58:57.572301"
+    },
+    {
+      "car_id": "car3",
+      "latitude": 50.073,
+      "longitude": 14.418,
+      "altitude": 400,
+      "tmp": "2023-12-01 09:58:57.578601"
+    },
+    {
+      "car_id": "car1",
+      "latitude": 50.073,
+      "longitude": 14.618,
+      "altitude": 400,
+      "tmp": "2023-12-01 09:59:04.253986"
+    },
+    {
+      "car_id": "car2",
+      "latitude": 50.073,
+      "longitude": 14.818,
+      "altitude": 400,
+      "tmp": "2023-12-01 09:59:04.263210"
+    },
+    {
+      "car_id": "car3",
+      "latitude": 50.073,
+      "longitude": 14.418,
+      "altitude": 400,
+      "tmp": "2023-12-01 09:59:04.272792"
+    },
+    {
+      "car_id": "car1",
+      "latitude": 50.073,
+      "longitude": 14.618,
+      "altitude": 400,
+      "tmp": "2023-12-01 09:59:11.531726"
+    },
+    {
+      "car_id": "car2",
+      "latitude": 50.073,
+      "longitude": 14.818,
+      "altitude": 400,
+      "tmp": "2023-12-01 09:59:11.543593"
+    },
+    {
+      "car_id": "car3",
+      "latitude": 50.073,
+      "longitude": 14.418,
+      "altitude": 400,
+      "tmp": "2023-12-01 09:59:11.560442"
     }
   ]
 }

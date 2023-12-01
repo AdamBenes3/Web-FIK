@@ -34,7 +34,7 @@ def send_data_to_express(endpoint: str, data: dict):
     return response
 
 def send_heartbeat():
-    date = datetime.datetime.now()
+    date = datetime.datetime.utcnow()
     cdp_heartbeat_data = {"ldp_heartbeat_value": str(date)}
     response = send_data_to_express("/post/ldp/hb", cdp_heartbeat_data)
 

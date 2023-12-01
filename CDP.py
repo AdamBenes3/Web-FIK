@@ -41,7 +41,7 @@ def send_hb_to_express(endpoint: str, data: dict):
 def start_background_task():
     async def send_cdp_heartbeat():
         while True:
-            date = datetime.datetime.now()
+            date = datetime.datetime.utcnow()
             cdp_heartbeat_data = {"cdp_heartbeat_value": str(date)}
             response = send_hb_to_express("/post/cdp/hb", cdp_heartbeat_data)
             await asyncio.sleep(10)
