@@ -39,9 +39,7 @@
     <table>
         <tr>
             <th>TTN fik8b last json</th>
-            <th>
-                <div id="fik8bTimeStamp"></div>
-            </th>
+            <td id="fik8bTimeStamp"></td>
             <td>
                 <button id="fik8bButton">fik8b</button>
                 <div id="fik8bPanel"></div>
@@ -49,9 +47,7 @@
         </tr>
         <tr>
             <th>TTN px4 last json</th>
-            <th>
-                <div id="px4TimeStamp"></div>
-            </th>
+            <td id="px4TimeStamp"></td>
             <td>
                 <button id="px4Button">px4</button>
                 <div id="px4Panel"></div>
@@ -153,7 +149,7 @@
         }
 
         reloadButton.addEventListener('click', reloadData);
-        setInterval(reloadData, 3000);
+        setInterval(reloadData, 6000);
 
 
         var fik8b;
@@ -406,7 +402,7 @@
             } else {
                 timestampBackgroundColor = 'rgba(255, 0, 0, 0.7)';
             }
-            document.getElementById('cdpHb').textContent = timestamp.toLocaleString() + ", (-" + timeDifferenceInSeconds + "s)";
+            document.getElementById('cdpHb').textContent = timestamp.toLocaleString('en-US', { hour12: false }) + ", (-" + timeDifferenceInSeconds + "s)";
             document.getElementById('cdpHb').style.backgroundColor = timestampBackgroundColor;
         }
 
@@ -422,7 +418,7 @@
             } else {
                 timestampBackgroundColor = 'rgba(255, 0, 0, 0.7)';
             }
-            document.getElementById('car1Hb').textContent = timestamp.toLocaleString() + ", (-" + timeDifferenceInSeconds + "s)";
+            document.getElementById('car1Hb').textContent = timestamp.toLocaleString('en-US', { hour12: false }) + ", (-" + timeDifferenceInSeconds + "s)";
             document.getElementById('car1Hb').style.backgroundColor = timestampBackgroundColor;
         }
 
@@ -438,7 +434,7 @@
             } else {
                 timestampBackgroundColor = 'rgba(255, 0, 0, 0.7)';
             }
-            document.getElementById('car2Hb').textContent = timestamp.toLocaleString() + ", (-" + timeDifferenceInSeconds + "s)";
+            document.getElementById('car2Hb').textContent = timestamp.toLocaleString('en-US', { hour12: false }) + ", (-" + timeDifferenceInSeconds + "s)";
             document.getElementById('car2Hb').style.backgroundColor = timestampBackgroundColor;
         }
         function updateStaticTableWithcar3Hb(HbData) {
@@ -453,7 +449,7 @@
             } else {
                 timestampBackgroundColor = 'rgba(255, 0, 0, 0.7)';
             }
-            document.getElementById('car3Hb').textContent = timestamp.toLocaleString() + ", (-" + timeDifferenceInSeconds + "s)";
+            document.getElementById('car3Hb').textContent = timestamp.toLocaleString('en-US', { hour12: false }) + ", (-" + timeDifferenceInSeconds + "s)";
             document.getElementById('car3Hb').style.backgroundColor = timestampBackgroundColor;
         }
         function updateStaticTableWithldpHb(HbData) {
@@ -468,7 +464,7 @@
             } else {
                 timestampBackgroundColor = 'rgba(255, 0, 0, 0.7)';
             }
-            document.getElementById('ldpHb').textContent = timestamp.toLocaleString() + ", (-" + timeDifferenceInSeconds + "s)";
+            document.getElementById('ldpHb').textContent = timestamp.toLocaleString('en-US', { hour12: false }) + ", (-" + timeDifferenceInSeconds + "s)";
             document.getElementById('ldpHb').style.backgroundColor = timestampBackgroundColor;
         }
 
@@ -485,7 +481,18 @@
                     if (data) {
                         fik8b = data.data;
                         var timestamp = new Date(fik8b.timestamp);
-                        document.getElementById('fik8bTimeStamp').textContent = timestamp.toLocaleString();
+                        timestamp.setHours(timestamp.getHours() + 1);
+                        var currentTimestamp = new Date();
+                        var timeDifferenceInSeconds = (currentTimestamp - timestamp) / 1000;
+                        if (timeDifferenceInSeconds < 60) {
+                            timestampBackgroundColor = 'rgba(0, 128, 0, 0.7)';
+                        } else if (timeDifferenceInSeconds >= 60 && timeDifferenceInSeconds <= 300) {
+                            timestampBackgroundColor = 'rgba(255, 165, 0, 0.7)';
+                        } else {
+                            timestampBackgroundColor = 'rgba(255, 0, 0, 0.7)';
+                        }
+                        document.getElementById('fik8bTimeStamp').textContent = timestamp.toLocaleString('en-US', { hour12: false }) + ", (-" + timeDifferenceInSeconds + "s)";
+                        document.getElementById('fik8bTimeStamp').style.backgroundColor = timestampBackgroundColor;
                     } else {
                         console.log('Received undefined data from the server');
                     }
@@ -506,7 +513,18 @@
                     if (data) {
                         px4 = data.data;
                         var timestamp = new Date(px4.timestamp);
-                        document.getElementById('px4TimeStamp').textContent = timestamp.toLocaleString();
+                        timestamp.setHours(timestamp.getHours() + 1);
+                        var currentTimestamp = new Date();
+                        var timeDifferenceInSeconds = (currentTimestamp - timestamp) / 1000;
+                        if (timeDifferenceInSeconds < 60) {
+                            timestampBackgroundColor = 'rgba(0, 128, 0, 0.7)';
+                        } else if (timeDifferenceInSeconds >= 60 && timeDifferenceInSeconds <= 300) {
+                            timestampBackgroundColor = 'rgba(255, 165, 0, 0.7)';
+                        } else {
+                            timestampBackgroundColor = 'rgba(255, 0, 0, 0.7)';
+                        }
+                        document.getElementById('px4TimeStamp').textContent = timestamp.toLocaleString('en-US', { hour12: false }) + ", (-" + timeDifferenceInSeconds + "s)";
+                        document.getElementById('px4TimeStamp').style.backgroundColor = timestampBackgroundColor;
                     } else {
                         console.log('Received undefined data from the server');
                     }
@@ -685,7 +703,7 @@
                         responses[3].json().then(data => {
                             var now = new Date();
                             var lastReloadTimeElement = document.getElementById('lastReloadTime');
-                            lastReloadTimeElement.textContent = 'Last Reload Time: ' + now.toLocaleString();
+                            lastReloadTimeElement.textContent = 'Last Reload Time: ' + now.toLocaleString('en-US', { hour12: false });
                         });
                     }
                 })
