@@ -51,7 +51,7 @@ async function isNewerTimestamp(receivedData) {
             const existingDataStr = fs.readFileSync(carDataFilePath, 'utf8');
             const existingData = JSON.parse(existingDataStr);
             console.log("existingData: " + existingData);
-            const existingTimestampStr = existingData["tmp"];
+            const existingTimestampStr = existingData["TUNNEL_updated"];
             if (existingTimestampStr) {
                 const existingTimestamp = new Date(existingTimestampStr);
                 return receivedTimestamp > existingTimestamp;
