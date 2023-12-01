@@ -190,10 +190,10 @@
       127
     ]
   },
-  "TUNNEL_updated": "2023-12-01 15:00:18.323136",
-  "latitude": "",
-  "longitude": "",
-  "altitude": "",
+  "tmp": "2023-12-01 19:00:18.323136",
+  "latitude": 50.073,
+  "longitude": 14.418,
+  "altitude": 400,
   "lastPosUpdate": "",
   "car_id": "car1",
   "balloon_id": "fik_SiK"
