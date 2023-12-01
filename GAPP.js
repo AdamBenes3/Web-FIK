@@ -43,7 +43,7 @@ function saveDataToFile(filename, data) {
 }
 
 async function isNewerTimestamp(receivedData) {
-    const receivedTimestampStr = receivedData["TUNNEL_updated"];
+    const receivedTimestampStr = receivedData["tmp"];
     if (receivedTimestampStr) {
         const receivedTimestamp = new Date(receivedTimestampStr);
         const carDataFilePath = "data/car_data.json";
@@ -51,7 +51,7 @@ async function isNewerTimestamp(receivedData) {
             const existingDataStr = fs.readFileSync(carDataFilePath, 'utf8');
             const existingData = JSON.parse(existingDataStr);
             console.log("existingData: " + existingData);
-            const existingTimestampStr = existingData["TUNNEL_updated"];
+            const existingTimestampStr = existingData["tmp"];
             if (existingTimestampStr) {
                 const existingTimestamp = new Date(existingTimestampStr);
                 return receivedTimestamp > existingTimestamp;
@@ -167,6 +167,7 @@ app.get('/get/car/hb/3', async (req, res) => {
 app.post('/post/car/data', async (req, res) => {
     console.log("Received car data");
     try {
+        console.log("Received car data");
         const receivedData = req.body;
         appendToJsonFile("ALLDATA.json", receivedData);
         const carId = receivedData["car_id"];
