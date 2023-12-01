@@ -43,7 +43,7 @@ function saveDataToFile(filename, data) {
 }
 
 async function isNewerTimestamp(receivedData) {
-    const receivedTimestampStr = receivedData["tmp"];
+    const receivedTimestampStr = receivedData["TUNNEL_updated"];
     if (receivedTimestampStr) {
         const receivedTimestamp = new Date(receivedTimestampStr);
         const carDataFilePath = "data/car_data.json";
