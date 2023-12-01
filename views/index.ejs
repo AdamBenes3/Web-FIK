@@ -33,7 +33,9 @@
 
 
     <div id="lastReloadTime">Last Reload Time: </div>
-    <button id="reloadButton" style="padding: 10px 20px; font-size: 16px; background-color: #000000; color: white; border: none; border-radius: 5px; cursor: pointer;">Reload Data</button>
+    <button id="reloadButton"
+        style="padding: 10px 20px; font-size: 16px; background-color: #000000; color: white; border: none; border-radius: 5px; cursor: pointer;">Reload
+        Data</button>
     <h1>Json data:</h1>
 
     <table>
@@ -41,7 +43,8 @@
             <th>TTN fik8b last json</th>
             <td id="fik8bTimeStamp"></td>
             <td>
-                <button id="fik8bButton" style="padding: 10px 20px; font-size: 16px; background-color: #000000; color: white; border: none; border-radius: 5px; cursor: pointer;">fik8b</button>
+                <button id="fik8bButton"
+                    style="padding: 10px 20px; font-size: 16px; background-color: #000000; color: white; border: none; border-radius: 5px; cursor: pointer;">fik8b</button>
                 <div id="fik8bPanel"></div>
             </td>
         </tr>
@@ -49,7 +52,8 @@
             <th>TTN px4 last json</th>
             <td id="px4TimeStamp"></td>
             <td>
-                <button id="px4Button" style="padding: 10px 20px; font-size: 16px; background-color: #000000; color: white; border: none; border-radius: 5px; cursor: pointer;">px4</button>
+                <button id="px4Button"
+                    style="padding: 10px 20px; font-size: 16px; background-color: #000000; color: white; border: none; border-radius: 5px; cursor: pointer;">px4</button>
                 <div id="px4Panel"></div>
             </td>
         </tr>
@@ -57,7 +61,9 @@
             <th>Car 1 last json</th>
             <th></th>
             <td>
-                <button id="car1Button" style="padding: 10px 20px; font-size: 16px; background-color: #000000; color: white; border: none; border-radius: 5px; cursor: pointer;">Car 1</button>
+                <button id="car1Button"
+                    style="padding: 10px 20px; font-size: 16px; background-color: #000000; color: white; border: none; border-radius: 5px; cursor: pointer;">Car
+                    1</button>
                 <div id="car1Panel"></div>
             </td>
         </tr>
@@ -65,7 +71,9 @@
             <th>Car 2 last json</th>
             <th></th>
             <td>
-                <button id="car2Button" style="padding: 10px 20px; font-size: 16px; background-color: #000000; color: white; border: none; border-radius: 5px; cursor: pointer;">Car 2</button>
+                <button id="car2Button"
+                    style="padding: 10px 20px; font-size: 16px; background-color: #000000; color: white; border: none; border-radius: 5px; cursor: pointer;">Car
+                    2</button>
                 <div id="car2Panel"></div>
             </td>
         </tr>
@@ -73,7 +81,9 @@
             <th>Car 3 last json</th>
             <th></th>
             <td>
-                <button id="car3Button" style="padding: 10px 20px; font-size: 16px; background-color: #000000; color: white; border: none; border-radius: 5px; cursor: pointer;">Car 3</button>
+                <button id="car3Button"
+                    style="padding: 10px 20px; font-size: 16px; background-color: #000000; color: white; border: none; border-radius: 5px; cursor: pointer;">Car
+                    3</button>
                 <div id="car3Panel"></div>
             </td>
         </tr>
@@ -116,21 +126,24 @@
         <tr>
             <th>fik8b TTN data</th>
             <td>
-                <button id="fik8bDataButton" style="padding: 10px 20px; font-size: 16px; background-color: #000000; color: white; border: none; border-radius: 5px; cursor: pointer;">fik8b</button>
+                <button id="fik8bDataButton"
+                    style="padding: 10px 20px; font-size: 16px; background-color: #000000; color: white; border: none; border-radius: 5px; cursor: pointer;">fik8b</button>
                 <div id="fik8bDataPanel"></div>
             </td>
         </tr>
         <tr>
             <th>px4 TTN data</th>
             <td>
-                <button id="px4DataButton" style="padding: 10px 20px; font-size: 16px; background-color: #000000; color: white; border: none; border-radius: 5px; cursor: pointer;">px4</button>
+                <button id="px4DataButton"
+                    style="padding: 10px 20px; font-size: 16px; background-color: #000000; color: white; border: none; border-radius: 5px; cursor: pointer;">px4</button>
                 <div id="px4DataPanel"></div>
             </td>
         </tr>
         <tr>
             <th>Car data</th>
             <td>
-                <button id="carDataButton" style="padding: 10px 20px; font-size: 16px; background-color: #000000; color: white; border: none; border-radius: 5px; cursor: pointer;">car</button>
+                <button id="carDataButton"
+                    style="padding: 10px 20px; font-size: 16px; background-color: #000000; color: white; border: none; border-radius: 5px; cursor: pointer;">car</button>
                 <div id="carDataPanel"></div>
             </td>
         </tr>
@@ -141,6 +154,7 @@
 
 
     <script>
+        var now;
 
         var reloadButton = document.getElementById('reloadButton');
 
@@ -701,10 +715,26 @@
                     });
                     if (load) {
                         responses[3].json().then(data => {
-                            var now = new Date();
+                            now = new Date();
+                            var timestampBackgroundColor = 'rgba(0, 128, 0, 0.7)';
                             var lastReloadTimeElement = document.getElementById('lastReloadTime');
                             lastReloadTimeElement.textContent = 'Last Reload Time: ' + now.toLocaleString('en-US', { hour12: false });
+                            lastReloadTimeElement.style.backgroundColor = timestampBackgroundColor;
                         });
+                    }
+                    else {
+                        now.setHours(timestamp.getHours() + 1);
+                        var currentTimestamp = new Date();
+                        var timeDifferenceInSeconds = (currentTimestamp - now) / 1000;
+                        if (timeDifferenceInSeconds < 10) {
+                            timestampBackgroundColor = 'rgba(0, 128, 0, 0.7)';
+                        } else if (timeDifferenceInSeconds >= 60 && timeDifferenceInSeconds <= 100) {
+                            timestampBackgroundColor = 'rgba(255, 165, 0, 0.7)';
+                        } else {
+                            timestampBackgroundColor = 'rgba(255, 0, 0, 0.7)';
+                        }
+                        var lastReloadTimeElement = document.getElementById('lastReloadTime');
+                        lastReloadTimeElement.style.backgroundColor = timestampBackgroundColor;
                     }
                 })
                 .catch(error => {
