@@ -172,6 +172,7 @@ app.post('/post/car/data', async (req, res) => {
         appendToJsonFile("ALLDATA.json", receivedData);
         const carId = receivedData["car_id"];
         const isNewer = await isNewerTimestamp(receivedData);
+        console.log(isNewer);
         switch (carId) {
             case "car1":
                 if (isNewer) {
