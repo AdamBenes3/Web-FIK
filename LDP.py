@@ -69,7 +69,7 @@ def on_message(client, userdata, message):
                 balloons_dict[balloon_id] = Uploader(balloon_id)
             
             balloons_dict[balloon_id].add_telemetry(
-                    "fik-" + balloon_id + "Test",
+                    "fik-" + balloon_id,
                     datetime.datetime.utcnow(),
                     latitude,
                     longitude,
