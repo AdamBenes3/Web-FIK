@@ -18,7 +18,7 @@ import sys
 import datetime
 import requests
 
-carID="car1"
+carID="car2"
 cdpAddres="https://public.crreat.eu"
 #cdpAddres="http://127.0.0.1:8000"
 hbEndPoint="/post/car/hb"
@@ -41,7 +41,7 @@ connection.mav.heartbeat_send(mavutil.mavlink.MAV_TYPE_ONBOARD_CONTROLLER,
                                               mavutil.mavlink.MAV_AUTOPILOT_INVALID, 0, 0, 0)
 
 messages={
-  "GPS_RAW_INT":["lat","lon","alt","eph","epv","vel","cog","satellites_visible","h_acc","v_acc"],
+  "GPS_RAW_INT":["lat","lon","alt","eph","epv","vel","cog","satellites_visible","v_acc"],
 	"ATTITUDE":["roll","pitch","yaw","rollspeed","pitchspeed","yawspeed"],
   "ALTITUDE":["altitude_amsl","altitude_local"],
   "VFR_HUD":["groundspeed","alt","climb"],
