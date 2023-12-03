@@ -1,5 +1,7 @@
 # Web-FIK - set of tools for stratospheric baloons
 
+![Control dashboard illustration](doc/img/Control_Dasboard_illustration.png)
+
 ## Overview
 Web-FIK is a sophisticated toolkit for rapid visualization of data from stratospheric balloons, utilizing multiple communication channels, specifically SiK with MAVLINK packets and Lora TTN. It extracts data from the TTN network and from scripts in tracking vehicles that receive Sik packets (mavlink) using ISM02A or TFSIK modems. The data is immediately sent to a server, visualized, and forwarded to amateur.sondehub.org.
 
@@ -15,7 +17,7 @@ Web-FIK is a sophisticated toolkit for rapid visualization of data from stratosp
 
 ### Car Data Pump (CDP)
 - **Technology**: Python3
-- **Functionality**: 
+- **Functionality**:
   - Receives mavlink data from SiK radio receivers.
   - Determines car location via GPSD.
   - Forwards data to GAPP and sondehub.
@@ -23,7 +25,7 @@ Web-FIK is a sophisticated toolkit for rapid visualization of data from stratosp
 
 ### LORA Data Pump (LDP)
 - **Technology**: Python.
-- **Functionality**: 
+- **Functionality**:
   - Downloads packets from the Lora The things network.
   - Sends packets to the GAPP server and sondehub.org.
 
