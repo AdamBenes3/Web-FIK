@@ -29,6 +29,9 @@ Web-FIK is a sophisticated toolkit for rapid visualization of data from stratosp
   - Downloads packets from the Lora The things network.
   - Sends packets to the GAPP server and sondehub.org.
 
+
+![image](https://github.com/user-attachments/assets/8dfd11a1-afeb-48da-ba00-321a28b19594)
+
 ---
 
 # Aditional notes
