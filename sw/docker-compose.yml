@@ -1,0 +1,81 @@
+services:
+  influxdb:
+    image: influxdb:latest
+    env_file: prototype.env
+    container_name: fikviz_influxdb
+    volumes:
+      - /data/fik/influxdb:/var/lib/influxdb
+    ports:
+      - "8801:8086"
+    networks:
+      - fik_network
+
+
+  telegraf:
+    image: docker.io/telegraf:latest
+    container_name: telegraf
+    env_file: prototype.env
+    environment:
+      - MQTT_USERNAME=fik
+      - MQTT_PASSWORD=fik
+    volumes:
+      - /data/fik/telegraf/telegraf.toml:/etc/telegraf/telegraf.conf
+    networks:
+      - fik_network
+    links:
+      - influxdb
+      - rabbitmq
+    depends_on:
+      - influxdb
+
+  postgres:
+    image: postgres:latest
+    container_name: fikviz_postgres
+    env_file: prototype.env
+    environment:
+      POSTGRES_USER: fik_user
+      POSTGRES_PASSWORD: fik_password
+      POSTGRES_DB: fik_db
+    volumes:
+      - /data/fik/postgres:/var/lib/postgresql/data
+    ports:
+      - "8802:5432"
+    networks:
+      - fik_network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: fikviz_grafana
+    env_file: prototype.env
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    user: "0"
+    volumes:
+      - /data/fik/grafana:/var/lib/grafana
+    ports:
+      - "8800:3000"
+    networks:
+      - fik_network
+    depends_on:
+      - influxdb
+      - postgres
+
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    env_file: prototype.env
+    ports:
+      - 1883:1883 # MQTT Port
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - /data/fik/rabbitmq/plugins/enabled_plugins:/etc/rabbitmq/enabled_plugins
+      - /data/fik/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - /data/fik/rabbitmq:/var/lib/rabbitmq
+    networks:
+      - fik_network
+
+networks:
+  fik_network:
+    driver: bridge
