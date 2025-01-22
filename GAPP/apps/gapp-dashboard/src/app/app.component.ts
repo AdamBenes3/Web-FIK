@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterModule, RouterOutlet } from '@angular/router';
-import { NxWelcomeComponent } from './nx-welcome.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
     selector: 'app-root',

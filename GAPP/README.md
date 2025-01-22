@@ -2,13 +2,13 @@
 
 ## Preparations
 
-1) You need NodeJS version `v22.13.1` or newer
+1. You need NodeJS version `v22.13.1` or newer
 
-2) Instal dependencies by running `npm i`
+2. Instal dependencies by running `npm i`
 
-3) To develop dashboard, run `npm run dashboard:dev`
+3. To develop dashboard, run `npm run dashboard:dev`
 
-4) To develop server, run `npm run server:dev`
+4. To develop server, run `npm run server:dev`
 
 ---
 

@@ -6,7 +6,8 @@
         "dashboard:dev": "nx serve gapp-dashboard",
         "dashboard:build": "nx build gapp-dashboard",
         "server:dev": "nx serve gapp-server | pino-pretty",
-        "server:build": "nx build gapp-server"
+        "server:build": "nx build gapp-server",
+        "format": "nx format:write"
     },
     "private": true,
     "dependencies": {
