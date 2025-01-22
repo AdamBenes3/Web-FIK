@@ -18,6 +18,6 @@ server.listen({ port, host }, (err) => {
         server.log.error(err);
         process.exit(1);
     } else {
-        console.log(`[ ready ] http://${host}:${port}`);
+        server.log.info(`[ ready ] http://${host}:${port}`);
     }
 });
