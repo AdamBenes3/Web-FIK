@@ -1,6 +1,16 @@
 # GAPP
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+## Preparations
+
+1) You need NodeJS version `v22.13.1` or newer
+
+2) Instal dependencies by running `npm i`
+
+3) To develop dashboard, run `npm run dashboard:dev`
+
+4) To develop server, run `npm run server:dev`
+
+---
 
 ✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
 
