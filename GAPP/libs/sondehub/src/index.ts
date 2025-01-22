@@ -1,1 +1,1 @@
-export * from './lib/sondehub';
+export * from './lib/uploader';

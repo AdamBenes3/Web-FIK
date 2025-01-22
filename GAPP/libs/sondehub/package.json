@@ -2,9 +2,7 @@
     "name": "@gapp/sondehub",
     "version": "0.0.1",
     "private": true,
-    "dependencies": {
-        "tslib": "^2.3.0"
-    },
+    "dependencies": {},
     "type": "commonjs",
     "main": "./src/index.js",
     "types": "./src/index.d.ts",

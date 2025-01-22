@@ -5,7 +5,7 @@ import { InfluxDB } from '@influxdata/influxdb-client';
 export default fp(async (fastify: FastifyInstance, config) => {
     const influxClient = new InfluxDB({
         token: '',
-        url: '',
+        url: 'https://localhost:8086',
     });
 
     fastify.decorate('influxClient', influxClient);
