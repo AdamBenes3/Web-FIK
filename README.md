@@ -7,7 +7,7 @@ Web-FIK is a sophisticated toolkit for rapid visualization of data from stratosp
 
 ![Screenshot 2023-12-02 at 19-47-46 UJF](https://github.com/ODZ-UJF-AV-CR/Web-FIK/assets/5196729/13da7159-cbff-4126-8152-a9d6690a923d)
 
-[Excalidraw](https://excalidraw.com/#json=pUeAjrgLBAp76-Gwl1sQS,iWnygnRdX8Azcpa8fjjz9A)
+[Excalidraw](https://excalidraw.com/#json=v3kQKDwtHosYTqkQNnwNl,aH2wctzhpj9UmDBvv5r_EQ)
 
 ## Components
 
