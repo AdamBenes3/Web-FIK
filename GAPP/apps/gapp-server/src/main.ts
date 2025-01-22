@@ -3,15 +3,16 @@ import { app } from './app/app';
 import { getConfig } from './config';
 import { Uploader } from '@gapp/sondehub';
 
-const uploader = new Uploader('CSK-TST');
+const uploader = new Uploader({ uploaderCallsign: 'CESILKO-NODE', uploaderPosition: [50.01, 15.01, 200] });
 
 uploader.addTelemetry({
-    payload_callsign: 'CSK-TST-PAYLOAD',
-    timestamp: new Date().toISOString(),
-    lat: 1.0,
-    lon: 1.0,
+    payload_callsign: 'test_payload',
+    datetime: new Date().toISOString(),
+    lat: 50,
+    lon: 14.05,
     alt: 1000,
 });
+
 uploader.uploadTelemetry();
 
 const config = getConfig(process.env);

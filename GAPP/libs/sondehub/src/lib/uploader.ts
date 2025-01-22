@@ -2,15 +2,11 @@
 import axios from 'axios';
 import { gzipSync } from 'node:zlib';
 
-export interface Position {
-    lat: number;
-    lon: number;
-    alt: number;
-}
+export type Position = [number, number, number];
 
 export interface TelemetryPacket {
     payload_callsign: string;
-    timestamp: string;
+    datetime: string;
     lat: number;
     lon: number;
     alt: number;
@@ -38,23 +34,43 @@ export interface TelemetryPacket {
     [key: string]: any;
 }
 
+interface UploaderConfig {
+  uploaderCallsign: string;
+  uploaderPosition?: Position;
+  uploaderRadio?: string;
+  uploaderAntenna?: string;
+  softwareName: string;
+  softwareVersion: string;
+  uploadRate: number;
+  uploadTimeout: number;
+  uploadRetries: number;
+  developerMode: boolean;
+}
+
+export type UploaderOptions = Partial<Omit<UploaderConfig, 'uploaderCallsign'>> & Pick<UploaderConfig, 'uploaderCallsign'>;
+
 export class Uploader {
+    private uploaderConfig: UploaderConfig = {
+      uploaderCallsign: '',
+      softwareName: 'node-sondehub',
+      softwareVersion: '0.0.1',
+      uploadRate: 2,
+      uploadTimeout: 20_000,
+      uploadRetries: 5,
+      developerMode: false
+    }
+
     private inputQueue: TelemetryPacket[] = [];
+
     private static SONDEHUB_AMATEUR_URL = 'https://api.v2.sondehub.org/amateur/telemetry';
     private static SONDEHUB_AMATEUR_STATION_POSITION_URL = 'https://api.v2.sondehub.org/amateur/listeners';
 
-    constructor(
-        private uploaderCallsign: string,
-        private uploaderPosition?: Position,
-        private uploaderRadio?: string,
-        private uploaderAntenna?: string,
-        private softwareName = 'ts-sondehub',
-        private softwareVersion = '0.0.1',
-        private uploadRate = 2,
-        private uploadTimeout = 20,
-        private uploadRetries = 5,
-        private developerMode = false
-    ) {}
+    constructor(options: UploaderOptions) {
+      this.uploaderConfig = {
+        ...options,
+        ...this.uploaderConfig
+      }
+    }
 
     private logDebug(message: string): void {
         console.debug(`Sondehub Uploader: ${message}`);
@@ -70,11 +86,15 @@ export class Uploader {
 
     public addTelemetry(packet: TelemetryPacket): void {
         const now = new Date();
-        packet.software_name = this.softwareName;
+        packet.software_name = this.uploaderConfig.softwareName;
         packet.software_version = this.softwareVersion;
 
         if (!packet.uploader_callsign) {
             packet.uploader_callsign = this.uploaderCallsign;
+        }
+
+        if(!packet.uploader_position) {
+          packet.uploader_position = this.uploaderPosition;
         }
 
         if (!packet.time_received) {
@@ -95,7 +115,7 @@ export class Uploader {
         this.inputQueue = []; // Clear the queue
 
         try {
-            const compressedPayload = gzipSync(JSON.stringify(packets));
+          const compressedPayload = gzipSync(JSON.stringify(packets));
             const headers = {
                 'User-Agent': `${this.softwareName}-${this.softwareVersion}`,
                 'Content-Encoding': 'gzip',
