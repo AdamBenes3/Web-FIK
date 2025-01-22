@@ -20,6 +20,7 @@
         "@angular/router": "~19.0.0",
         "@fastify/autoload": "~5.7.1",
         "@fastify/sensible": "~5.2.0",
+        "@influxdata/influxdb-client": "^1.35.0",
         "axios": "^1.6.0",
         "envalid": "^8.0.0",
         "fastify": "~4.13.0",
