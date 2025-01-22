@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { NxWelcomeComponent } from './nx-welcome.component';
 
 @Component({
-  imports: [NxWelcomeComponent, RouterModule],
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss',
+    imports: [RouterOutlet],
 })
-export class AppComponent {
-  title = 'gapp-dashboard';
-}
+export class AppComponent {}
