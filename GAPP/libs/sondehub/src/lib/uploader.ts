@@ -35,30 +35,30 @@ interface TelemetryPacket {
 }
 
 interface UploaderConfig {
-  uploaderCallsign: string;
-  uploaderPosition?: Position;
-  uploaderRadio?: string;
-  uploaderAntenna?: string;
-  softwareName: string;
-  softwareVersion: string;
-  uploadRate: number;
-  uploadTimeout: number;
-  uploadRetries: number;
-  developerMode: boolean;
+    uploaderCallsign: string;
+    uploaderPosition?: Position;
+    uploaderRadio?: string;
+    uploaderAntenna?: string;
+    softwareName: string;
+    softwareVersion: string;
+    uploadRate: number;
+    uploadTimeout: number;
+    uploadRetries: number;
+    developerMode: boolean;
 }
 
 export type UploaderOptions = Partial<Omit<UploaderConfig, 'uploaderCallsign'>> & Pick<UploaderConfig, 'uploaderCallsign'>;
 
 export class Uploader {
     private uploaderConfig: UploaderConfig = {
-      uploaderCallsign: '',
-      uploadRate: 2,
-      uploadTimeout: 20_000,
-      uploadRetries: 5,
-      developerMode: false,
-      softwareName: 'node-sondehub',
-      softwareVersion: '0.0.1',
-    }
+        uploaderCallsign: '',
+        uploadRate: 2,
+        uploadTimeout: 20_000,
+        uploadRetries: 5,
+        developerMode: false,
+        softwareName: 'node-sondehub',
+        softwareVersion: '0.0.1',
+    };
 
     private inputQueue: TelemetryPacket[] = [];
 
@@ -66,10 +66,10 @@ export class Uploader {
     public static readonly SONDEHUB_AMATEUR_STATION_POSITION_URL = 'https://api.v2.sondehub.org/amateur/listeners';
 
     constructor(options: UploaderOptions) {
-      this.uploaderConfig = {
-        ...this.uploaderConfig,
-        ...options,
-      }
+        this.uploaderConfig = {
+            ...this.uploaderConfig,
+            ...options,
+        };
     }
 
     private logDebug(message: string): void {
@@ -101,8 +101,8 @@ export class Uploader {
         this.inputQueue = [];
 
         try {
-          console.log(packets);
-          const compressedPayload = gzipSync(JSON.stringify(packets));
+            console.log(packets);
+            const compressedPayload = gzipSync(JSON.stringify(packets));
             const headers = {
                 'User-Agent': `${this.uploaderConfig.softwareName}-${this.uploaderConfig.softwareVersion}`,
                 'Content-Encoding': 'gzip',
@@ -166,23 +166,23 @@ export class Uploader {
     //
 
     private enhanceTelemetryPacket(packet: TelemetryPacket): TelemetryPacket {
-      console.log('Config: ', this.uploaderConfig);
-      const enhancedPacket = { ...packet };
-      enhancedPacket.software_name = this.uploaderConfig.softwareName;
-      enhancedPacket.software_version = this.uploaderConfig.softwareVersion;
+        console.log('Config: ', this.uploaderConfig);
+        const enhancedPacket = { ...packet };
+        enhancedPacket.software_name = this.uploaderConfig.softwareName;
+        enhancedPacket.software_version = this.uploaderConfig.softwareVersion;
 
-      if (!packet.uploader_callsign) {
-          enhancedPacket.uploader_callsign = this.uploaderConfig.uploaderCallsign;
-      }
+        if (!packet.uploader_callsign) {
+            enhancedPacket.uploader_callsign = this.uploaderConfig.uploaderCallsign;
+        }
 
-      if(!packet.uploader_position) {
-        enhancedPacket.uploader_position = this.uploaderConfig.uploaderPosition;
-      }
+        if (!packet.uploader_position) {
+            enhancedPacket.uploader_position = this.uploaderConfig.uploaderPosition;
+        }
 
-      if (!packet.time_received) {
-        enhancedPacket.time_received = new Date().toISOString();
-      }
+        if (!packet.time_received) {
+            enhancedPacket.time_received = new Date().toISOString();
+        }
 
-      return enhancedPacket;
+        return enhancedPacket;
     }
 }
