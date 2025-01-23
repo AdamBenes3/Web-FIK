@@ -4,7 +4,7 @@ import { gzipSync } from 'node:zlib';
 
 export type Position = [number, number, number];
 
-export interface TelemetryPacket {
+interface TelemetryPacket {
     payload_callsign: string;
     datetime: string;
     lat: number;
@@ -52,23 +52,23 @@ export type UploaderOptions = Partial<Omit<UploaderConfig, 'uploaderCallsign'>> 
 export class Uploader {
     private uploaderConfig: UploaderConfig = {
       uploaderCallsign: '',
-      softwareName: 'node-sondehub',
-      softwareVersion: '0.0.1',
       uploadRate: 2,
       uploadTimeout: 20_000,
       uploadRetries: 5,
-      developerMode: false
+      developerMode: false,
+      softwareName: 'node-sondehub',
+      softwareVersion: '0.0.1',
     }
 
     private inputQueue: TelemetryPacket[] = [];
 
-    private static SONDEHUB_AMATEUR_URL = 'https://api.v2.sondehub.org/amateur/telemetry';
-    private static SONDEHUB_AMATEUR_STATION_POSITION_URL = 'https://api.v2.sondehub.org/amateur/listeners';
+    public static readonly SONDEHUB_AMATEUR_URL = 'https://api.v2.sondehub.org/amateur/telemetry';
+    public static readonly SONDEHUB_AMATEUR_STATION_POSITION_URL = 'https://api.v2.sondehub.org/amateur/listeners';
 
     constructor(options: UploaderOptions) {
       this.uploaderConfig = {
+        ...this.uploaderConfig,
         ...options,
-        ...this.uploaderConfig
       }
     }
 
@@ -85,23 +85,9 @@ export class Uploader {
     }
 
     public addTelemetry(packet: TelemetryPacket): void {
-        const now = new Date();
-        packet.software_name = this.uploaderConfig.softwareName;
-        packet.software_version = this.softwareVersion;
+        const enhancedPacket = this.enhanceTelemetryPacket(packet);
 
-        if (!packet.uploader_callsign) {
-            packet.uploader_callsign = this.uploaderCallsign;
-        }
-
-        if(!packet.uploader_position) {
-          packet.uploader_position = this.uploaderPosition;
-        }
-
-        if (!packet.time_received) {
-            packet.time_received = now.toISOString();
-        }
-
-        this.inputQueue.push(packet);
+        this.inputQueue.push(enhancedPacket);
         this.logDebug('Telemetry packet added to queue.');
     }
 
@@ -112,19 +98,20 @@ export class Uploader {
         }
 
         const packets = [...this.inputQueue];
-        this.inputQueue = []; // Clear the queue
+        this.inputQueue = [];
 
         try {
+          console.log(packets);
           const compressedPayload = gzipSync(JSON.stringify(packets));
             const headers = {
-                'User-Agent': `${this.softwareName}-${this.softwareVersion}`,
+                'User-Agent': `${this.uploaderConfig.softwareName}-${this.uploaderConfig.softwareVersion}`,
                 'Content-Encoding': 'gzip',
                 'Content-Type': 'application/json',
             };
 
             const response = await axios.put(Uploader.SONDEHUB_AMATEUR_URL, compressedPayload, {
                 headers,
-                timeout: this.uploadTimeout * 1000,
+                timeout: this.uploaderConfig.uploadTimeout,
             });
 
             if (response.status === 200) {
@@ -138,42 +125,64 @@ export class Uploader {
         }
     }
 
-    public async uploadStationPosition(
-        callsign: string,
-        position: Position,
-        radio?: string,
-        antenna?: string,
-        contactEmail?: string,
-        mobile = false
-    ): Promise<void> {
-        const payload = {
-            software_name: this.softwareName,
-            software_version: this.softwareVersion,
-            uploader_callsign: callsign,
-            uploader_position: position,
-            uploader_radio: radio || this.uploaderRadio,
-            uploader_antenna: antenna || this.uploaderAntenna,
-            uploader_contact_email: contactEmail || '',
-            mobile,
-            dev: this.developerMode,
-        };
+    // public async uploadStationPosition(
+    //     callsign: string,
+    //     position: Position,
+    //     radio?: string,
+    //     antenna?: string,
+    //     contactEmail?: string,
+    //     mobile = false
+    // ): Promise<void> {
+    //     const payload = {
+    //         software_name: this.softwareName,
+    //         software_version: this.softwareVersion,
+    //         uploader_callsign: callsign,
+    //         uploader_position: position,
+    //         uploader_radio: radio || this.uploaderRadio,
+    //         uploader_antenna: antenna || this.uploaderAntenna,
+    //         uploader_contact_email: contactEmail || '',
+    //         mobile,
+    //         dev: this.developerMode,
+    //     };
 
-        try {
-            const response = await axios.put(Uploader.SONDEHUB_AMATEUR_STATION_POSITION_URL, payload, {
-                headers: {
-                    'User-Agent': `${this.softwareName}-${this.softwareVersion}`,
-                    'Content-Type': 'application/json',
-                },
-                timeout: this.uploadTimeout * 1000,
-            });
+    //     try {
+    //         const response = await axios.put(Uploader.SONDEHUB_AMATEUR_STATION_POSITION_URL, payload, {
+    //             headers: {
+    //                 'User-Agent': `${this.softwareName}-${this.softwareVersion}`,
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             timeout: this.uploadTimeout * 1000,
+    //         });
 
-            if (response.status === 200) {
-                this.logInfo('Station position uploaded successfully.');
-            } else {
-                this.logError(`Failed to upload station position. Status: ${response.status}, Message: ${response.statusText}`);
-            }
-        } catch (error) {
-            this.logError(`Error uploading station position: ${error}`);
-        }
+    //         if (response.status === 200) {
+    //             this.logInfo('Station position uploaded successfully.');
+    //         } else {
+    //             this.logError(`Failed to upload station position. Status: ${response.status}, Message: ${response.statusText}`);
+    //         }
+    //     } catch (error) {
+    //         this.logError(`Error uploading station position: ${error}`);
+    //     }
+    // }
+    //
+
+    private enhanceTelemetryPacket(packet: TelemetryPacket): TelemetryPacket {
+      console.log('Config: ', this.uploaderConfig);
+      const enhancedPacket = { ...packet };
+      enhancedPacket.software_name = this.uploaderConfig.softwareName;
+      enhancedPacket.software_version = this.uploaderConfig.softwareVersion;
+
+      if (!packet.uploader_callsign) {
+          enhancedPacket.uploader_callsign = this.uploaderConfig.uploaderCallsign;
+      }
+
+      if(!packet.uploader_position) {
+        enhancedPacket.uploader_position = this.uploaderConfig.uploaderPosition;
+      }
+
+      if (!packet.time_received) {
+        enhancedPacket.time_received = new Date().toISOString();
+      }
+
+      return enhancedPacket;
     }
 }
