@@ -3,10 +3,10 @@ import { app } from './app/app';
 import { getConfig } from './config';
 import { Uploader } from '@gapp/sondehub';
 
-const uploader = new Uploader({ uploaderCallsign: 'node-sondehub', uploaderPosition: [50.01, 15.01, 200] });
+const uploader = new Uploader({ uploader_callsign: 'node-sondehub' });
 
 uploader.addTelemetry({
-    payload_callsign: 'test-payload',
+    payload_callsign: 'cesilko-payload',
     datetime: new Date().toISOString(),
     lat: 50,
     lon: 15,
@@ -14,6 +14,12 @@ uploader.addTelemetry({
 });
 
 uploader.uploadTelemetry();
+
+uploader.uploadStationPosition({
+  uploader_callsign: 'cesilko-car',
+  uploader_position: [50.01, 15.01, 185],
+  mobile: true
+});
 
 const config = getConfig(process.env);
 

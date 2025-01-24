@@ -1,63 +1,68 @@
-// Import required modules
 import axios from 'axios';
 import { gzipSync } from 'node:zlib';
 
-export type Position = [number, number, number];
+// Base interface containing common properties
+interface BasePacket {
+    software_name: string;
+    software_version: string;
+    uploader_callsign: string;
+    uploader_position?: [number, number, number];
+    uploader_antenna?: string;
+}
 
-interface TelemetryPacket {
+// Telemetry packet interface
+interface TelemetryPacket extends Partial<BasePacket> {
+    dev?: string;
+    time_received?: string; // ISO 8601 timestamp
     payload_callsign: string;
-    datetime: string;
+    datetime: string; // ISO 8601 timestamp
     lat: number;
     lon: number;
     alt: number;
-    frame?: number;
-    time_received?: string;
-    sats?: number;
-    batt?: number;
+    frequency?: number;
     temp?: number;
     humidity?: number;
-    pressure?: number;
     vel_h?: number;
     vel_v?: number;
+    pressure?: number;
     heading?: number;
-    tx_frequency?: number;
-    modulation?: string;
+    batt?: number;
+    sats?: number;
     snr?: number;
-    frequency?: number;
     rssi?: number;
-    uploader_callsign?: string;
-    uploader_position?: Position;
-    uploader_radio?: string;
-    uploader_antenna?: string;
-    software_name?: string;
-    software_version?: string;
-    [key: string]: any;
+    telemetry_hidden?: boolean;
+    historical?: boolean;
+    upload_time?: string; // ISO 8601 timestamp
 }
 
-interface UploaderConfig {
-    uploaderCallsign: string;
-    uploaderPosition?: Position;
-    uploaderRadio?: string;
-    uploaderAntenna?: string;
-    softwareName: string;
-    softwareVersion: string;
+type StationBasePayload = Partial<Omit<BasePacket, 'uploader_callsign' | 'uploader_position'>> &
+    Required<Pick<BasePacket, 'uploader_callsign' | 'uploader_position'>>;
+
+// Station position packet interface
+interface StationPositionPacket extends StationBasePayload {
+    uploader_radio?: string;
+    uploader_contact_email?: string;
+    mobile?: boolean;
+}
+
+interface UploaderConfig extends BasePacket {
     uploadRate: number;
     uploadTimeout: number;
     uploadRetries: number;
-    developerMode: boolean;
+    dev: boolean;
 }
 
-export type UploaderOptions = Partial<Omit<UploaderConfig, 'uploaderCallsign'>> & Pick<UploaderConfig, 'uploaderCallsign'>;
+type MinimalUploaderConfig = Partial<Omit<UploaderConfig, 'uploader_Callsign'>> & Pick<UploaderConfig, 'uploader_callsign'>;
 
 export class Uploader {
     private uploaderConfig: UploaderConfig = {
-        uploaderCallsign: '',
+        uploader_callsign: '',
         uploadRate: 2,
         uploadTimeout: 20_000,
         uploadRetries: 5,
-        developerMode: false,
-        softwareName: 'node-sondehub',
-        softwareVersion: '0.0.1',
+        dev: false,
+        software_name: 'node-sondehub',
+        software_version: '0.0.1',
     };
 
     private inputQueue: TelemetryPacket[] = [];
@@ -65,7 +70,7 @@ export class Uploader {
     public static readonly SONDEHUB_AMATEUR_URL = 'https://api.v2.sondehub.org/amateur/telemetry';
     public static readonly SONDEHUB_AMATEUR_STATION_POSITION_URL = 'https://api.v2.sondehub.org/amateur/listeners';
 
-    constructor(options: UploaderOptions) {
+    constructor(options: MinimalUploaderConfig) {
         this.uploaderConfig = {
             ...this.uploaderConfig,
             ...options,
@@ -101,10 +106,9 @@ export class Uploader {
         this.inputQueue = [];
 
         try {
-            console.log(packets);
             const compressedPayload = gzipSync(JSON.stringify(packets));
             const headers = {
-                'User-Agent': `${this.uploaderConfig.softwareName}-${this.uploaderConfig.softwareVersion}`,
+                'User-Agent': `${this.uploaderConfig.software_name}-${this.uploaderConfig.software_version}`,
                 'Content-Encoding': 'gzip',
                 'Content-Type': 'application/json',
             };
@@ -125,58 +129,52 @@ export class Uploader {
         }
     }
 
-    // public async uploadStationPosition(
-    //     callsign: string,
-    //     position: Position,
-    //     radio?: string,
-    //     antenna?: string,
-    //     contactEmail?: string,
-    //     mobile = false
-    // ): Promise<void> {
-    //     const payload = {
-    //         software_name: this.softwareName,
-    //         software_version: this.softwareVersion,
-    //         uploader_callsign: callsign,
-    //         uploader_position: position,
-    //         uploader_radio: radio || this.uploaderRadio,
-    //         uploader_antenna: antenna || this.uploaderAntenna,
-    //         uploader_contact_email: contactEmail || '',
-    //         mobile,
-    //         dev: this.developerMode,
-    //     };
+    public async uploadStationPosition(stationPacket: StationPositionPacket): Promise<void> {
+        const payload = {
+            software_name: this.uploaderConfig.software_name,
+            software_version: this.uploaderConfig.software_version,
+            uploader_callsign: stationPacket.uploader_callsign,
+            uploader_position: stationPacket.uploader_position,
+            uploader_radio: stationPacket.uploader_radio,
+            uploader_antenna: stationPacket.uploader_antenna || this.uploaderConfig.uploader_antenna,
+            uploader_contact_email: stationPacket.uploader_contact_email,
+            mobile: stationPacket.mobile ?? false,
+            dev: this.uploaderConfig.dev,
+        };
 
-    //     try {
-    //         const response = await axios.put(Uploader.SONDEHUB_AMATEUR_STATION_POSITION_URL, payload, {
-    //             headers: {
-    //                 'User-Agent': `${this.softwareName}-${this.softwareVersion}`,
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             timeout: this.uploadTimeout * 1000,
-    //         });
+        try {
+            const compressedPayload = gzipSync(JSON.stringify(payload));
+            const headers = {
+                'User-Agent': `${this.uploaderConfig.software_name}-${this.uploaderConfig.software_version}`,
+                'Content-Encoding': 'gzip',
+                'Content-Type': 'application/json',
+            };
+            const response = await axios.put(Uploader.SONDEHUB_AMATEUR_STATION_POSITION_URL, compressedPayload, {
+                headers,
+                timeout: this.uploaderConfig.uploadTimeout,
+            });
 
-    //         if (response.status === 200) {
-    //             this.logInfo('Station position uploaded successfully.');
-    //         } else {
-    //             this.logError(`Failed to upload station position. Status: ${response.status}, Message: ${response.statusText}`);
-    //         }
-    //     } catch (error) {
-    //         this.logError(`Error uploading station position: ${error}`);
-    //     }
-    // }
-    //
+            if (response.status === 200) {
+                this.logInfo('Station position uploaded successfully.');
+            } else {
+                this.logError(`Failed to upload station position. Status: ${response.status}, Message: ${response.statusText}`);
+            }
+        } catch (error) {
+            this.logError(`Error uploading station position: ${error}`);
+        }
+    }
 
     private enhanceTelemetryPacket(packet: TelemetryPacket): TelemetryPacket {
-        console.log('Config: ', this.uploaderConfig);
         const enhancedPacket = { ...packet };
-        enhancedPacket.software_name = this.uploaderConfig.softwareName;
-        enhancedPacket.software_version = this.uploaderConfig.softwareVersion;
+        enhancedPacket.software_name = this.uploaderConfig.software_name;
+        enhancedPacket.software_version = this.uploaderConfig.software_version;
 
         if (!packet.uploader_callsign) {
-            enhancedPacket.uploader_callsign = this.uploaderConfig.uploaderCallsign;
+            enhancedPacket.uploader_callsign = this.uploaderConfig.uploader_callsign;
         }
 
         if (!packet.uploader_position) {
-            enhancedPacket.uploader_position = this.uploaderConfig.uploaderPosition;
+            enhancedPacket.uploader_position = this.uploaderConfig.uploader_position;
         }
 
         if (!packet.time_received) {
