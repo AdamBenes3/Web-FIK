@@ -19,13 +19,14 @@
         "@angular/platform-browser": "~19.0.0",
         "@angular/platform-browser-dynamic": "~19.0.0",
         "@angular/router": "~19.0.0",
-        "@fastify/autoload": "~5.7.1",
-        "@fastify/sensible": "~5.2.0",
+        "@fastify/autoload": "^6.0.3",
+        "@fastify/sensible": "^6.0.2",
         "@influxdata/influxdb-client": "^1.35.0",
         "axios": "^1.7.9",
         "envalid": "^8.0.0",
-        "fastify": "~4.13.0",
-        "fastify-plugin": "~4.5.0",
+        "fastify": "^5.2.1",
+        "fastify-plugin": "^5.0.1",
+        "pino": "^9.6.0",
         "rxjs": "~7.8.0"
     },
     "devDependencies": {
