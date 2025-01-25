@@ -1,18 +1,17 @@
 import Fastify from 'fastify';
-import { app } from './app/app';
+import { app } from './app';
 import { getConfig } from './config';
 import pino from 'pino';
-import { Uploader } from '@gapp/sondehub';
-
-console.log(Uploader);
+import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 
 const config = getConfig(process.env);
 const logger = pino();
-const server = Fastify({ loggerInstance: logger });
+const server = Fastify({ loggerInstance: logger, disableRequestLogging: true }).withTypeProvider<TypeBoxTypeProvider>();
 
 server.register(app, {
     influxDbToken: config.INFLUXDB_TOKEN,
     influxDbHost: config.INFLUXDB_HOST,
+    influxDbOrg: config.INFLUXDB_ORG,
 });
 
 server.listen({ port: config.PORT, host: '0.0.0.0' }, (err) => {

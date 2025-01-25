@@ -9,6 +9,7 @@ const envSchema = {
         desc: 'Influx db host with port',
         devDefault: 'http://localhost:8086',
     }),
+    INFLUXDB_ORG: str({ desc: 'Influx db organization', default: 'fik' }),
 };
 
 export const getConfig = (configObject: object) => {
