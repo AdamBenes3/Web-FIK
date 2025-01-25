@@ -11,7 +11,7 @@ interface BasePacket {
     uploader_antenna?: string;
 }
 
-interface TelemetryPacket extends Partial<BasePacket> {
+export interface TelemetryPacket extends Partial<BasePacket> {
     dev?: string;
     time_received?: string;
     payload_callsign: string;
@@ -33,6 +33,7 @@ interface TelemetryPacket extends Partial<BasePacket> {
     telemetry_hidden?: boolean;
     historical?: boolean;
     upload_time?: string;
+    modulation?: 'APRS' | 'Hours Binary' | 'RTTY' | 'LoRa' | 'WSPR';
 }
 
 type StationBasePayload = Partial<Omit<BasePacket, 'uploader_callsign' | 'uploader_position'>> &

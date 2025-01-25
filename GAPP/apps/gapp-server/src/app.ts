@@ -5,6 +5,7 @@ import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import { carsController } from './controllers/cars.controller';
 import sondehubPlugin from './plugins/sondehub';
+import { sondesController } from './controllers/sondes.controller';
 
 interface AppOptions extends FastifyPluginOptions {
     influxDbToken: string;
@@ -31,6 +32,7 @@ export const app = async (fastify: FastifyInstance, opts: AppOptions) => {
 
     // ROUTES
     fastify.register(carsController, { prefix: '/cars' });
+    fastify.register(sondesController, { prefix: '/sondes' });
 
     fastify.get(
         '/ping',
