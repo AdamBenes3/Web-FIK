@@ -2,10 +2,12 @@ import * as path from 'path';
 import { FastifyInstance } from 'fastify';
 import AutoLoad from '@fastify/autoload';
 
-/* eslint-disable-next-line */
-export interface AppOptions {}
+export interface AppOptions {
+    influxDbToken: string;
+    influxDbHost: string;
+}
 
-export async function app(fastify: FastifyInstance, opts: AppOptions) {
+export const app = async (fastify: FastifyInstance, opts: AppOptions) => {
     fastify.register(AutoLoad, {
         dir: path.join(__dirname, 'plugins'),
         options: { ...opts },
@@ -15,4 +17,4 @@ export async function app(fastify: FastifyInstance, opts: AppOptions) {
         dir: path.join(__dirname, 'routes'),
         options: { ...opts },
     });
-}
+};

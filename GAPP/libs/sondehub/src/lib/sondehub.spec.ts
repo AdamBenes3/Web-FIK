@@ -1,5 +1,5 @@
 describe('sondehub', () => {
     it('should work', () => {
-      expect(true).toBeTruthy();
+        expect(true).toBeTruthy();
     });
 });

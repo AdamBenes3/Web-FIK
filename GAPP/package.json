@@ -2,12 +2,14 @@
     "name": "@gapp/source",
     "version": "0.0.0",
     "license": "MIT",
+    "type": "module",
     "scripts": {
         "dashboard:dev": "nx serve gapp-dashboard",
         "dashboard:build": "nx build gapp-dashboard",
         "server:dev": "nx serve gapp-server | pino-pretty",
         "server:build": "nx build gapp-server",
-        "format": "nx format:write"
+        "format": "nx format:write",
+        "server:start": "node dist/apps/gapp-server/main.js"
     },
     "private": true,
     "dependencies": {

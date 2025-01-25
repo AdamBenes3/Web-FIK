@@ -31,5 +31,5 @@ module.exports = [
         // Override or add rules here
         rules: {},
     },
-    eslintConfigPrettier
+    eslintConfigPrettier,
 ];
