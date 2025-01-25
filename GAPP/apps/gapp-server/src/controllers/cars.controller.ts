@@ -15,6 +15,12 @@ export const carsController: FastifyPluginAsyncTypebox = async (fastify) => {
             const { callsign } = req.query;
             const { latitude, longitude, altitude } = req.body;
 
+            req.server.carsService.writeCarStatus(callsign, {
+                latitude,
+                longitude,
+                altitude,
+            });
+
             await req.server.sondehub.uploadStationPosition({
                 uploader_callsign: callsign,
                 uploader_position: [latitude, longitude, altitude],

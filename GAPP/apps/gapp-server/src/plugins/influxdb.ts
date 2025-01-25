@@ -1,7 +1,8 @@
 import { FastifyPluginAsync, FastifyPluginOptions } from 'fastify';
 import fp from 'fastify-plugin';
-import { InfluxDB, QueryApi, WriteApi } from '@influxdata/influxdb-client';
+import { InfluxDB } from '@influxdata/influxdb-client';
 import { Plugins } from './plugins';
+import { Organization, OrgsAPI } from '@influxdata/influxdb-client-apis';
 
 interface InfluxdbPluginOptions extends FastifyPluginOptions {
     host: string;
@@ -11,8 +12,8 @@ interface InfluxdbPluginOptions extends FastifyPluginOptions {
 
 declare module 'fastify' {
     interface FastifyInstance {
-        influxWriteApi: WriteApi;
-        influxQueryApi: QueryApi;
+        influxClient: InfluxDB;
+        influxOrg: Organization;
     }
 }
 
@@ -22,16 +23,21 @@ const influxDbPlugin: FastifyPluginAsync<InfluxdbPluginOptions> = async (fastify
         url: options.host,
     });
 
-    const writeApi = influxClient.getWriteApi(options.org, 'fik');
-    const queryApi = influxClient.getQueryApi(options.org);
+    const orgsApi = new OrgsAPI(influxClient);
+    const orgs = await orgsApi.getOrgs();
+    let org = orgs.orgs.find((org) => org.name === options.org);
+    if (!org) {
+        fastify.log.info(`Creating organization ${options.org}`);
+        org = await orgsApi.postOrgs({
+            body: {
+                name: options.org,
+                description: 'Organization for storing telemetry data',
+            },
+        });
+    }
 
-    fastify.decorate('influxWriteApi', writeApi);
-    fastify.decorate('influxQueryApi', queryApi);
-    fastify.addHook('onClose', async () => {
-        fastify.log.info('Closing influxdb write api...');
-        await writeApi.close();
-        fastify.log.info('Influxdb write api closed');
-    });
+    fastify.decorate('influxOrg', org);
+    fastify.decorate('influxClient', influxClient);
 };
 
 export default fp(influxDbPlugin, {

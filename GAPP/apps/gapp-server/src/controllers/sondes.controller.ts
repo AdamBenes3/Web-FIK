@@ -15,6 +15,7 @@ export const sondesController: FastifyPluginAsyncTypebox = async (fastify) => {
         async (req, rep) => {
             const telemetryPacket = ttnPacketDto(req.body);
 
+            req.server.telemetryService.writeTelemetry(telemetryPacket);
             req.server.sondehub.addTelemetry(telemetryPacket);
 
             rep.code(200).send('OK');

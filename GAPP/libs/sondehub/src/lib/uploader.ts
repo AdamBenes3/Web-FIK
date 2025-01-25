@@ -12,7 +12,7 @@ interface BasePacket {
 }
 
 export interface TelemetryPacket extends Partial<BasePacket> {
-    dev?: string;
+    dev?: boolean;
     time_received?: string;
     payload_callsign: string;
     datetime: string;
@@ -157,7 +157,6 @@ export class Uploader {
             uploader_antenna: stationPacket.uploader_antenna || this.uploaderConfig.uploader_antenna,
             uploader_contact_email: stationPacket.uploader_contact_email,
             mobile: stationPacket.mobile ?? false,
-            dev: this.uploaderConfig.dev,
         };
 
         try {

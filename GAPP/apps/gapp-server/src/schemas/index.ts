@@ -1,4 +1,4 @@
-import { Type as T } from '@sinclair/typebox';
+import { Static, Type as T } from '@sinclair/typebox';
 
 export const Q_Callsign = T.Object({
     callsign: T.String(),
@@ -11,6 +11,7 @@ export const B_CarStatus = T.Object({
     longitude: T.Number(),
     altitude: T.Number(),
 });
+export type CarStatus = Static<typeof B_CarStatus>;
 
 export const B_SondeTelemetry = T.Object({
     end_device_ids: T.Object({

@@ -6,6 +6,8 @@ import swaggerUi from '@fastify/swagger-ui';
 import { carsController } from './controllers/cars.controller';
 import sondehubPlugin from './plugins/sondehub';
 import { sondesController } from './controllers/sondes.controller';
+import carsServicePlugin from './plugins/cars-service';
+import telemetryServicePlugin from './plugins/telemetry-service';
 
 interface AppOptions extends FastifyPluginOptions {
     influxDbToken: string;
@@ -23,12 +25,12 @@ export const app = async (fastify: FastifyInstance, opts: AppOptions) => {
         token: opts.influxDbToken,
         org: opts.influxDbOrg,
     });
-    await fastify.register(sondehubPlugin, { dev: true });
+    await fastify.register(sondehubPlugin, { dev: false });
+    await fastify.register(carsServicePlugin);
+    await fastify.register(telemetryServicePlugin);
 
     await fastify.register(swagger);
-    await fastify.register(swaggerUi, {
-        routePrefix: '/docs',
-    });
+    await fastify.register(swaggerUi, { routePrefix: '/docs' });
 
     // ROUTES
     fastify.register(carsController, { prefix: '/cars' });
