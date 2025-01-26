@@ -8,6 +8,7 @@ export const carsController: FastifyPluginAsyncTypebox = async (fastify) => {
             schema: {
                 summary: 'Get cars positions',
                 description: 'Get latest location for all registered cars.',
+                tags: ['cars'],
             },
         },
         async (req, rep) => {
@@ -20,7 +21,9 @@ export const carsController: FastifyPluginAsyncTypebox = async (fastify) => {
         '/status',
         {
             schema: {
-                summary: 'Uploads car position to sondehub amateur.',
+                tags: ['cars'],
+                summary: 'Endpoint for car position',
+                description: 'Received data are stored in InfluxDB and forwarded to SondeHub.',
                 querystring: Q_Callsign,
                 body: B_CarStatus,
             },

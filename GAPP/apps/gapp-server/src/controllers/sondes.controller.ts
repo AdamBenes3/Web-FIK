@@ -7,8 +7,9 @@ export const sondesController: FastifyPluginAsyncTypebox = async (fastify) => {
         '/ttn',
         {
             schema: {
+                tags: ['sondes'],
                 summary: 'TTN webhook',
-                description: 'Endpoint for receiving telemetry data from TTN',
+                description: 'Endpoint for receiving telemetry data from TheThingsNetwork.',
                 body: B_SondeTtnTelemetry,
             },
         },

@@ -40,12 +40,7 @@ export const app = async (fastify: FastifyInstance, opts: AppOptions) => {
         '/ping',
         {
             schema: {
-                description: 'Ping route',
-                response: {
-                    200: {
-                        type: 'string',
-                    },
-                },
+                hide: true,
             },
         },
         () => `pong\n\n${new Date().toString()}`
