@@ -35,10 +35,10 @@ export class CarsService extends InfluxDbServiceBase {
     public async getCarsStatus(callsigns: string[]) {
         console.log(callsigns);
         const query = `from(bucket: "cars")
-        |> range(start: -48h)
-        |> filter(fn: (r) => r._measurement == "car_status")
-        |> filter(fn: (r) => [${callsigns}].includes(r.callsign))
-        |> last()`;
+            |> range(start: -24h)
+            |> last()
+            |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+            |> keep(columns: ["_time", "altitude", "longitude", "latitude", "callsign"])`;
 
         const data = await this.queryAPi.collectRows(query);
 
