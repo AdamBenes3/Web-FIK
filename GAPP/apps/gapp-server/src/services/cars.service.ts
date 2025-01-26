@@ -32,26 +32,16 @@ export class CarsService extends InfluxDbServiceBase {
         this.writeAPi.writePoint(point);
     }
 
-    public getCarsStatus(callsigns: string[]) {
+    public async getCarsStatus(callsigns: string[]) {
         console.log(callsigns);
         const query = `from(bucket: "cars")
         |> range(start: -48h)
         |> filter(fn: (r) => r._measurement == "car_status")
-        |> filter(fn: (r) => r.callsign == "cesilko-test")
-        |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+        |> filter(fn: (r) => [${callsigns}].includes(r.callsign))
         |> last()`;
 
-        this.queryAPi.queryRows(query, {
-            next(row, tableMeta) {
-                const obj = tableMeta.toObject(row);
-                console.log(obj);
-            },
-            error(error) {
-                console.error(error);
-            },
-            complete() {
-                console.log('Query completed');
-            },
-        });
+        const data = await this.queryAPi.collectRows(query);
+
+        console.log(data);
     }
 }

@@ -1,6 +1,6 @@
 import { FastifyPluginAsync, FastifyPluginOptions } from 'fastify';
 import fp from 'fastify-plugin';
-import { InfluxDB } from '@influxdata/influxdb-client';
+import { InfluxDB, WriteApi } from '@influxdata/influxdb-client';
 import { Plugins } from './plugins';
 import { Organization, OrgsAPI } from '@influxdata/influxdb-client-apis';
 
@@ -21,6 +21,12 @@ const influxDbPlugin: FastifyPluginAsync<InfluxdbPluginOptions> = async (fastify
     const influxClient = new InfluxDB({
         token: options.token,
         url: options.host,
+        writeOptions: {
+            batchSize: 10,
+            writeSuccess: (lines: string[]) => {
+                fastify.log.info(lines, 'Influx data written');
+            },
+        },
     });
 
     const orgsApi = new OrgsAPI(influxClient);
