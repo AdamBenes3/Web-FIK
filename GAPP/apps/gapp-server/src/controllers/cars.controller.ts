@@ -2,6 +2,20 @@ import { B_CarStatus, Q_Callsign } from '../schemas';
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 
 export const carsController: FastifyPluginAsyncTypebox = async (fastify) => {
+    fastify.get(
+        '/status',
+        {
+            schema: {
+                summary: 'Get cars positions',
+                description: 'Get latest location for all registered cars.',
+            },
+        },
+        async (req, rep) => {
+            req.server.carsService.getCarsStatus(['cesilko-test']);
+            rep.status(200).send();
+        }
+    );
+
     fastify.post(
         '/status',
         {

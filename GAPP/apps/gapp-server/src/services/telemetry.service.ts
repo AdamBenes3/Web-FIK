@@ -25,7 +25,9 @@ export class TelemetryService extends InfluxDbServiceBase {
             .tag('callsign', telemetry.payload_callsign)
             .floatField('latitude', telemetry.lat)
             .floatField('longitude', telemetry.lon)
-            .floatField('altitude', telemetry.alt);
+            .floatField('altitude', telemetry.alt)
+            .floatField('heading', telemetry.heading)
+            .floatField('vel_h', telemetry.vel_h);
 
         this.writeAPi.writePoint(point);
     }

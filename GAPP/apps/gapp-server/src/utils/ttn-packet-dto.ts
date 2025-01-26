@@ -11,6 +11,7 @@ export const ttnPacketDto = (ttnPayload: Static<typeof B_SondeTtnTelemetry>): Te
         lon: ttnPayload.uplink_message.decoded_payload.lon,
         alt: ttnPayload.uplink_message.decoded_payload.alt_m,
         heading: ttnPayload.uplink_message.decoded_payload.course,
+        vel_h: ttnPayload.uplink_message.decoded_payload.speed_mps,
         modulation: 'LoRa',
         uploader_callsign: 'GAPP-Server',
     };
