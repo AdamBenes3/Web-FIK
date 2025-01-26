@@ -13,7 +13,7 @@ export const B_CarStatus = T.Object({
 });
 export type CarStatus = Static<typeof B_CarStatus>;
 
-export const B_SondeTelemetry = T.Object({
+export const B_SondeTtnTelemetry = T.Object({
     end_device_ids: T.Object({
         device_id: T.String(),
     }),
