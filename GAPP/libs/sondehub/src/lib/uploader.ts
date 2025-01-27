@@ -12,7 +12,7 @@ interface BasePacket {
 }
 
 export interface TelemetryPacket extends Partial<BasePacket> {
-    dev?: boolean;
+    dev?: string;
     time_received?: string;
     payload_callsign: string;
     datetime: string;
@@ -237,6 +237,8 @@ export class Uploader {
         if (!packet.time_received) {
             enhancedPacket.time_received = new Date().toISOString();
         }
+
+        enhancedPacket.dev = packet.dev ?? this.uploaderConfig.dev ? 'true' : 'false';
 
         return enhancedPacket;
     }

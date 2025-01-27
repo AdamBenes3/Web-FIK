@@ -2,6 +2,7 @@ import { InfluxDB, Point, QueryApi, WriteApi } from '@influxdata/influxdb-client
 import { InfluxDbServiceBase } from '../utils/influxdb-service-base';
 import { Organization } from '@influxdata/influxdb-client-apis';
 import { CarStatus } from '../schemas';
+import { arrayAsString } from '../utils/array-as-atring';
 
 export class CarsService extends InfluxDbServiceBase {
     private writeAPi: WriteApi;
@@ -36,6 +37,7 @@ export class CarsService extends InfluxDbServiceBase {
         console.log(callsigns);
         const query = `from(bucket: "cars")
             |> range(start: -24h)
+            |> filter(fn: (r) => contains(value: r.callsign, set: ${arrayAsString(callsigns)}))
             |> last()
             |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
             |> keep(columns: ["_time", "altitude", "longitude", "latitude", "callsign"])`;

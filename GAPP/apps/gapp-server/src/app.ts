@@ -25,7 +25,7 @@ export const app = async (fastify: FastifyInstance, opts: AppOptions) => {
         token: opts.influxDbToken,
         org: opts.influxDbOrg,
     });
-    await fastify.register(sondehubPlugin, { dev: false });
+    await fastify.register(sondehubPlugin, { dev: true });
     await fastify.register(carsServicePlugin);
     await fastify.register(telemetryServicePlugin);
 
