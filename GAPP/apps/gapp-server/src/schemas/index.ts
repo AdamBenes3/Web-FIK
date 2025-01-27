@@ -4,6 +4,13 @@ export const Q_Callsign = T.Object({
     callsign: T.String(),
 });
 
+export const Q_OptionalCallsign = T.Object(
+    {
+        callsign: T.Optional(T.String()),
+    },
+    { nullable: true }
+);
+
 export const B_CarStatus = T.Object({
     car_id: T.Optional(T.String()),
     car_heartbeat_value: T.Optional(T.String({ format: 'date-time' })),
@@ -78,3 +85,15 @@ export const B_SondeTtnTelemetry = T.Object({
         }),
     }),
 });
+
+export const R_CarsStatus = T.Array(
+    T.Object({
+        _time: T.String(),
+        altitude: T.Number(),
+        longitude: T.Number(),
+        latitude: T.Number(),
+        callsign: T.String(),
+    })
+);
+
+export type CarsStatus = Static<typeof R_CarsStatus>;

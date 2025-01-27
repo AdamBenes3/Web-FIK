@@ -29,8 +29,20 @@ export const app = async (fastify: FastifyInstance, opts: AppOptions) => {
     await fastify.register(carsServicePlugin);
     await fastify.register(telemetryServicePlugin);
 
-    await fastify.register(swagger);
-    await fastify.register(swaggerUi, { routePrefix: '/docs' });
+    await fastify.register(swagger, {
+        openapi: {
+            info: {
+                title: 'GAPP API',
+                version: '0.0.1',
+                description: 'API Docs for ground app',
+            },
+            tags: [
+                { name: 'cars', description: 'Chase cars API' },
+                { name: 'sondes', description: 'Sondes telemetry APi' },
+            ],
+        },
+    });
+    await fastify.register(swaggerUi, { routePrefix: '/docs', uiConfig: {} });
 
     // ROUTES
     fastify.register(carsController, { prefix: '/cars' });

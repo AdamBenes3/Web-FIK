@@ -1,7 +1,7 @@
 import { InfluxDB, Point, QueryApi, WriteApi } from '@influxdata/influxdb-client';
 import { InfluxDbServiceBase } from '../utils/influxdb-service-base';
 import { Organization } from '@influxdata/influxdb-client-apis';
-import { CarStatus } from '../schemas';
+import { CarsStatus, CarStatus } from '../schemas';
 import { arrayAsString } from '../utils/array-as-atring';
 
 export class CarsService extends InfluxDbServiceBase {
@@ -33,17 +33,14 @@ export class CarsService extends InfluxDbServiceBase {
         this.writeAPi.writePoint(point);
     }
 
-    public async getCarsStatus(callsigns: string[]) {
-        console.log(callsigns);
+    public async getCarsStatus(callsigns: string[]): Promise<CarsStatus> {
         const query = `from(bucket: "cars")
             |> range(start: -24h)
-            |> filter(fn: (r) => contains(value: r.callsign, set: ${arrayAsString(callsigns)}))
+            ${callsigns.length ? `|> filter(fn: (r) => contains(value: r.callsign, set: ${arrayAsString(callsigns)}))` : undefined}
             |> last()
             |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
             |> keep(columns: ["_time", "altitude", "longitude", "latitude", "callsign"])`;
 
-        const data = await this.queryAPi.collectRows(query);
-
-        console.log(data);
+        return await this.queryAPi.collectRows(query);
     }
 }
