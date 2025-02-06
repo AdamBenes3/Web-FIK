@@ -5,9 +5,9 @@
 #
 ##povolit seriovku
 #sudo raspi-config
-# 
+#
 ##spustit
-##MAVLINK20=1 python3 mavlink.py 
+##MAVLINK20=1 python3 mavlink.py
 
 from pymavlink.dialects.v20 import common as mavlink2
 from pymavlink import mavutil
@@ -19,10 +19,10 @@ import datetime
 import requests
 
 carID="car2"
-cdpAddres="https://public.crreat.eu"
+cdpAddres="https://fik.crreat.eu/api"
 #cdpAddres="http://127.0.0.1:8000"
-hbEndPoint="/post/car/hb"
-dataEndPoint="/post/car/data"
+hbEndPoint="/telemetry/car"
+dataEndPoint="/telemetry/vessel"
 
 
 try:
@@ -59,9 +59,9 @@ for k,v in messages.items():
 state["latitude"]=""
 state["longitude"]=""
 state["altitude"]=""
-state["tmp"]=""
-state["car_id"]=carID
-state["balloon_id"]="fik_SiK"
+state["received_at"]=""
+# state["car_id"]=carID
+state["cellsign"]="fik_SiK"
 sended=True
 
 lastHB=datetime.datetime(1990,1,1,0,0,0)
@@ -85,20 +85,19 @@ while True:
       #print(msg)
       #print(type(msg))
       #print(msg.lat)
-      state["tmp"]=str(datetime.datetime.utcnow())
+      state["received_at"]=str(datetime.datetime.utcnow())
       state["latitude"]=float(msg.lat)/10000000.0
       state["longitude"]=float(msg.lon)/10000000.0
       state["altitude"]=float(msg.alt)/1000.0
-      print(state["tmp"]," ",state["latitude"]," ",state["longitude"]," ",state["altitude"])
+      print(state["received_at"]," ",state["latitude"]," ",state["longitude"]," ",state["altitude"])
       sended=False
 
-  if (datetime.datetime.utcnow()-lastHB).total_seconds()>15:     
-    #send hardbeat
-    print("Sending HB to CDP")
+  if (datetime.datetime.utcnow()-lastHB).total_seconds()>15:
+    #send car location
+    print("Sending car location to GAPP")
     carPos = gpsd.get_current()
     hbMsg={}
-    hbMsg['car_id']=carID
-    hbMsg['car_heartbeat_value']=str(datetime.datetime.utcnow())
+    hbMsg['callsign']=carID
     hbMsg['latitude']=carPos.lat
     hbMsg['longitude']=carPos.lon
     hbMsg['altitude']=carPos.alt
@@ -107,10 +106,10 @@ while True:
       print(response)
       lastHB=datetime.datetime.utcnow()
     except Exception as e:
-      print("Error couldnt send HB to CDP",e)
+      print("Error couldnt send position to GAPP",e)
 
   if sended==False and (datetime.datetime.utcnow()-lastData).total_seconds()>5:
-    #try send     
+    #try send
     try:
       print("Sending Data to CDP")
       print(state)
